@@ -1,0 +1,16 @@
+﻿<Window x:Class="osadniciZKatanuGUI.Information"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Information" Height="300" Width="300">
+    <Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical">
+                <TextBlock x:Name="InfoTextBlock" Margin="3" FontStyle="Italic" VerticalAlignment="Stretch"
+                      TextWrapping="Wrap" TextAlignment="Justify" Width="489" AllowDrop="False" Foreground="#FF0000E7" FontFamily="Lucida Sans Unicode" />
+            </StackPanel>
+        </ScrollViewer>
+        <!--<ScrollViewer>
+            <TextBlock Name="InfoTextBlock" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"  HorizontalAlignment="Left" Height="254" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="274"/>
+        </ScrollViewer>-->
+    </Grid>
+</Window>

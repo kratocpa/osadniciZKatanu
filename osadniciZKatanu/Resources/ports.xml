@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ports>
+  <port xCoord="267.2" yCoord="32.2">
+    <material>noMaterial</material>
+  </port>
+  <port xCoord="324.8" yCoord="32.2">
+    <material>noMaterial</material>
+  </port>
+  <port xCoord="408.8" yCoord="81">
+    <material>sheep</material>
+  </port>
+  <port xCoord="436.8" yCoord="129.8">
+    <material>sheep</material>
+  </port>
+  <port xCoord="521.6" yCoord="178.6">
+    <material>noMaterial</material>
+  </port>
+  <port xCoord="493.6" yCoord="227.4">
+    <material>noMaterial</material>
+  </port>
+  <port xCoord="521.6" yCoord="373.8">
+    <material>noMaterial</material>
+  </port>
+  <port xCoord="493.6" yCoord="422.6">
+    <material>noMaterial</material>
+  </port>
+  <port xCoord="352" yCoord="471.4">
+    <material>brick</material>
+  </port>
+  <port xCoord="408.8" yCoord="471.4">
+    <material>brick</material>
+  </port>
+  <port xCoord="182.4" yCoord="471.4">
+    <material>wood</material>
+  </port>
+  <port xCoord="239.2" yCoord="471.4">
+    <material>wood</material>
+  </port>
+  <port xCoord="98.4" yCoord="422.6">
+    <material>noMaterial</material>
+  </port>
+  <port xCoord="69.6" yCoord="373.8">
+    <material>noMaterial</material>
+  </port>
+  <port xCoord="98.4" yCoord="227.4">
+    <material>grain</material>
+  </port>
+  <port xCoord="69.6" yCoord="276.2">
+    <material>grain</material>
+  </port>
+  <port xCoord="182.4" yCoord="81">
+    <material>stone</material>
+  </port>
+  <port xCoord="154.4" yCoord="129.8">
+    <material>stone</material>
+  </port>
+</ports>

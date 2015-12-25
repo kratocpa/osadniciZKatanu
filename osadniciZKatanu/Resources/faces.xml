@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<faces>
+  <face xCoord="296" yCoord="81">
+    <material>grain</material>
+    <number>4</number>
+  </face>
+  <face xCoord="211.2" yCoord="129.8">
+    <material>brick</material>
+    <number>2</number>
+  </face> 
+  <face xCoord="380.8" yCoord="129.8">
+    <material>wood</material>
+    <number>6</number>
+  </face> 
+  <face xCoord="127.2" yCoord="178.6">
+    <material>sheep</material>
+    <number>9</number>
+  </face> 
+  <face xCoord="296" yCoord="178.6">
+    <material>wood</material>
+    <number>5</number>
+  </face> 
+  <face xCoord="465.6" yCoord="178.6">
+    <material>grain</material>
+    <number>9</number>
+  </face> 
+  <face xCoord="211.2" yCoord="227.4">
+    <material>brick</material>
+    <number>8</number>
+  </face> 
+  <face xCoord="380.8" yCoord="227.4">
+    <material>sheep</material>
+    <number>12</number>
+  </face> 
+  <face xCoord="127.2" yCoord="276.2">
+    <material>wood</material>
+    <number>3</number>
+  </face> 
+  <face xCoord="296" yCoord="276.2">
+    <material>desert</material>
+    <number>7</number>
+  </face> 
+  <face xCoord="465.6" yCoord="276.2">
+    <material>sheep</material>
+    <number>4</number>
+  </face> 
+  <face xCoord="211.2" yCoord="325">
+    <material>stone</material>
+    <number>5</number>
+  </face> 
+  <face xCoord="380.8" yCoord="325">
+    <material>stone</material>
+    <number>8</number>
+  </face> 
+  <face xCoord="127.2" yCoord="373.8">
+    <material>grain</material>
+    <number>3</number>
+  </face> 
+  <face xCoord="296" yCoord="373.8">
+    <material>brick</material>
+    <number>10</number>
+  </face> 
+  <face xCoord="465.6" yCoord="373.8">
+    <material>sheep</material>
+    <number>10</number>
+  </face> 
+  <face xCoord="211.2" yCoord="422.6">
+    <material>grain</material>
+    <number>6</number>
+  </face> 
+  <face xCoord="380" yCoord="422.6">
+    <material>wood</material>
+    <number>11</number>
+  </face> 
+  <face xCoord="296" yCoord="471">
+    <material>stone</material>
+    <number>11</number>
+  </face> 
+</faces>

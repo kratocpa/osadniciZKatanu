@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<game pointsToWin="10" longestRoad="4" largestArmy="2" villageProduction="1" townProduction="2" longestRoadProduction="2" largestArmyProduction="2">
+  <actionCardPackage>
+    <knight count="14"></knight>
+    <coupon count="5"></coupon>
+    <materialFromPlayers count="2"></materialFromPlayers>
+    <twoMaterials count="2"></twoMaterials>
+    <twoRoad count="2"></twoRoad>
+  </actionCardPackage>
+  <ports>
+    <specialPort rate="2"></specialPort>
+    <universalPort rate="3"></universalPort>
+    <noPort rate="4"></noPort>
+  </ports>
+  <materialsForActions>
+    <road>
+      <wood count="1"></wood>
+      <brick count="1"></brick>
+    </road>
+    <village>
+      <wood count="1"></wood>
+      <brick count="1"></brick>
+      <sheep count="1"></sheep>
+      <grain count="1"></grain>
+    </village>
+    <town>
+      <stone count="3"></stone>
+      <grain count="2"></grain>
+    </town>
+    <actionCard>
+      <stone count="1"></stone>
+      <grain count="1"></grain>
+      <sheep count="1"></sheep>
+    </actionCard>
+  </materialsForActions>
+</game>

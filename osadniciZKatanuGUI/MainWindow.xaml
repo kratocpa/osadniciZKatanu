@@ -1,0 +1,50 @@
+﻿<Window x:Class="osadniciZKatanuGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="262.8" Width="341.8" ResizeMode="NoResize" Background="Azure">
+    <Grid>
+        <Button Content="Nová hra" FontSize="15" FontWeight="ExtraBlack" HorizontalAlignment="Left" Height="28" Margin="172,167,0,0" VerticalAlignment="Top" Width="141" Click="Button_Click_1"/>
+        <ComboBox Name="language_combo_box" SelectedIndex="0"  Text="jazyk" HorizontalAlignment="Left" Height="20" Margin="8,44,0,0" VerticalAlignment="Top" Width="148">
+
+            <ComboBoxItem  Name="czech">čeština</ComboBoxItem>
+            <ComboBoxItem  Name="english">angličtina</ComboBoxItem>
+
+        </ComboBox>
+        <Label Name="jazyk" Content="Jazyk" FontSize="12" FontWeight="ExtraBold" HorizontalAlignment="Left" Height="29" Margin="11,10,0,0" VerticalAlignment="Top" Width="146"/>
+        <Label Content="Počet hráčů" FontSize="12" FontWeight="ExtraBold" HorizontalAlignment="Left" Height="29" Margin="8,118,0,0" VerticalAlignment="Top" Width="145"/>
+        <ComboBox x:Name="game_border_combo_box" SelectedIndex="0" Text="hrací plán" HorizontalAlignment="Left" Height="20" Margin="8,93,0,0" VerticalAlignment="Top" Width="146">
+            <ComboBoxItem  x:Name="default" Content="výchozí"/>
+            <ComboBoxItem  x:Name="random" Content="náhodný"/>
+        </ComboBox>
+        <Label Content="Hrací plán" FontSize="12" FontWeight="ExtraBold" HorizontalAlignment="Left" Height="29" Margin="9,64,0,0" VerticalAlignment="Top" Width="145"/>
+        <StackPanel Name="redStackPanel" Margin="0,10,89.2,117.8" HorizontalAlignment="Right" Width="65" >
+            <Label Content="červený" FontSize="12" FontWeight="ExtraBold" HorizontalAlignment="Left"></Label>
+            <RadioButton Name="redIsPlayerRadioButton" GroupName="redPl" Content="hráč" IsChecked="True"/>
+            <RadioButton GroupName="redPl" Content="počítač" />
+
+        </StackPanel>
+        <StackPanel Name="blueStackPanel" Margin="0,10,27.2,114.8" HorizontalAlignment="Right" Width="57">
+            <Label Content="modrý" FontSize="12" FontWeight="ExtraBold" HorizontalAlignment="Left"></Label>
+            <RadioButton Name="blueIsPlayerRadioButton" GroupName="bluePl" Content="hráč" IsChecked="True"/>
+            <RadioButton GroupName="bluePl" Content="počítač" />
+        </StackPanel>
+        <StackPanel Name="whiteStackPanel" Margin="0,78,89.2,43.8" HorizontalAlignment="Right" Width="65">
+            <Label Content="žlutý" FontSize="12" FontWeight="ExtraBold" HorizontalAlignment="Left"></Label>
+            <RadioButton Name="yellowIsPlayerRadioButton" GroupName="yellowPl" Content="hráč" IsChecked="True"/>
+            <RadioButton GroupName="yellowPl" Content="počítač" />
+        </StackPanel>
+        <StackPanel Name="yellowStackPanel" Margin="0,78,27.2,43.8" HorizontalAlignment="Right" Width="57">
+            <Label Content="bílý" FontSize="12" FontWeight="ExtraBold" HorizontalAlignment="Left"></Label>
+            <RadioButton Name="whiteIsPlayerRadioButton" GroupName="whitePl" Content="hráč" IsChecked="True"/>
+            <RadioButton GroupName="whitePl" Content="počítač" />
+        </StackPanel>
+        <StackPanel Name="playerNumStack" Margin="10,145,0,9.6" HorizontalAlignment="left" Width="65">
+            <RadioButton Name="twoPlayerRadioButton" GroupName="playerNum" Content="dva" Checked="RadioButton_Checked_1"/>
+            <RadioButton Name="threePlayerRadioButton" GroupName="playerNum" Content="tři" Checked="RadioButton_Checked_2" />
+            <RadioButton Name="fourPlayerRadioButton" GroupName="playerNum" Content="čtyři" IsChecked="True" Checked="RadioButton_Checked_3" />
+        </StackPanel>
+        <CheckBox Name="helpfullID" Content="zobrazit ID vrcholu a hran" HorizontalAlignment="Left" Height="23" Margin="8,202,0,0" VerticalAlignment="Top" Width="159"/>
+        <CheckBox Name="showMoves" Content="u AI ukázat popisy tahů"  HorizontalAlignment="Left" Height="22" Margin="172,202,0,0" VerticalAlignment="Top" Width="153"/>
+    </Grid>
+</Window>
+
