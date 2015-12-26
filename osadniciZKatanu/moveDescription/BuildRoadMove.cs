@@ -8,9 +8,9 @@ namespace osadniciZKatanu
 {
     public class BuildRoadMove : Move
     {
-        public EdgeDesc BuildingCoord { get; private set; } // souřadnice stavby (pokud je to cesta, pak souřadnice středu cesty)
+        public Edge BuildingCoord { get; private set; } // souřadnice stavby (pokud je to cesta, pak souřadnice středu cesty)
 
-        public BuildRoadMove(EdgeDesc buildingCoord)
+        public BuildRoadMove(Edge buildingCoord)
         {
             BuildingCoord = buildingCoord;
         }
@@ -19,7 +19,7 @@ namespace osadniciZKatanu
         {
         }
 
-        public void BuildRoad(EdgeDesc buildingCoord)
+        public void BuildRoad(Edge buildingCoord)
         {
             BuildingCoord = buildingCoord;
         }

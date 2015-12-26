@@ -32,7 +32,7 @@ namespace osadniciZKatanuAI
                 if (curVx.IsFreePlaceForVillage())
                 {
                     fitness = ComputeVertexFitness(gmProp, plProp, curVx);
-                    foreach (var curEg in curVx.EdgeNeighborsDesc)
+                    foreach (var curEg in curVx.EdgeNeighbors)
                     {
                         FirstPhaseGameMove mvDesc = new FirstPhaseGameMove(curVx, curEg);
                         fitness += ComputeEdgeFitness(gmProp, plProp, curEg);
@@ -45,19 +45,19 @@ namespace osadniciZKatanuAI
             return possibleMoves;
         }
 
-        private double ComputeEdgeFitness(GameProperties gmProp, PlayerProperties plProp, EdgeDesc edge)
+        private double ComputeEdgeFitness(GameProperties gmProp, PlayerProperties plProp, Edge edge)
         {
             return movesProp.weightEdgeGeneral;
         }
 
-        private double ComputeVertexFitness(GameProperties gmProp, PlayerProperties plProp, VertexDesc vertex)
+        private double ComputeVertexFitness(GameProperties gmProp, PlayerProperties plProp, Vertex vertex)
         {
             List<Game.materials> matWhatIHave = WhatIHave(gmProp, plProp);
 
             double[] prob = gmProp.GameBorderData.probabilities;
             double fitness = 0;
 
-            foreach (var curFc in vertex.FaceNeighborsDesc)
+            foreach (var curFc in vertex.FaceNeighbors)
             {
                 double matWeigth = ComputeWeightMaterial(curFc.Material);
                 fitness = fitness + movesProp.weightGoodNumbers * matWeigth * prob[curFc.ProbabilityNumber - 2];

@@ -8,10 +8,10 @@ namespace osadniciZKatanu
 {
     public class FirstPhaseGameMove : Move
     {
-        public VertexDesc VillageCoord { get; private set; } // souřadnice vesnice
-        public EdgeDesc RoadCoord { get; private set; } // souřadnice středu cesty
+        public Vertex VillageCoord { get; private set; } // souřadnice vesnice
+        public Edge RoadCoord { get; private set; } // souřadnice středu cesty
 
-        public FirstPhaseGameMove(VertexDesc villageCoord, EdgeDesc roadCoord)
+        public FirstPhaseGameMove(Vertex villageCoord, Edge roadCoord)
         {
             VillageCoord = villageCoord;
             RoadCoord = roadCoord;

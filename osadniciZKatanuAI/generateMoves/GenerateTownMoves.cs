@@ -70,14 +70,14 @@ namespace osadniciZKatanuAI
             return possibleVertices;
         }
 
-        private int RateTown(VertexDesc curVx, GameProperties gmProp)
+        private int RateTown(Vertex curVx, GameProperties gmProp)
         {
             double fitness;
             fitness = movesProp.weightTownGeneral;
 
             double[] prob = gmProp.GameBorderData.probabilities;
 
-            foreach (var curFc in curVx.FaceNeighborsDesc)
+            foreach (var curFc in curVx.FaceNeighbors)
             {
                 fitness = fitness + movesProp.weightTownGoodNumbers * prob[curFc.ProbabilityNumber - 2];
             }

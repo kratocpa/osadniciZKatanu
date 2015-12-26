@@ -55,15 +55,15 @@ namespace osadniciZKatanuGUI
         class thief
         {
             public Image thiefImage;
-            public FaceDesc thiefLocation;
+            public Face thiefLocation;
             public static int thiefSize = 70;
         }
 
         class village
         {
             public Image villageImage;
-            public VertexDesc villageLocation;
-            public village(Image villageImage_, VertexDesc villageLocation_)
+            public Vertex villageLocation;
+            public village(Image villageImage_, Vertex villageLocation_)
             {
                 villageImage = villageImage_;
                 villageLocation = villageLocation_;
@@ -74,8 +74,8 @@ namespace osadniciZKatanuGUI
         class town
         {
             public Image townImage;
-            public VertexDesc townLocation;
-            public town(Image townImage_, VertexDesc townLocation_)
+            public Vertex townLocation;
+            public town(Image townImage_, Vertex townLocation_)
             {
                 townImage = townImage_;
                 townLocation = townLocation_;
@@ -86,8 +86,8 @@ namespace osadniciZKatanuGUI
         class road
         {
             public Line roadLine;
-            public EdgeDesc roadLocation;
-            public road(Line roadLine_, EdgeDesc roadLocation_)
+            public Edge roadLocation;
+            public road(Line roadLine_, Edge roadLocation_)
             {
                 roadLine = roadLine_;
                 roadLocation = roadLocation_;
@@ -226,7 +226,7 @@ namespace osadniciZKatanuGUI
         /// <param name="gameBorderDataStruct_"></param>
         public void DrawGameBorder(GameBorder gameBorder)
         {
-            foreach (FaceDesc curFc in gameBorder.Faces)
+            foreach (Face curFc in gameBorder.Faces)
             {
                 DrawMaterials(curFc, gameBorder.probabilities[curFc.ProbabilityNumber-2]);
             }
@@ -238,7 +238,7 @@ namespace osadniciZKatanuGUI
         /// vykreslí zloděje na pozici zadanou stěnou v parametru
         /// </summary>
         /// <param name="thiefFaceStruct"></param>
-        public void DrawThief(FaceDesc thiefFaceStruct)
+        public void DrawThief(Face thiefFaceStruct)
         {
             Image thiefImg = new Image();
             thiefImg.Source = new BitmapImage(new Uri("pictures/thief.png", UriKind.Relative));
@@ -251,7 +251,7 @@ namespace osadniciZKatanuGUI
             thief_.thiefLocation = thiefFaceStruct;
         }
 
-        public void MoveThief(FaceDesc newFc)
+        public void MoveThief(Face newFc)
         {
             Canvas.SetTop(thief_.thiefImage, newFc.Coordinate.Y - thief.thiefSize / 2);
             Canvas.SetLeft(thief_.thiefImage, newFc.Coordinate.X - thief.thiefSize / 2);
@@ -272,7 +272,7 @@ namespace osadniciZKatanuGUI
         /// </summary>
         /// <param name="plottedFace"></param>
         /// <param name="prob">pravděpodobnost padnutí této suroviny na hracích kostkách</param>
-        public void DrawMaterials(FaceDesc plottedFace, double prob)
+        public void DrawMaterials(Face plottedFace, double prob)
         {
             if (plottedFace.ProbabilityNumber == 7)
             {
@@ -388,12 +388,12 @@ namespace osadniciZKatanuGUI
         /// vykreslí vesnici na zadané souřadnici
         /// </summary>
         /// <param name="villageVertexStruct"></param>
-        public void DrawVillage(VertexDesc villageVertexStruct)
+        public void DrawVillage(Vertex villageVertexStruct)
         {
             DrawVillage(villageVertexStruct, villageVertexStruct.Color);
         }
 
-        public void DrawVillage(VertexDesc villageVertexStruct, Game.color col)
+        public void DrawVillage(Vertex villageVertexStruct, Game.color col)
         {
             Image buildingImg = new Image();
             switch (col)
@@ -423,7 +423,7 @@ namespace osadniciZKatanuGUI
         /// smaže vesnici na zadané souřadnici a vykreslí místo ní město
         /// </summary>
         /// <param name="townVertexStruct"></param>
-        public void DrawTown(VertexDesc townVertexStruct)
+        public void DrawTown(Vertex townVertexStruct)
         {
             canvasGameBorder.Children.Remove(villageList.Find(x => x.villageLocation == townVertexStruct).villageImage);
             Image buildingImg = new Image();
@@ -452,7 +452,7 @@ namespace osadniciZKatanuGUI
              townList.Add(new town(buildingImg, townVertexStruct));
         }
 
-        public void DrawRoad(EdgeDesc roadEg)
+        public void DrawRoad(Edge roadEg)
         {
             DrawRoad(roadEg, roadEg.Color);
         }
@@ -461,7 +461,7 @@ namespace osadniciZKatanuGUI
         /// vykreslí cestu na zadané souřadnici
         /// </summary>
         /// <param name="roadEdgeStruct"></param>
-        public void DrawRoad(EdgeDesc roadEdgeStruct, Game.color col)
+        public void DrawRoad(Edge roadEdgeStruct, Game.color col)
         {
             Line path = new Line();
             //TODO : zajistit, aby se cesty normálně roztáhly přes celou cestu, ale pokud je tam postavená vesnice, tak ne

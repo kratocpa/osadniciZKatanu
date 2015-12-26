@@ -21,36 +21,36 @@ namespace osadniciZKatanu
         //na pozici "i" je pravděpodobnost, že padne součet na kostkách "i+2" (0 ani 1 nemůže padnout)
         public double[] probabilities;
 
-        public List<VertexDesc> verticesDesc;
-        public List<EdgeDesc> edgesDesc;
-        public List<FaceDesc> facesDesc;
+        public List<Vertex> verticesDesc;
+        public List<Edge> edgesDesc;
+        public List<Face> facesDesc;
 
         public GameBorderDesc()
         {
-            verticesDesc = new List<VertexDesc>();
-            edgesDesc = new List<EdgeDesc>();
-            facesDesc = new List<FaceDesc>();
+            verticesDesc = new List<Vertex>();
+            edgesDesc = new List<Edge>();
+            facesDesc = new List<Face>();
             countNumbersFit = new double[] { 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1 };
             allPossibilities = 36;
 
             ComputeProbabilities();
         }
 
-        public VertexDesc FindVerticesByCoordinateDesc(Coord coordinate)
+        public Vertex FindVerticesByCoordinateDesc(Coord coordinate)
         {
-            foreach (VertexDesc currentVertexStruct in verticesDesc)
+            foreach (Vertex currentVertexStruct in verticesDesc)
             {
                 if (SamePoints(currentVertexStruct.Coordinate, coordinate))
                 {
                     return currentVertexStruct;
                 }
             }
-            return new VertexDesc(new Coord(0, 0));
+            return new Vertex(new Coord(0, 0));
         }
 
-        public FaceDesc FindFaceByCoordinateDesc(Coord coordinate)
+        public Face FindFaceByCoordinateDesc(Coord coordinate)
         {
-            foreach (FaceDesc currentFaceStruct in facesDesc)
+            foreach (Face currentFaceStruct in facesDesc)
             {
                 if (SamePoints(currentFaceStruct.Coordinate, coordinate))
                 {
@@ -58,19 +58,19 @@ namespace osadniciZKatanu
                 }
             }
 
-            return new FaceDesc(new Coord(-1,-1), Game.materials.noMaterial, -1);
+            return new Face(new Coord(-1,-1), Game.materials.noMaterial, -1);
         }
 
-        public EdgeDesc FindEdgeByCoordinateDesc(Coord coordinate)
+        public Edge FindEdgeByCoordinateDesc(Coord coordinate)
         {
-            foreach (EdgeDesc currentEdgeStruct in edgesDesc)
+            foreach (Edge currentEdgeStruct in edgesDesc)
             {
                 if (SamePoints(currentEdgeStruct.CentreCoordinate, coordinate))
                 {
                     return currentEdgeStruct;
                 }
             }
-            return new EdgeDesc(Tuple.Create(new Coord(-1,-1), new Coord(-1,-1)));
+            return new Edge(Tuple.Create(new Coord(-1,-1), new Coord(-1,-1)));
         }
 
         public static bool SamePoints(Coord firstPoint, Coord secondPoint)
@@ -84,7 +84,7 @@ namespace osadniciZKatanu
                 (GameBorderDesc.SamePoints(firstLine.Item1, secondLine.Item2) && GameBorderDesc.SamePoints(firstLine.Item2, secondLine.Item1));
         }
 
-        public static bool SameLine(EdgeDesc firstEg, EdgeDesc secEg)
+        public static bool SameLine(Edge firstEg, Edge secEg)
         {
             return SameLine(firstEg.Coordinate, secEg.Coordinate);
         }
@@ -99,7 +99,7 @@ namespace osadniciZKatanu
             return false;
         }
 
-        public static bool IsAproximatly(VertexDesc first, VertexDesc second, int min)
+        public static bool IsAproximatly(Vertex first, Vertex second, int min)
         {
             return IsAproximatly(first.Coordinate, second.Coordinate, min);
         }

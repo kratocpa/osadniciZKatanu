@@ -26,7 +26,7 @@ namespace osadniciZKatanuAI
             List<Edge> possibleEdges = new List<Edge>();
             foreach (Edge curEg in plProp.Road)
             {
-                foreach (Edge cEg in curEg.EdgeNeighborsDesc)
+                foreach (Edge cEg in curEg.EdgeNeighbors)
                 {
                     if (!cEg.Road && cEg.IsHereAdjacentRoadWithColor(plProp.Color) &&
                         plProp.RoadRemaining > 0 )
@@ -64,7 +64,7 @@ namespace osadniciZKatanuAI
         public bool CanIBuildVillageOnEdge(Edge curEg)
         {
             bool succes = false;
-            foreach (VertexDesc curVx in curEg.VertexNeighborsDesc)
+            foreach (Vertex curVx in curEg.VertexNeighbors)
             {
                 succes = succes || (!curVx.Building && !curVx.IsHereBuildingInNeighbour());
             }

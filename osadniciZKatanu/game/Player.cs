@@ -122,8 +122,8 @@ namespace osadniciZKatanu
             bool succes = false;
             foreach (var curEg in PlProp.Road)
             {
-                succes = succes || (!curEg.VertexNeighborsDesc.First().Building && !curEg.VertexNeighborsDesc.First().IsHereBuildingInNeighbour());
-                succes = succes || (!curEg.VertexNeighborsDesc.Last().Building && !curEg.VertexNeighborsDesc.Last().IsHereBuildingInNeighbour());
+                succes = succes || (!curEg.VertexNeighbors.First().Building && !curEg.VertexNeighbors.First().IsHereBuildingInNeighbour());
+                succes = succes || (!curEg.VertexNeighbors.Last().Building && !curEg.VertexNeighbors.Last().IsHereBuildingInNeighbour());
             }
             return succes;
         }

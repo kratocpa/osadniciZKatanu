@@ -6,16 +6,27 @@ using System.Threading.Tasks;
 
 namespace osadniciZKatanu
 {
-    public class Edge : EdgeDesc
+    public class Edge : ICloneable
     {
+        public Tuple<Coord, Coord> Coordinate { get; protected set; } // souřadnice cesty
+        public Coord CentreCoordinate { get; protected set; } // souřadnice středu cesty
+        public bool Road { get; protected set; } // true - je zde cesta, false - není
+        public Game.color Color { get; protected set; } // barva cesty, pokud zde nějaká je, jinak noColor
+        public int ID { get; set; }
+
         public List<Edge> EdgeNeighbors { get; private set; }
         public List<Vertex> VertexNeighbors { get; private set; }
 
         public void SetRoad(Game.color playerColor_) { Color = playerColor_; Road = true; }
 
-        public Edge(Tuple<Coord, Coord> edgeCoordinate_)
-            : base(edgeCoordinate_)
+        public Edge(Tuple<Coord, Coord> edgeCoordinate)
         {
+            Coordinate = edgeCoordinate;
+            CentreCoordinate = new Coord(Coordinate.Item2.X + (Coordinate.Item1.X - Coordinate.Item2.X) / 2,
+                                         Coordinate.Item2.Y + (Coordinate.Item1.Y - Coordinate.Item2.Y) / 2);
+            Road = false;
+            Color = Game.color.noColor;
+
             EdgeNeighbors = new List<Edge>();
             VertexNeighbors = new List<Vertex>();
         }
@@ -26,7 +37,6 @@ namespace osadniciZKatanu
             foreach (Edge curEg in addedEdge)
             {
                 EdgeNeighbors.Add(curEg);
-                base.EdgeNeighborsDesc.Add(curEg);
             }
         }
 
@@ -36,11 +46,43 @@ namespace osadniciZKatanu
             foreach (Vertex curVx in addedVertices)
             {
                 VertexNeighbors.Add(curVx);
-                base.VertexNeighborsDesc.Add(curVx);
             }
         }
 
-        public override object Clone()
+        public bool IsHereRoadWithColor(Game.color playerColor)
+        {
+            return Road && playerColor == Color;
+        }
+
+        public bool IsHereAdjacentRoadWithColor(Game.color playerColor)
+        {
+            bool succes = false;
+            foreach (var curEg in EdgeNeighbors)
+            {
+                succes = succes || curEg.Color == playerColor;
+            }
+            return succes;
+        }
+
+        public bool IsHereAdjectedVillageWithColor(Game.color playerColor)
+        {
+            bool succes = false;
+            foreach (var curVx in VertexNeighbors)
+            {
+                succes = succes || curVx.Color == playerColor;
+            }
+            return succes;
+        }
+
+        public Boolean IsEqualTo(Edge scEg)
+        {
+            return (Coordinate.Item1.X == scEg.Coordinate.Item1.X &&
+                Coordinate.Item1.Y == scEg.Coordinate.Item1.Y &&
+                Coordinate.Item2.X == scEg.Coordinate.Item2.X &&
+                Coordinate.Item2.Y == scEg.Coordinate.Item2.Y);
+        }
+
+        public object Clone()
         {
             Edge newEg = new Edge(Coordinate);
 

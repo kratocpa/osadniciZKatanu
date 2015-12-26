@@ -57,14 +57,14 @@ namespace osadniciZKatanuAI
             return possibleVillageMoves;
         }
 
-        private int RateVillage(GameProperties gmProp, PlayerProperties plProp, VertexDesc curVx)
+        private int RateVillage(GameProperties gmProp, PlayerProperties plProp, Vertex curVx)
         {
             double fitness;
             fitness = movesProp.weightVillageGeneral;
 
             double[] prob = gmProp.GameBorderData.probabilities;
 
-            foreach (var curFc in curVx.FaceNeighborsDesc)
+            foreach (var curFc in curVx.FaceNeighbors)
             {
                 fitness = fitness + movesProp.weightVillageGoodNumbers * prob[curFc.ProbabilityNumber - 2];
             }
@@ -84,12 +84,12 @@ namespace osadniciZKatanuAI
             return (int)fitness;
         }
 
-        private List<VertexDesc> GeneratePossibleVerticesToBuildVillage(GameProperties gmDesc, PlayerProperties plProp)
+        private List<Vertex> GeneratePossibleVerticesToBuildVillage(GameProperties gmDesc, PlayerProperties plProp)
         {
-            List<VertexDesc> possibleVertices = new List<VertexDesc>();
-            foreach (EdgeDesc curEg in plProp.Road)
+            List<Vertex> possibleVertices = new List<Vertex>();
+            foreach (Edge curEg in plProp.Road)
             {
-                foreach (VertexDesc curVx in curEg.VertexNeighborsDesc)
+                foreach (Vertex curVx in curEg.VertexNeighbors)
                 {
                     if (curVx.IsFreePlaceForVillage() && curVx.IsHereAdjectedRoadWithColor(plProp.Color) && plProp.VillageRemaining>0)                        
                     {

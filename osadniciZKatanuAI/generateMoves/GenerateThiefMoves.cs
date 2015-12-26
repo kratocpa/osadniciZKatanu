@@ -39,7 +39,7 @@ namespace osadniciZKatanuAI
             return possibleMoves;
         }
 
-        private List<ThiefMove> ComputeMoveThiefFaceFitness(GameProperties gmProp, PlayerProperties plProp, FaceDesc curFc)
+        private List<ThiefMove> ComputeMoveThiefFaceFitness(GameProperties gmProp, PlayerProperties plProp, Face curFc)
         {
             double[] prob = gmProp.GameBorderData.probabilities;
             int countOfMyBuilding = 0;
@@ -47,7 +47,7 @@ namespace osadniciZKatanuAI
             List<Game.color> colors = new List<Game.color>();
             List<ThiefMove> result = new List<ThiefMove>();
 
-            foreach (var curVx in curFc.VerticesNeighborsDesc)
+            foreach (var curVx in curFc.VerticesNeighbors)
             {
                 if (curVx.Building)
                 {

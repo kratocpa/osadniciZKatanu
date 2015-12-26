@@ -8,9 +8,9 @@ namespace osadniciZKatanu
 {
     public class BuildVillageMove : Move
     {
-        public VertexDesc BuildingCoord { get; private set; } // souřadnice stavby (pokud je to cesta, pak souřadnice středu cesty)
+        public Vertex BuildingCoord { get; private set; } // souřadnice stavby (pokud je to cesta, pak souřadnice středu cesty)
 
-        public BuildVillageMove(VertexDesc buildingCoord)
+        public BuildVillageMove(Vertex buildingCoord)
         {
             BuildingCoord = buildingCoord;
         }
@@ -19,7 +19,7 @@ namespace osadniciZKatanu
         {
         }
 
-        public void BuildVillage(VertexDesc buildingCoord)
+        public void BuildVillage(Vertex buildingCoord)
         {
             BuildingCoord = buildingCoord;
         }

@@ -8,10 +8,10 @@ namespace osadniciZKatanu
 {
     public class TwoRoadMove : Move
     {
-        public EdgeDesc FirstRoad {get; private set;}
-        public EdgeDesc SecondRoad {get; private set;}
+        public Edge FirstRoad {get; private set;}
+        public Edge SecondRoad {get; private set;}
 
-        public TwoRoadMove(EdgeDesc firstRoad, EdgeDesc secondRoad)
+        public TwoRoadMove(Edge firstRoad, Edge secondRoad)
         {
             FirstRoad = firstRoad;
             SecondRoad = secondRoad;

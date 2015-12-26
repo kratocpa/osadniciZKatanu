@@ -8,16 +8,16 @@ namespace osadniciZKatanu
 {
     public class ThiefMove : Move
     {
-        public FaceDesc ThiefCoord {get; set;} // souřadnice kam chci zloděje přesunout
+        public Face ThiefCoord {get; set;} // souřadnice kam chci zloděje přesunout
         public Game.color RobbedPlayer{get; set;} // barva okradeného hráče, noColor pokud neokradu žádného hráče
 
-        public ThiefMove(FaceDesc thiefCoord, Game.color robbedPlayer)
+        public ThiefMove(Face thiefCoord, Game.color robbedPlayer)
         {
             ThiefCoord = thiefCoord;
             RobbedPlayer = robbedPlayer;
         }
 
-        public ThiefMove(FaceDesc thiefCoord)
+        public ThiefMove(Face thiefCoord)
         {
             ThiefCoord = thiefCoord;
             RobbedPlayer = Game.color.noColor;
