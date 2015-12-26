@@ -27,31 +27,31 @@ namespace osadniciZKatanuAI
             common = new CommonFeatures(movesProp);
         }
 
-        public List<BuildRoadMove> Generate(GameDesc gmDesc)
+        public List<BuildRoadMove> Generate(GameProperties gmProp, PlayerProperties plProp)
         {
             List<BuildRoadMove> possibleRoadMoves = new List<BuildRoadMove>();
 
-            if (gmDesc.ActualPlayerDesc.MaterialsDesc.IsPossibleDelete(gmDesc.materialForRoadDesc) && gmDesc.ActualPlayerDesc.RoadRemaining>0)
+            if (plProp.Materials.IsPossibleDelete(gmProp.MaterialsForRoad) && plProp.RoadRemaining>0)
             {
-                var possibleEdges = common.GeneratePossibleEdgesToBuildRoad(gmDesc);
+                var possibleEdges = common.GeneratePossibleEdgesToBuildRoad(gmProp, plProp);
                 foreach (var curEg in possibleEdges)
                 {
                     BuildRoadMove mvDesc = new BuildRoadMove(curEg);
-                    mvDesc.fitnessMove = common.RateRoad(curEg, gmDesc);
+                    mvDesc.fitnessMove = common.RateRoad(gmProp, plProp, curEg);
                     possibleRoadMoves.Add(mvDesc);
                 }
             }
-            else if (gmDesc.ActualPlayerDesc.RoadRemaining > 0)
+            else if (plProp.RoadRemaining > 0)
             {
-                BuildRoadMove mvDesc = (BuildRoadMove)exchange.Generate(gmDesc.materialForRoadDesc, gmDesc, GenerateExchangeMoves.typeMove.buildRoad);
+                BuildRoadMove mvDesc = (BuildRoadMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForRoad, GenerateExchangeMoves.typeMove.buildRoad);
                 if (mvDesc != null)
                 {
-                    var possibleEdges = common.GeneratePossibleEdgesToBuildRoad(gmDesc);
+                    var possibleEdges = common.GeneratePossibleEdgesToBuildRoad(gmProp, plProp);
                     foreach (var curEg in possibleEdges)
                     {
-                        mvDesc = (BuildRoadMove)exchange.Generate(gmDesc.materialForRoadDesc, gmDesc, GenerateExchangeMoves.typeMove.buildRoad);
+                        mvDesc = (BuildRoadMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForRoad, GenerateExchangeMoves.typeMove.buildRoad);
                         mvDesc.BuildRoad(curEg);
-                        mvDesc.fitnessMove = common.RateRoad(curEg, gmDesc);
+                        mvDesc.fitnessMove = common.RateRoad(gmProp, plProp, curEg);
                         possibleRoadMoves.Add(mvDesc);
                     }
                 }

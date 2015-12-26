@@ -22,19 +22,21 @@ namespace simulator
             bool viewProgressBar = true;
             Statistics statistic = new Statistics(curLang, gamesNum, viewProgressBar);
 
-            GameProperties gmProp = new GameProperties();
-            gmProp.LoadFromXml();
-
+            GameProperties gmProp;
+            
             int i = 0;
             while(i<gamesNum)
             {
-                List<Player> players = new List<Player>();
-                players.Add(new Player(GameDesc.color.red, false, gmProp));
-                players.Add(new Player(GameDesc.color.blue, false, gmProp));
-                players.Add(new Player(GameDesc.color.yellow, false, gmProp));
-                players.Add(new Player(GameDesc.color.white, false, gmProp));
+                gmProp = new GameProperties(true, curLang);
+                gmProp.LoadFromXml();
 
-                Simulator simul = new Simulator(players, false, curLang, gmProp);
+                List<Player> players = new List<Player>();
+                players.Add(new Player(Game.color.red, false, gmProp));
+                players.Add(new Player(Game.color.blue, false, gmProp));
+                players.Add(new Player(Game.color.yellow, false, gmProp));
+                players.Add(new Player(Game.color.white, false, gmProp));
+
+                Simulator simul = new Simulator(players, gmProp);
                 simul.firstPl = new MyGameLogic();
                 simul.secondPl = new MyGameLogic();
                 simul.thirdPl = new MyGameLogic();

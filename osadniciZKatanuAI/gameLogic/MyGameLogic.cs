@@ -9,8 +9,11 @@ namespace osadniciZKatanuAI
 {
     public class MyGameLogic : IGameLogic
     {
+        int[] param;
         GenerateMoves genMov;
         List<Move> possibleMoves;
+        GameProperties gmProp;
+        PlayerProperties plProp;
 
         public MyGameLogic()
         {
@@ -19,13 +22,15 @@ namespace osadniciZKatanuAI
 
         public MyGameLogic(int[] param)
         {
+            this.param = param;
             genMov = new GenerateMoves(param);
         }
 
-        public Move GenerateMove(GameDesc gmDesc)
+        public Move GenerateMove(GameProperties gmProp, PlayerProperties plProp)
         {
-
-            possibleMoves = GeneratePossibleMoves(gmDesc);
+            this.gmProp = gmProp;
+            this.plProp = plProp;
+            possibleMoves = GeneratePossibleMoves();
 
             //Random rand = new Random();
 
@@ -77,51 +82,51 @@ namespace osadniciZKatanuAI
             return possibleMoves;
         }
 
-        private List<Move> GeneratePossibleMoves(GameDesc gmDesc)
+        private List<Move> GeneratePossibleMoves()
         {
             List<Move> possibleMoves = new List<Move>();
 
-            if (!gmDesc.ActualPlayerDesc.FirstPathCreated && !gmDesc.ActualPlayerDesc.FirstVillageCreated &&
-                !gmDesc.ActualPlayerDesc.SecondPathCreated && !gmDesc.ActualPlayerDesc.SecondVillageCreated)
+            if (!plProp.FirstPathCreated && !plProp.FirstVillageCreated &&
+                !plProp.SecondPathCreated && !plProp.SecondVillageCreated)
             {
-                foreach (var curIt in genMov.GenerateFirstRoadAndVillage(gmDesc)) { possibleMoves.Add(curIt); }
+                foreach (var curIt in genMov.GenerateFirstRoadAndVillage(gmProp, plProp)) { possibleMoves.Add(curIt); }
                 return possibleMoves;
             }
-            else if (gmDesc.ActualPlayerDesc.FirstPathCreated && gmDesc.ActualPlayerDesc.FirstVillageCreated &&
-                !gmDesc.ActualPlayerDesc.SecondPathCreated && !gmDesc.ActualPlayerDesc.SecondVillageCreated)
+            else if (plProp.FirstPathCreated && plProp.FirstVillageCreated &&
+                !plProp.SecondPathCreated && !plProp.SecondVillageCreated)
             {
-                foreach (var curIt in genMov.GenerateFirstRoadAndVillage(gmDesc)) { possibleMoves.Add(curIt); }
+                foreach (var curIt in genMov.GenerateFirstRoadAndVillage(gmProp, plProp)) { possibleMoves.Add(curIt); }
                 return possibleMoves;
             }
-            else if (gmDesc.NeedToMoveThief)
+            else if (gmProp.NeedToMoveThief)
             {
-                foreach (var curIt in genMov.GenerateThiefMoves(gmDesc)) { possibleMoves.Add(curIt); }
+                foreach (var curIt in genMov.GenerateThiefMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
                 return possibleMoves;
             }
 
-            if (!gmDesc.wasBuildSomething)
+            if (!gmProp.wasBuildSomething)
             {
-                foreach (var curIt in genMov.GenerateBuildRoadMoves(gmDesc)) { possibleMoves.Add(curIt); }
+                foreach (var curIt in genMov.GenerateBuildRoadMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
             }
 
-            if (!gmDesc.wasBuildSomething)
+            if (!gmProp.wasBuildSomething)
             {
-                foreach (var curIt in genMov.GenerateBuildVillageMoves(gmDesc)) { possibleMoves.Add(curIt); }
+                foreach (var curIt in genMov.GenerateBuildVillageMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
             }
 
-            if (!gmDesc.wasBuildSomething)
+            if (!gmProp.wasBuildSomething)
             {
-                foreach (var curIt in genMov.GenerateBuildTownMoves(gmDesc)) { possibleMoves.Add(curIt); }
+                foreach (var curIt in genMov.GenerateBuildTownMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
             }
 
-            if (!gmDesc.wasBuildSomething)
+            if (!gmProp.wasBuildSomething)
             {
-                foreach (var curIt in genMov.GenerateBuyActionCardMoves(gmDesc)) { possibleMoves.Add(curIt); }
+                foreach (var curIt in genMov.GenerateBuyActionCardMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
             }
 
-            if (!gmDesc.wasUseActionCard)
+            if (!gmProp.wasUseActionCard)
             {
-                foreach (var curIt in genMov.GenerateUseActionCardMoves(gmDesc)) { possibleMoves.Add(curIt); }
+                foreach (var curIt in genMov.GenerateUseActionCardMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
             }
 
             return possibleMoves;

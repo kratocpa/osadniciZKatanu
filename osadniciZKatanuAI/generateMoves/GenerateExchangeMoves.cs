@@ -21,7 +21,7 @@ namespace osadniciZKatanuAI
             this.movesProp = movesProp;
         }
 
-        public Move Generate(MaterialCollectionDesc whatIWant, GameDesc gmDesc, typeMove tm)
+        public Move Generate(GameProperties gmProp, PlayerProperties plProp, MaterialCollection whatIWant, typeMove tm)
         {
             Move result = new Move();
 
@@ -33,7 +33,7 @@ namespace osadniciZKatanuAI
                 case typeMove.buyActionCard: result = new BuyActionCardMove(); break;
             }
 
-            MaterialCollection copyOfMyMaterial = (MaterialCollection)gmDesc.ActualPlayerDesc.MaterialsDesc.Clone();
+            MaterialCollection copyOfMyMaterial = (MaterialCollection)plProp.Materials.Clone();
 
             int countOfMissMat = CountOfMissingMaterials(whatIWant, copyOfMyMaterial);
 
@@ -43,20 +43,20 @@ namespace osadniciZKatanuAI
                 {
                     int portRate;
                     int count = curMatToChange.Quantity - whatIWant.GetQuantity(curMatToChange.MaterialType);
-                    if (gmDesc.ActualPlayerDesc.PortForMaterial.Contains(curMatToChange.MaterialType))
+                    if (plProp.PortForMaterial.Contains(curMatToChange.MaterialType))
                     {
-                        count = count / gmDesc.SpecialPortRate;
-                        portRate = gmDesc.SpecialPortRate;
+                        count = count / gmProp.SpecialPortRate;
+                        portRate = gmProp.SpecialPortRate;
                     }
-                    else if (gmDesc.ActualPlayerDesc.UniversalPort)
+                    else if (plProp.UniversalPort)
                     {
-                        count = count / gmDesc.UniversalPortRate;
-                        portRate = gmDesc.UniversalPortRate;
+                        count = count / gmProp.UniversalPortRate;
+                        portRate = gmProp.UniversalPortRate;
                     }
                     else
                     {
-                        count = count / gmDesc.NoPortRate;
-                        portRate = gmDesc.NoPortRate;
+                        count = count / gmProp.NoPortRate;
+                        portRate = gmProp.NoPortRate;
                     }
 
                     while (count > 0 && countOfMissMat > 0)
@@ -92,7 +92,7 @@ namespace osadniciZKatanuAI
             }
         }
 
-        public int CountOfMissingMaterials(MaterialCollectionDesc whatIWant, MaterialCollectionDesc whatIHave)
+        public int CountOfMissingMaterials(MaterialCollection whatIWant, MaterialCollection whatIHave)
         {
             int countOfMissMat = 0;
             foreach (var curMat in whatIWant.Materials)

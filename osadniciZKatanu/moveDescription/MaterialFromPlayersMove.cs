@@ -8,9 +8,9 @@ namespace osadniciZKatanu
 {
     public class MaterialFromPlayersMove : Move
     {
-        public GameDesc.materials PickedMaterial { get; private set; }
+        public Game.materials PickedMaterial { get; private set; }
 
-        public MaterialFromPlayersMove(GameDesc.materials pickedMaterial)
+        public MaterialFromPlayersMove(Game.materials pickedMaterial)
         {
             PickedMaterial = pickedMaterial;
         }

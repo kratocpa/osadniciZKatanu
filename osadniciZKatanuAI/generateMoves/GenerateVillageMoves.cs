@@ -24,30 +24,30 @@ namespace osadniciZKatanuAI
             exchange = new GenerateExchangeMoves(movesProp);
         }
 
-        public List<BuildVillageMove> Generate(GameDesc gmDesc)
+        public List<BuildVillageMove> Generate(GameProperties gmProp, PlayerProperties plProp)
         {
             List<BuildVillageMove> possibleVillageMoves = new List<BuildVillageMove>();
 
-            if (gmDesc.ActualPlayerDesc.MaterialsDesc.IsPossibleDelete(gmDesc.materialForVillageDesc) && gmDesc.ActualPlayerDesc.VillageRemaining>0)
+            if (plProp.Materials.IsPossibleDelete(gmProp.MaterialsForVillage) && plProp.VillageRemaining>0)
             {
-                var possibleVertices = GeneratePossibleVerticesToBuildVillage(gmDesc);
+                var possibleVertices = GeneratePossibleVerticesToBuildVillage(gmProp, plProp);
                 foreach (var curVx in possibleVertices)
                 {
                     BuildVillageMove mvDesc = new BuildVillageMove(curVx);
-                    mvDesc.fitnessMove = RateVillage(curVx, gmDesc);
+                    mvDesc.fitnessMove = RateVillage(gmProp, plProp, curVx);
                     possibleVillageMoves.Add(mvDesc);
                 }
             }
-            else if (gmDesc.ActualPlayerDesc.VillageRemaining > 0)
+            else if (plProp.VillageRemaining > 0)
             {
-                BuildVillageMove mvDesc = (BuildVillageMove)exchange.Generate(gmDesc.materialForVillageDesc, gmDesc, GenerateExchangeMoves.typeMove.buildVillage);
+                BuildVillageMove mvDesc = (BuildVillageMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForVillage, GenerateExchangeMoves.typeMove.buildVillage);
                 if (mvDesc != null)
                 {
-                    var possibleVertices = GeneratePossibleVerticesToBuildVillage(gmDesc);
+                    var possibleVertices = GeneratePossibleVerticesToBuildVillage(gmProp, plProp);
                     foreach (var curVx in possibleVertices)
                     {
-                        mvDesc = (BuildVillageMove)exchange.Generate(gmDesc.materialForVillageDesc, gmDesc, GenerateExchangeMoves.typeMove.buildVillage);
-                        mvDesc.fitnessMove = RateVillage(curVx, gmDesc);
+                        mvDesc = (BuildVillageMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForVillage, GenerateExchangeMoves.typeMove.buildVillage);
+                        mvDesc.fitnessMove = RateVillage(gmProp, plProp, curVx);
                         mvDesc.BuildVillage(curVx);
                         possibleVillageMoves.Add(mvDesc);
                     }
@@ -57,12 +57,12 @@ namespace osadniciZKatanuAI
             return possibleVillageMoves;
         }
 
-        private int RateVillage(VertexDesc curVx, GameDesc gmDesc)
+        private int RateVillage(GameProperties gmProp, PlayerProperties plProp, VertexDesc curVx)
         {
             double fitness;
             fitness = movesProp.weightVillageGeneral;
 
-            double[] prob = gmDesc.GameBorderDesc.probabilities;
+            double[] prob = gmProp.GameBorderData.probabilities;
 
             foreach (var curFc in curVx.FaceNeighborsDesc)
             {
@@ -71,7 +71,7 @@ namespace osadniciZKatanuAI
 
             if (curVx.Port)
             {
-                if (curVx.PortMaterial == GameDesc.materials.noMaterial)
+                if (curVx.PortMaterial == Game.materials.noMaterial)
                 {
                     fitness = fitness + movesProp.weightVillagePortThreeOne;
                 }
@@ -84,14 +84,14 @@ namespace osadniciZKatanuAI
             return (int)fitness;
         }
 
-        private List<VertexDesc> GeneratePossibleVerticesToBuildVillage(GameDesc gmDesc)
+        private List<VertexDesc> GeneratePossibleVerticesToBuildVillage(GameProperties gmDesc, PlayerProperties plProp)
         {
             List<VertexDesc> possibleVertices = new List<VertexDesc>();
-            foreach (EdgeDesc curEg in gmDesc.ActualPlayerDesc.RoadDesc)
+            foreach (EdgeDesc curEg in plProp.Road)
             {
                 foreach (VertexDesc curVx in curEg.VertexNeighborsDesc)
                 {
-                    if (curVx.IsFreePlaceForVillage() && curVx.IsHereAdjectedRoadWithColor(gmDesc.ActualPlayerDesc.Color) && gmDesc.ActualPlayerDesc.VillageRemaining>0)                        
+                    if (curVx.IsFreePlaceForVillage() && curVx.IsHereAdjectedRoadWithColor(plProp.Color) && plProp.VillageRemaining>0)                        
                     {
                         possibleVertices.Add(curVx);
                     }

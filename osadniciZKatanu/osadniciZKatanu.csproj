@@ -59,6 +59,7 @@
     <Compile Include="game\Game.cs" />
     <Compile Include="game\GameProperties.cs" />
     <Compile Include="game\Player.cs" />
+    <Compile Include="game\PlayerProperties.cs" />
     <Compile Include="language\CzechLanguage.cs" />
     <Compile Include="language\EngLanguage.cs" />
     <Compile Include="language\ILanguage.cs" />

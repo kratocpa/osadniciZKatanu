@@ -11,7 +11,7 @@ namespace osadniciZKatanu
         public List<Edge> EdgeNeighbors { get; private set; }
         public List<Vertex> VertexNeighbors { get; private set; }
 
-        public void SetRoad(GameDesc.color playerColor_) { Color = playerColor_; Road = true; }
+        public void SetRoad(Game.color playerColor_) { Color = playerColor_; Road = true; }
 
         public Edge(Tuple<Coord, Coord> edgeCoordinate_)
             : base(edgeCoordinate_)

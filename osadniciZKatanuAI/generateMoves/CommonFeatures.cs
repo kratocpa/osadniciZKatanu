@@ -21,15 +21,15 @@ namespace osadniciZKatanuAI
             this.movesProp = movesProp;
         }
 
-        public List<EdgeDesc> GeneratePossibleEdgesToBuildRoad(GameDesc gmDesc)
+        public List<Edge> GeneratePossibleEdgesToBuildRoad(GameProperties gmProp, PlayerProperties plProp)
         {
-            List<EdgeDesc> possibleEdges = new List<EdgeDesc>();
-            foreach (EdgeDesc curEg in gmDesc.ActualPlayerDesc.RoadDesc)
+            List<Edge> possibleEdges = new List<Edge>();
+            foreach (Edge curEg in plProp.Road)
             {
-                foreach (EdgeDesc cEg in curEg.EdgeNeighborsDesc)
+                foreach (Edge cEg in curEg.EdgeNeighborsDesc)
                 {
-                    if (!cEg.Road && cEg.IsHereAdjacentRoadWithColor(gmDesc.ActualPlayerDesc.Color) &&
-                        gmDesc.ActualPlayerDesc.RoadRemaining > 0 )
+                    if (!cEg.Road && cEg.IsHereAdjacentRoadWithColor(plProp.Color) &&
+                        plProp.RoadRemaining > 0 )
                     {
                         possibleEdges.Add(cEg);
                     }
@@ -38,14 +38,14 @@ namespace osadniciZKatanuAI
             return possibleEdges;
         }
 
-        public double RateRoad(EdgeDesc curEg, GameDesc gmDesc)
+        public double RateRoad(GameProperties gmProp, PlayerProperties plProp, Edge curEg)
         {
             double fitness;
             fitness = movesProp.weightRoadGeneral;
-            int newLength = LengthOfNewPath(curEg, gmDesc);
-            if (newLength > gmDesc.ActualPlayerDesc.LongestWayLength)
+            int newLength = LengthOfNewPath(gmProp, plProp, curEg);
+            if (newLength > plProp.LongestWayLength)
             {
-                if (newLength > gmDesc.LongestRoad)
+                if (newLength > gmProp.LongestRoad)
                 {
                     fitness += movesProp.weightLongestRoad;
                 }
@@ -61,7 +61,7 @@ namespace osadniciZKatanuAI
             return fitness;
         }
 
-        public bool CanIBuildVillageOnEdge(EdgeDesc curEg)
+        public bool CanIBuildVillageOnEdge(Edge curEg)
         {
             bool succes = false;
             foreach (VertexDesc curVx in curEg.VertexNeighborsDesc)
@@ -71,19 +71,19 @@ namespace osadniciZKatanuAI
             return succes;
         }
 
-        public int LengthOfNewPath(EdgeDesc newEg, GameDesc gmDesc)
+        public int LengthOfNewPath(GameProperties gmProp, PlayerProperties plProp, Edge newEg)
         {
-            List<EdgeDesc> newRoadList = new List<EdgeDesc>();
+            List<Edge> newRoadList = new List<Edge>();
 
-            foreach (var curEg in gmDesc.ActualPlayerDesc.RoadDesc)
+            foreach (var curEg in plProp.Road)
             {
                 newRoadList.Add(curEg);
             }
             newRoadList.Add(newEg);
 
             return Math.Max(
-                PlayerDesc.FindFurthermostVertexDesc(0, newEg.VertexNeighborsDesc[0], newRoadList).Item2,
-                PlayerDesc.FindFurthermostVertexDesc(0, newEg.VertexNeighborsDesc[1], newRoadList).Item2
+                Player.FindFurthermostVertex(0, newEg.VertexNeighbors[0], newRoadList),
+                Player.FindFurthermostVertex(0, newEg.VertexNeighbors[1], newRoadList)
             );
         }
 

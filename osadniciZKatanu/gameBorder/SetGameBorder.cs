@@ -15,15 +15,8 @@ namespace osadniciZKatanu
         {
         }
 
-        public GameBorder GenerateGameBorder(bool randomMaterials, GameProperties gmProp)
+        public GameBorder GenerateGameBorder(bool randomMaterials, List<Vertex> vertices, List<Face> faces, List<Edge> edges)
         {
-            List<Vertex> vertices = new List<Vertex>();
-            List<Edge> edges = new List<Edge>();
-            List<Face> faces = new List<Face>();
-            foreach (var curVx in gmProp.Vertices) { vertices.Add((Vertex)curVx.Clone()); }
-            foreach (var curEg in gmProp.Edges) { edges.Add((Edge)curEg.Clone()); }
-            foreach (var curFc in gmProp.Faces) { faces.Add((Face)curFc.Clone()); }
-
             foreach (Vertex currentVertex in vertices)
             {
                 currentVertex.AddEdgeNeighbors(FindNeighboringEdgesToVertex(currentVertex, edges));
@@ -57,7 +50,7 @@ namespace osadniciZKatanu
         {
             Random rand = new Random();
             int fs, sc;
-            GameDesc.materials fsMat, scMat;
+            Game.materials fsMat, scMat;
             for (int i = 0; i < 100; i++)
             {
                 fs = rand.Next(0, faces.Count - 1);
@@ -89,7 +82,7 @@ namespace osadniciZKatanu
             {
                 bool succes = false;
                 //pro každý vrchol sousedící se stěnou musím zkontrolovat, jestli nesousedí se třemi stejnými stěnami
-                GameDesc.materials lastMat = curVert.FaceNeighbors[0].Material;
+                Game.materials lastMat = curVert.FaceNeighbors[0].Material;
                 if (curVert.FaceNeighbors.Count == 3)
                 {
                     foreach (var curFace in curVert.FaceNeighbors)

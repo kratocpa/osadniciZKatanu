@@ -12,15 +12,15 @@ namespace osadniciZKatanu
         public List<Edge> EdgeNeighbors { get; private set; }
         public List<Face> FaceNeighbors { get; private set; }
 
-        public void addPort(GameDesc.materials portMaterial_)
+        public void addPort(Game.materials portMaterial_)
         {
             PortMaterial = portMaterial_;
             Port = true;
         }
 
-        public void SetVillage(GameDesc.color playerColor_) { Color = playerColor_; Village = true; }
+        public void SetVillage(Game.color playerColor_) { Color = playerColor_; Village = true; }
 
-        public void SetTown(GameDesc.color playerColor_) { Color = playerColor_; Town = true; Village = false; }
+        public void SetTown(Game.color playerColor_) { Color = playerColor_; Town = true; Village = false; }
 
         public Vertex(Coord vertexCoordinate_)
             : base(vertexCoordinate_)

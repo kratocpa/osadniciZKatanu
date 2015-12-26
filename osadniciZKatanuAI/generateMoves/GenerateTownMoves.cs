@@ -24,30 +24,30 @@ namespace osadniciZKatanuAI
             exchange = new GenerateExchangeMoves(movesProp);
         }
 
-        public List<BuildTownMove> Generate(GameDesc gmDesc)
+        public List<BuildTownMove> Generate(GameProperties gmProp, PlayerProperties plProp)
         {
             List<BuildTownMove> possibleTownMoves = new List<BuildTownMove>();
 
-            if (gmDesc.ActualPlayerDesc.MaterialsDesc.IsPossibleDelete(gmDesc.materialForTownDesc) && gmDesc.ActualPlayerDesc.TownRemaining>0)
+            if (plProp.Materials.IsPossibleDelete(gmProp.MaterialsForTown) && plProp.TownRemaining>0)
             {
-                var possibleVertices = GeneratePossibleVerticesToBuildTown(gmDesc);
+                var possibleVertices = GeneratePossibleVerticesToBuildTown(gmProp, plProp);
                 foreach (var curVx in possibleVertices)
                 {
                     BuildTownMove mvDesc = new BuildTownMove(curVx);
-                    mvDesc.fitnessMove = RateTown(curVx, gmDesc);
+                    mvDesc.fitnessMove = RateTown(curVx, gmProp);
                     possibleTownMoves.Add(mvDesc);
                 }
             }
-            else if (gmDesc.ActualPlayerDesc.TownRemaining > 0)
+            else if (plProp.TownRemaining > 0)
             {
-                BuildTownMove mvDesc = (BuildTownMove)exchange.Generate(gmDesc.materialForTownDesc, gmDesc, GenerateExchangeMoves.typeMove.buildTown);
+                BuildTownMove mvDesc = (BuildTownMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForTown, GenerateExchangeMoves.typeMove.buildTown);
                 if (mvDesc != null)
                 {
-                    var possibleVertices = GeneratePossibleVerticesToBuildTown(gmDesc);
+                    var possibleVertices = GeneratePossibleVerticesToBuildTown(gmProp, plProp);
                     foreach (var curVx in possibleVertices)
                     {
-                        mvDesc = (BuildTownMove)exchange.Generate(gmDesc.materialForTownDesc, gmDesc, GenerateExchangeMoves.typeMove.buildTown);
-                        mvDesc.fitnessMove = RateTown(curVx, gmDesc);
+                        mvDesc = (BuildTownMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForTown, GenerateExchangeMoves.typeMove.buildTown);
+                        mvDesc.fitnessMove = RateTown(curVx, gmProp);
                         mvDesc.BuildTown(curVx);
                         possibleTownMoves.Add(mvDesc);
                     }
@@ -57,12 +57,12 @@ namespace osadniciZKatanuAI
             return possibleTownMoves;
         }
 
-        private List<VertexDesc> GeneratePossibleVerticesToBuildTown(GameDesc gmDesc)
+        private List<Vertex> GeneratePossibleVerticesToBuildTown(GameProperties gmProp, PlayerProperties plProp)
         {
-            List<VertexDesc> possibleVertices = new List<VertexDesc>();
-            foreach (VertexDesc curVx in gmDesc.ActualPlayerDesc.VillageDesc)
+            List<Vertex> possibleVertices = new List<Vertex>();
+            foreach (Vertex curVx in plProp.Village)
             {
-                if (curVx.IsHereVillage(gmDesc.ActualPlayerDesc.Color) && gmDesc.ActualPlayerDesc.TownRemaining > 0)
+                if (curVx.IsHereVillage(plProp.Color) && plProp.TownRemaining > 0)
                 {
                     possibleVertices.Add(curVx);
                 }
@@ -70,12 +70,12 @@ namespace osadniciZKatanuAI
             return possibleVertices;
         }
 
-        private int RateTown(VertexDesc curVx, GameDesc gmDesc)
+        private int RateTown(VertexDesc curVx, GameProperties gmProp)
         {
             double fitness;
             fitness = movesProp.weightTownGeneral;
 
-            double[] prob = gmDesc.GameBorderDesc.probabilities;
+            double[] prob = gmProp.GameBorderData.probabilities;
 
             foreach (var curFc in curVx.FaceNeighborsDesc)
             {

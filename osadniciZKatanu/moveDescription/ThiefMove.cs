@@ -9,9 +9,9 @@ namespace osadniciZKatanu
     public class ThiefMove : Move
     {
         public FaceDesc ThiefCoord {get; set;} // souřadnice kam chci zloděje přesunout
-        public GameDesc.color RobbedPlayer{get; set;} // barva okradeného hráče, noColor pokud neokradu žádného hráče
+        public Game.color RobbedPlayer{get; set;} // barva okradeného hráče, noColor pokud neokradu žádného hráče
 
-        public ThiefMove(FaceDesc thiefCoord, GameDesc.color robbedPlayer)
+        public ThiefMove(FaceDesc thiefCoord, Game.color robbedPlayer)
         {
             ThiefCoord = thiefCoord;
             RobbedPlayer = robbedPlayer;
@@ -20,7 +20,7 @@ namespace osadniciZKatanu
         public ThiefMove(FaceDesc thiefCoord)
         {
             ThiefCoord = thiefCoord;
-            RobbedPlayer = GameDesc.color.noColor;
+            RobbedPlayer = Game.color.noColor;
         }
 
         public override string MoveDescription(ILanguage lang)
@@ -29,7 +29,7 @@ namespace osadniciZKatanu
             res = base.MoveDescription(lang);
             if (res != "") { res += "\n"; }
 
-            if (RobbedPlayer == GameDesc.color.noColor) { res += lang.MoveDescThief(ThiefCoord.ID); }
+            if (RobbedPlayer == Game.color.noColor) { res += lang.MoveDescThief(ThiefCoord.ID); }
             else { res += lang.MoveDescThief(ThiefCoord.ID, RobbedPlayer); }
             return res;
         }

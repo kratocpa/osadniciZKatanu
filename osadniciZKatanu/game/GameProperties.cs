@@ -9,22 +9,22 @@ namespace osadniciZKatanu
 {
     public class GameProperties
     {
-        public int MinPointsToWin { get; private set; }
-        public int LongestRoad { get; private set; }
-        public int MaxKnights { get; private set; }
+        public int MinPointsToWin { get; set; }
+        public int LongestRoad { get; set; }
+        public int MaxKnights { get; set; }
 
-        public int VillageProduction { get; private set; }
-        public int TownProduction { get; private set; }
-        public int LongestRoadProduction { get; private set; }
-        public int LargestArmyProduction { get; private set; }
+        public int VillageProduction { get; set; }
+        public int TownProduction { get; set; }
+        public int LongestRoadProduction { get; set; }
+        public int LargestArmyProduction { get; set; }
 
-        public int SpecialPortRate { get; private set; }
-        public int UniversalPortRate { get; private set; }
-        public int NoPortRate { get; private set; }
+        public int SpecialPortRate { get; set; }
+        public int UniversalPortRate { get; set; }
+        public int NoPortRate { get; set; }
 
-        public int RoadRemaining { get; private set; }
-        public int VillageRemaining { get; private set; }
-        public int TownRemaining { get; private set; }
+        public int RoadRemaining { get; set; }
+        public int VillageRemaining { get; set; }
+        public int TownRemaining { get; set; }
 
         public ActionCardCollection RemainingActionCards { get; private set; }
         public MaterialCollection MaterialsForRoad { get; private set; }
@@ -32,11 +32,28 @@ namespace osadniciZKatanu
         public MaterialCollection MaterialsForTown { get; private set; }
         public MaterialCollection MaterialsForActionCard { get; private set; }
 
-        public List<Vertex> Vertices;
-        public List<Face> Faces;
-        public List<Edge> Edges;
+        public Face ThiefFace { get; set; } // stěna, na který je zloděj
 
-        public GameProperties()
+        public int Round { get; set; } // uvádí kolikáté kolo hry se odehrává
+        public Game.state CurrentState { get; set; } // aktuální stav hry (začátek, hra, konec...)
+        public int FallenNum { get { return FirstDice + SecondDice; } } // číslo které padlo na obou hracích kostkách
+        public int FirstDice { get; set; } // číslo které padlo na první kostce
+        public int SecondDice { get; set; } // číslo které padlo na druhé kostce
+        public bool NeedToMoveThief { get; set; } // padla 7, je třeba přemístit zloděje
+        public bool wasBuildSomething { get; set; } // bylo už za tah něco postaveno
+        public bool wasUseActionCard { get; set; } // byla za tah užita akční karta
+        public bool actionCardsPackedIsEmpty { get { return RemainingActionCards.GetSumAllActionCard() == 0; } } // je balíček akčních karet prázdný
+
+        public GameBorder GameBorderData; // popis hrací desky
+        public ILanguage CurLang { get; private set; } // jazyk hry
+
+        private List<Vertex> vertices;
+        private List<Face> faces;
+        private List<Edge> edges;
+
+        private SetGameBorder st;
+
+        public GameProperties(bool isRandomGameBorder, ILanguage curLang)
         {
             RemainingActionCards = new ActionCardCollection();
             MaterialsForRoad = new MaterialCollection();
@@ -44,9 +61,25 @@ namespace osadniciZKatanu
             MaterialsForTown = new MaterialCollection();
             MaterialsForActionCard = new MaterialCollection();
 
-            Vertices = new List<Vertex>();
-            Faces = new List<Face>();
-            Edges = new List<Edge>();
+            vertices = new List<Vertex>();
+            faces = new List<Face>();
+            edges = new List<Edge>();
+
+            st = new SetGameBorder();
+
+            LoadFromXml();
+
+            Round = 0;
+            CurrentState = Game.state.start;
+            FirstDice = 0;
+            SecondDice = 0;
+            NeedToMoveThief = false;
+            wasBuildSomething = false;
+            wasUseActionCard = false;
+            CurLang = curLang;
+            GameBorderData = st.GenerateGameBorder(isRandomGameBorder, vertices, faces, edges);
+
+            ThiefFace = GameBorderData.Faces.Find(x => x.Material == Game.materials.desert);
         }
 
         public void LoadFromXml()
@@ -100,11 +133,11 @@ namespace osadniciZKatanu
                 int count = int.Parse(chNode.Attributes["count"].Value);
                 switch (chNode.Name)
                 {
-                    case "knight": RemainingActionCards.SetQuantity(GameDesc.actionCards.knight, count); break;
-                    case "coupon": RemainingActionCards.SetQuantity(GameDesc.actionCards.coupon, count); break;
-                    case "materialFromPlayers": RemainingActionCards.SetQuantity(GameDesc.actionCards.materialsFromPlayers, count); break;
-                    case "twoMaterials": RemainingActionCards.SetQuantity(GameDesc.actionCards.twoMaterials, count); break;
-                    case "twoRoad": RemainingActionCards.SetQuantity(GameDesc.actionCards.twoRoad, count); break;
+                    case "knight": RemainingActionCards.SetQuantity(Game.actionCards.knight, count); break;
+                    case "coupon": RemainingActionCards.SetQuantity(Game.actionCards.coupon, count); break;
+                    case "materialFromPlayers": RemainingActionCards.SetQuantity(Game.actionCards.materialsFromPlayers, count); break;
+                    case "twoMaterials": RemainingActionCards.SetQuantity(Game.actionCards.twoMaterials, count); break;
+                    case "twoRoad": RemainingActionCards.SetQuantity(Game.actionCards.twoRoad, count); break;
                     default: break;
                 }
             }
@@ -154,11 +187,11 @@ namespace osadniciZKatanu
                 int count = int.Parse(chNode.Attributes["count"].Value);
                 switch (chNode.Name)
                 {
-                    case "wood": result.SetQuantity(GameDesc.materials.wood, count); break;
-                    case "brick": result.SetQuantity(GameDesc.materials.brick, count); break;
-                    case "sheep": result.SetQuantity(GameDesc.materials.sheep, count); break;
-                    case "grain": result.SetQuantity(GameDesc.materials.grain, count); break;
-                    case "stone": result.SetQuantity(GameDesc.materials.stone, count); break;
+                    case "wood": result.SetQuantity(Game.materials.wood, count); break;
+                    case "brick": result.SetQuantity(Game.materials.brick, count); break;
+                    case "sheep": result.SetQuantity(Game.materials.sheep, count); break;
+                    case "grain": result.SetQuantity(Game.materials.grain, count); break;
+                    case "stone": result.SetQuantity(Game.materials.stone, count); break;
 
                     default: break;
                 }
@@ -210,7 +243,7 @@ namespace osadniciZKatanu
                     Vertex curVx = new Vertex(point);
                     curVx.ID = ID;
                     ID++;
-                    Vertices.Add(curVx);
+                    vertices.Add(curVx);
                 }
 
                 //načtení souřadnic portů
@@ -221,8 +254,8 @@ namespace osadniciZKatanu
                     point.X = double.Parse(curNode.Attributes["xCoord"].Value, System.Globalization.CultureInfo.InvariantCulture);
                     point.Y = double.Parse(curNode.Attributes["yCoord"].Value, System.Globalization.CultureInfo.InvariantCulture);
 
-                    GameDesc.materials portMaterials = GameDesc.RecogniseMaterials(curNode.FirstChild.InnerText);
-                    Vertices.Find(x => x.Coordinate.X == point.X &&
+                    Game.materials portMaterials = Game.RecogniseMaterials(curNode.FirstChild.InnerText);
+                    vertices.Find(x => x.Coordinate.X == point.X &&
                         x.Coordinate.Y == point.Y).addPort(portMaterials);
                 }
             }
@@ -246,12 +279,12 @@ namespace osadniciZKatanu
                     Coord point = new Coord();
                     point.X = double.Parse(curNode.Attributes["xCoord"].Value, System.Globalization.CultureInfo.InvariantCulture);
                     point.Y = double.Parse(curNode.Attributes["yCoord"].Value, System.Globalization.CultureInfo.InvariantCulture);
-                    GameDesc.materials matFace = GameDesc.RecogniseMaterials(curNode.FirstChild.InnerText);
+                    Game.materials matFace = Game.RecogniseMaterials(curNode.FirstChild.InnerText);
                     int numFace = int.Parse(curNode.LastChild.InnerText);
                     Face curFc = new Face(point, matFace, numFace);
                     curFc.ID = ID;
                     ID++;
-                    Faces.Add(curFc);
+                    faces.Add(curFc);
                 }
             }
             catch (Exception ex)
@@ -267,15 +300,15 @@ namespace osadniciZKatanu
         private void SetEdges()
         {
             int ID = 0;
-            foreach (Vertex fsCurVx in Vertices)
+            foreach (Vertex fsCurVx in vertices)
             {
-                foreach (Vertex scCurVx in Vertices)
+                foreach (Vertex scCurVx in vertices)
                 {
                     if(SetGameBorder.NeighboringVertices(fsCurVx, scCurVx) && fsCurVx != scCurVx)
                     {
                         bool notAdd = false;
                         var curL = new Tuple<Coord, Coord>(fsCurVx.Coordinate, scCurVx.Coordinate);
-                        foreach (var findL in Edges)
+                        foreach (var findL in edges)
                         {
                             if (GameBorderDesc.SameLine(curL, findL.Coordinate))
                             {
@@ -286,7 +319,7 @@ namespace osadniciZKatanu
                             Edge curEg = new Edge(curL);
                             curEg.ID = ID;
                             ID++;
-                            Edges.Add(curEg); 
+                            edges.Add(curEg); 
                         }
                     }
                 }

@@ -58,7 +58,7 @@ namespace osadniciZKatanu
                 }
             }
 
-            return new FaceDesc(new Coord(-1,-1), GameDesc.materials.noMaterial, -1);
+            return new FaceDesc(new Coord(-1,-1), Game.materials.noMaterial, -1);
         }
 
         public EdgeDesc FindEdgeByCoordinateDesc(Coord coordinate)

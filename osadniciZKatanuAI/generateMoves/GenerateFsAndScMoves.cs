@@ -22,20 +22,20 @@ namespace osadniciZKatanuAI
             this.movesProp = movesProp;
         }
 
-        public List<FirstPhaseGameMove> Generate(GameDesc gmDesc)
+        public List<FirstPhaseGameMove> Generate(GameProperties gmProp, PlayerProperties plProp)
         {
             List<FirstPhaseGameMove> possibleMoves = new List<FirstPhaseGameMove>();
             double fitness;
 
-            foreach (var curVx in gmDesc.GameBorderDesc.verticesDesc)
+            foreach (var curVx in gmProp.GameBorderData.Vertices)
             {
                 if (curVx.IsFreePlaceForVillage())
                 {
-                    fitness = ComputeVertexFitness(curVx, gmDesc);
+                    fitness = ComputeVertexFitness(gmProp, plProp, curVx);
                     foreach (var curEg in curVx.EdgeNeighborsDesc)
                     {
                         FirstPhaseGameMove mvDesc = new FirstPhaseGameMove(curVx, curEg);
-                        fitness += ComputeEdgeFitness(curEg, gmDesc);
+                        fitness += ComputeEdgeFitness(gmProp, plProp, curEg);
                         mvDesc.fitnessMove = fitness;
                         possibleMoves.Add(mvDesc);
                     }
@@ -45,23 +45,23 @@ namespace osadniciZKatanuAI
             return possibleMoves;
         }
 
-        private double ComputeEdgeFitness(EdgeDesc edge, GameDesc gmDesc)
+        private double ComputeEdgeFitness(GameProperties gmProp, PlayerProperties plProp, EdgeDesc edge)
         {
             return movesProp.weightEdgeGeneral;
         }
 
-        private double ComputeVertexFitness(VertexDesc vertex, GameDesc gmDesc)
+        private double ComputeVertexFitness(GameProperties gmProp, PlayerProperties plProp, VertexDesc vertex)
         {
-            List<GameDesc.materials> matWhatIHave = WhatIHave(gmDesc);
+            List<Game.materials> matWhatIHave = WhatIHave(gmProp, plProp);
 
-            double[] prob = gmDesc.GameBorderDesc.probabilities;
+            double[] prob = gmProp.GameBorderData.probabilities;
             double fitness = 0;
 
             foreach (var curFc in vertex.FaceNeighborsDesc)
             {
                 double matWeigth = ComputeWeightMaterial(curFc.Material);
                 fitness = fitness + movesProp.weightGoodNumbers * matWeigth * prob[curFc.ProbabilityNumber - 2];
-                if (!matWhatIHave.Contains(curFc.Material) && curFc.Material != GameDesc.materials.desert)
+                if (!matWhatIHave.Contains(curFc.Material) && curFc.Material != Game.materials.desert)
                 {
                     fitness += movesProp.weightMissingMaterial;
                 }
@@ -69,7 +69,7 @@ namespace osadniciZKatanuAI
 
             if (vertex.Port)
             {
-                if (vertex.PortMaterial == GameDesc.materials.noMaterial)
+                if (vertex.PortMaterial == Game.materials.noMaterial)
                 {
                     fitness = fitness + movesProp.weightPortThreeOne;
                 }
@@ -82,13 +82,13 @@ namespace osadniciZKatanuAI
             return fitness;
         }
 
-        private List<GameDesc.materials> WhatIHave(GameDesc gmDesc)
+        private List<Game.materials> WhatIHave(GameProperties gmProp, PlayerProperties plProp)
         {
-            List<GameDesc.materials> matWhatIHave = new List<GameDesc.materials>();
+            List<Game.materials> matWhatIHave = new List<Game.materials>();
 
-            foreach (var curVx in gmDesc.ActualPlayerDesc.VillageDesc)
+            foreach (var curVx in plProp.Village)
             {
-                foreach (var curFc in curVx.FaceNeighborsDesc)
+                foreach (var curFc in curVx.FaceNeighbors)
                 {
                     if (!matWhatIHave.Contains(curFc.Material))
                     {
@@ -100,16 +100,16 @@ namespace osadniciZKatanuAI
             return matWhatIHave;
         }
 
-        private double ComputeWeightMaterial(GameDesc.materials curMat)
+        private double ComputeWeightMaterial(Game.materials curMat)
         {
             double fitness;
             switch (curMat)
             {
-                case GameDesc.materials.brick: fitness = movesProp.weightBrick; break;
-                case GameDesc.materials.grain: fitness = movesProp.weightGrain; break;
-                case GameDesc.materials.sheep: fitness = movesProp.weightSheep; break;
-                case GameDesc.materials.stone: fitness = movesProp.weightStone; break;
-                case GameDesc.materials.wood: fitness = movesProp.weightWood; break;
+                case Game.materials.brick: fitness = movesProp.weightBrick; break;
+                case Game.materials.grain: fitness = movesProp.weightGrain; break;
+                case Game.materials.sheep: fitness = movesProp.weightSheep; break;
+                case Game.materials.stone: fitness = movesProp.weightStone; break;
+                case Game.materials.wood: fitness = movesProp.weightWood; break;
                 default: fitness = 0; break;
             }
 

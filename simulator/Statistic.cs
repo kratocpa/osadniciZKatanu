@@ -50,21 +50,21 @@ namespace simulator
             }
         }
 
-        public void AddToStatistic(GameDesc result)
+        public void AddToStatistic(Game result)
         {
-            if (result.Round > maxNumRound) { maxNumRound = result.Round; }
-            if (result.Round < minNumRound) { minNumRound = result.Round; }
-            avrNumRound = avrNumRound + result.Round;
+            if (result.GmProp.Round > maxNumRound) { maxNumRound = result.GmProp.Round; }
+            if (result.GmProp.Round < minNumRound) { minNumRound = result.GmProp.Round; }
+            avrNumRound = avrNumRound + result.GmProp.Round;
             actualGame++;
 
-            if (result.ActualPlayerDesc.Points >= 10)
+            if (result.ActualPlayer.PlProp.Points >= 10)
             {
-                switch (result.ActualPlayerDesc.Color)
+                switch (result.ActualPlayer.PlProp.Color)
                 {
-                    case GameDesc.color.red: RedWins++; break;
-                    case GameDesc.color.blue: BlueWins++; break;
-                    case GameDesc.color.yellow: YellowWins++; break;
-                    case GameDesc.color.white: WhiteWins++; break;
+                    case Game.color.red: RedWins++; break;
+                    case Game.color.blue: BlueWins++; break;
+                    case Game.color.yellow: YellowWins++; break;
+                    case Game.color.white: WhiteWins++; break;
                 }
             }
 
@@ -81,13 +81,13 @@ namespace simulator
             output.WriteLine("Cerveny vyhral: " + RedWins + ", Modry vyhral: " + BlueWins + ", Zluty vyhral: " + YellowWins + ", Bily vyhral: " + WhiteWins);
         }
 
-        public void PrintGameResult(GameDesc result, System.IO.TextWriter output)
+        public void PrintGameResult(Game result, System.IO.TextWriter output)
         {
-            output.WriteLine("počet kol: " + result.Round);
+            output.WriteLine("počet kol: " + result.GmProp.Round);
             output.WriteLine("pořadí: ");
-            foreach (PlayerDesc plDes in result.PlayersDesc)
+            foreach (Player plDes in result.Players)
             {
-                output.WriteLine(curLang.ColorToString(plDes.Color) + ": body " + plDes.Points + ", rytíři " + plDes.Knights);
+                output.WriteLine(curLang.ColorToString(plDes.PlProp.Color) + ": body " + plDes.PlProp.Points + ", rytíři " + plDes.PlProp.Knights);
             }
         }
 

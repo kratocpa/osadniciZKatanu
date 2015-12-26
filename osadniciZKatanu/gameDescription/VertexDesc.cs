@@ -13,8 +13,8 @@ namespace osadniciZKatanu
         public bool Town { get; protected set; } // true - je zde město, false - není
         public bool Building { get { return Village || Town; } } // true - je zde město nebo vesnice, false - není
         public bool Port { get; protected set; } // true - je zde port, false - není
-        public GameDesc.materials PortMaterial { get; protected set; } // pokud je hodnota noMaterial, pak je zde univerzální port
-        public GameDesc.color Color { get; protected set; } // barva vesnice nebo města které je zde postavené (jinak noColor)
+        public Game.materials PortMaterial { get; protected set; } // pokud je hodnota noMaterial, pak je zde univerzální port
+        public Game.color Color { get; protected set; } // barva vesnice nebo města které je zde postavené (jinak noColor)
         public List<VertexDesc> VerticesNeighborsDesc { get; protected set; } // seznam vrcholů, který přimo sousedí s tímto
         public List<EdgeDesc> EdgeNeighborsDesc { get; protected set; } // seznam hran, které sousední s tímto vrcholem
         public List<FaceDesc> FaceNeighborsDesc { get; protected set; } // seznam stěn, které sousedí s vrcholem
@@ -24,22 +24,22 @@ namespace osadniciZKatanu
         {
             Village = false;
             Town = false;
-            Color = GameDesc.color.noColor;
+            Color = Game.color.noColor;
             Coordinate = vertexCoordinate_;
             VerticesNeighborsDesc = new List<VertexDesc>();
             EdgeNeighborsDesc = new List<EdgeDesc>();
             FaceNeighborsDesc = new List<FaceDesc>();
 
             Port = false;
-            PortMaterial = GameDesc.materials.noMaterial;
+            PortMaterial = Game.materials.noMaterial;
         }
 
-        public bool IsHereVillage(GameDesc.color playerColor)
+        public bool IsHereVillage(Game.color playerColor)
         {
             return Village && Color == playerColor;
         }
 
-        public bool IsHereTown(GameDesc.color playerColor)
+        public bool IsHereTown(Game.color playerColor)
         {
             return Town && Color == playerColor;
         }
@@ -54,7 +54,7 @@ namespace osadniciZKatanu
             return succes;
         }
 
-        public bool IsHereAdjectedRoadWithColor(GameDesc.color roadColor)
+        public bool IsHereAdjectedRoadWithColor(Game.color roadColor)
         {
             bool succes = false;
             foreach (EdgeDesc curEg in EdgeNeighborsDesc)

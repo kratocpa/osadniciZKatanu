@@ -190,34 +190,34 @@ namespace osadniciZKatanuGUI
             remainingActionCardImage.Visibility = Visibility.Visible;
             remainingActionCardLabel.Visibility = Visibility.Visible;
 
-            switch (gm.ActualPlayer.Color)
+            switch (gm.ActualPlayer.PlProp.Color)
             {
-                case GameDesc.color.blue:
+                case Game.color.blue:
                     remainingVillageImage.Source = new BitmapImage(new Uri("pictures/blueVillage.png", UriKind.Relative));
                     remainingTownImage.Source = new BitmapImage(new Uri("pictures/blueTown.png", UriKind.Relative));
                     remainingRoadLine.Stroke = Brushes.Blue;
                     break;
-                case GameDesc.color.red:
+                case Game.color.red:
                     remainingVillageImage.Source = new BitmapImage(new Uri("pictures/redVillage.png", UriKind.Relative));
                     remainingTownImage.Source = new BitmapImage(new Uri("pictures/redTown.png", UriKind.Relative));
                     remainingRoadLine.Stroke = Brushes.Red;
                     break;
-                case GameDesc.color.white:
+                case Game.color.white:
                     remainingVillageImage.Source = new BitmapImage(new Uri("pictures/whiteVillage.png", UriKind.Relative));
                     remainingTownImage.Source = new BitmapImage(new Uri("pictures/whiteTown.png", UriKind.Relative));
                     remainingRoadLine.Stroke = Brushes.White;
                     break;
-                case GameDesc.color.yellow:
+                case Game.color.yellow:
                     remainingVillageImage.Source = new BitmapImage(new Uri("pictures/yellowVillage.png", UriKind.Relative));
                     remainingTownImage.Source = new BitmapImage(new Uri("pictures/yellowTown.png", UriKind.Relative));
                     remainingRoadLine.Stroke = Brushes.Yellow;
                     break;
             }
 
-            remainingRoadLabel.Content = gm.ActualPlayer.RoadRemaining;
-            remainingVillageLabel.Content = gm.ActualPlayer.VillageRemaining;
-            remainingTownLabel.Content = gm.ActualPlayer.TownRemaining;
-            remainingActionCardLabel.Content = gm.RemainingActionCards.GetSumAllActionCard();
+            remainingRoadLabel.Content = gm.ActualPlayer.PlProp.RoadRemaining;
+            remainingVillageLabel.Content = gm.ActualPlayer.PlProp.VillageRemaining;
+            remainingTownLabel.Content = gm.ActualPlayer.PlProp.TownRemaining;
+            remainingActionCardLabel.Content = gm.GmProp.RemainingActionCards.GetSumAllActionCard();
         }
 
         /// <summary>
@@ -338,7 +338,7 @@ namespace osadniciZKatanuGUI
 
         public void DrawHelpfullID(Game gm)
         {
-            foreach (var curVx in gm.GameBorderData.Vertices)
+            foreach (var curVx in gm.GmProp.GameBorderData.Vertices)
             {
                 int faceNumSize = 40;
                 Label matNum = new Label();
@@ -353,7 +353,7 @@ namespace osadniciZKatanuGUI
                 Canvas.SetLeft(matNum, curVx.Coordinate.X - faceNumSize / 2);
             }
 
-            foreach (var curEg in gm.GameBorderData.Edges)
+            foreach (var curEg in gm.GmProp.GameBorderData.Edges)
             {
                 int faceNumSize = 40;
                 Label matNum = new Label();
@@ -368,7 +368,7 @@ namespace osadniciZKatanuGUI
                 Canvas.SetLeft(matNum, curEg.CentreCoordinate.X - faceNumSize / 2);
             }
 
-            foreach (var curFc in gm.GameBorderData.Faces)
+            foreach (var curFc in gm.GmProp.GameBorderData.Faces)
             {
                 int faceNumSize = 40;
                 Label matNum = new Label();
@@ -398,16 +398,16 @@ namespace osadniciZKatanuGUI
             Image buildingImg = new Image();
             switch (col)
             {
-                case GameDesc.color.blue:
+                case Game.color.blue:
                     buildingImg.Source = new BitmapImage(new Uri("pictures/blueVillage.png", UriKind.Relative));
                     break;
-                case GameDesc.color.red:
+                case Game.color.red:
                     buildingImg.Source = new BitmapImage(new Uri("pictures/redVillage.png", UriKind.Relative));
                     break;
-                case GameDesc.color.white:
+                case Game.color.white:
                     buildingImg.Source = new BitmapImage(new Uri("pictures/whiteVillage.png", UriKind.Relative));
                     break;
-                case GameDesc.color.yellow:
+                case Game.color.yellow:
                     buildingImg.Source = new BitmapImage(new Uri("pictures/yellowVillage.png", UriKind.Relative));
                     break;
             }
@@ -429,16 +429,16 @@ namespace osadniciZKatanuGUI
             Image buildingImg = new Image();
             switch (townVertexStruct.Color)
             {
-                case GameDesc.color.blue:
+                case Game.color.blue:
                     buildingImg.Source = new BitmapImage(new Uri("pictures/blueTown.png", UriKind.Relative));
                     break;
-                case GameDesc.color.red:
+                case Game.color.red:
                     buildingImg.Source = new BitmapImage(new Uri("pictures/redTown.png", UriKind.Relative));
                     break;
-                case GameDesc.color.white:
+                case Game.color.white:
                     buildingImg.Source = new BitmapImage(new Uri("pictures/whiteTown.png", UriKind.Relative));
                     break;
-                case GameDesc.color.yellow:
+                case Game.color.yellow:
                     buildingImg.Source = new BitmapImage(new Uri("pictures/yellowTown.png", UriKind.Relative));
                     break;
              }
@@ -461,7 +461,7 @@ namespace osadniciZKatanuGUI
         /// vykreslí cestu na zadané souřadnici
         /// </summary>
         /// <param name="roadEdgeStruct"></param>
-        public void DrawRoad(EdgeDesc roadEdgeStruct, GameDesc.color col)
+        public void DrawRoad(EdgeDesc roadEdgeStruct, Game.color col)
         {
             Line path = new Line();
             //TODO : zajistit, aby se cesty normálně roztáhly přes celou cestu, ale pokud je tam postavená vesnice, tak ne
@@ -506,16 +506,16 @@ namespace osadniciZKatanuGUI
            */
             switch (col)
             {
-                case GameDesc.color.blue :
+                case Game.color.blue :
                     path.Stroke = Brushes.Blue;
                     break;
-                case GameDesc.color.red :
+                case Game.color.red :
                     path.Stroke = Brushes.Red;
                     break;
-                case GameDesc.color.white :
+                case Game.color.white :
                     path.Stroke = Brushes.White;
                     break;
-                case GameDesc.color.yellow :
+                case Game.color.yellow :
                     path.Stroke = Brushes.Yellow;
                     break;
              }
@@ -530,7 +530,7 @@ namespace osadniciZKatanuGUI
         /// <param name="gm"></param>
         public void DrawStatue(Game gm, GameWindow.gameEvent gmEv)
         {
-            switch (gm.CurrentState)
+            switch (gm.GmProp.CurrentState)
             {
                 case Game.state.start: DrawStatueStart(gm);
                     break;
@@ -545,7 +545,7 @@ namespace osadniciZKatanuGUI
 
         void DrawEndGame(Game gm)
         {
-            actualPlayerLabel.Content = curLang.EndOfGame() + curLang.ColorToString(gm.ActualPlayer.Color);
+            actualPlayerLabel.Content = curLang.EndOfGame() + curLang.ColorToString(gm.ActualPlayer.PlProp.Color);
             gm.NextState();
             startGameButton.Content = curLang.NextGame();
             startGameButton.IsEnabled = true;
@@ -553,11 +553,11 @@ namespace osadniciZKatanuGUI
             changeMaterialButton.IsEnabled = false;
             useActionCardButton.IsEnabled = false;
 
-            String messageRes = curLang.win() + " " + curLang.ColorToString(gm.ActualPlayer.Color) + "\n";
-            List<Player> sortedList = gm.Players.OrderByDescending(x => x.Points).ToList();
+            String messageRes = curLang.win() + " " + curLang.ColorToString(gm.ActualPlayer.PlProp.Color) + "\n";
+            List<Player> sortedList = gm.Players.OrderByDescending(x => x.PlProp.Points).ToList();
             foreach (var curPl in sortedList)
             {
-                messageRes = messageRes + "\n" + curLang.ColorToString(curPl.Color) + " - " + curPl.Points + "b";
+                messageRes = messageRes + "\n" + curLang.ColorToString(curPl.PlProp.Color) + " - " + curPl.PlProp.Points + "b";
             }
 
             MessageBoxResult mResult = MessageBox.Show(messageRes, "Konec hry", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -570,25 +570,25 @@ namespace osadniciZKatanuGUI
 
         void DrawStatueGame(Game gm, GameWindow.gameEvent gmEv)
         {
-            DrawActualPlayer(gm.ActualPlayer.Color);
-            brickCountLabel.Content = gm.ActualPlayer.Materials.GetQuantity(GameDesc.materials.brick);
-            grainCountLabel.Content = gm.ActualPlayer.Materials.GetQuantity(GameDesc.materials.grain);
-            sheepCountLabel.Content = gm.ActualPlayer.Materials.GetQuantity(GameDesc.materials.sheep);
-            stoneCountLabel.Content = gm.ActualPlayer.Materials.GetQuantity(GameDesc.materials.stone);
-            woodCountLabel.Content = gm.ActualPlayer.Materials.GetQuantity(GameDesc.materials.wood);
+            DrawActualPlayer(gm.ActualPlayer.PlProp.Color);
+            brickCountLabel.Content = gm.ActualPlayer.PlProp.Materials.GetQuantity(Game.materials.brick);
+            grainCountLabel.Content = gm.ActualPlayer.PlProp.Materials.GetQuantity(Game.materials.grain);
+            sheepCountLabel.Content = gm.ActualPlayer.PlProp.Materials.GetQuantity(Game.materials.sheep);
+            stoneCountLabel.Content = gm.ActualPlayer.PlProp.Materials.GetQuantity(Game.materials.stone);
+            woodCountLabel.Content = gm.ActualPlayer.PlProp.Materials.GetQuantity(Game.materials.wood);
             DrawActionCardsList(gm.ActualPlayer);
             DrawPointsAndKnights(gm.ActualPlayer);
-            roundLabel.Content = gm.Round;
+            roundLabel.Content = gm.GmProp.Round;
 
-            buyActionCardButton.IsEnabled = gm.ActualPlayer.Materials.IsPossibleDelete(gm.materialForActionCard) && !gm.wasBuildSomething;
+            buyActionCardButton.IsEnabled = gm.ActualPlayer.PlProp.Materials.IsPossibleDelete(gm.GmProp.MaterialsForActionCard) && !gm.GmProp.wasBuildSomething;
             changeMaterialButton.IsEnabled = ExchangePossibility(gm).Count > 0;
 
             DrawRemainingBuildingAndCards(gm);
             
-            if (gm.ActualPlayer.LargestArmy){largestArmyImage.Visibility = Visibility.Visible;}
+            if (gm.ActualPlayer.PlProp.LargestArmy){largestArmyImage.Visibility = Visibility.Visible;}
             else{largestArmyImage.Visibility = Visibility.Hidden; }
 
-            if (gm.ActualPlayer.LongestWay) { longestWayImage.Visibility = Visibility.Visible; }
+            if (gm.ActualPlayer.PlProp.LongestWay) { longestWayImage.Visibility = Visibility.Visible; }
             else { longestWayImage.Visibility = Visibility.Hidden; }
 
             switch (gmEv)
@@ -619,7 +619,7 @@ namespace osadniciZKatanuGUI
                     break;
             }
 
-            if (!gm.ActualPlayer.RealPlayer)
+            if (!gm.ActualPlayer.PlProp.RealPlayer)
             {
                 gameEventLabel.Content = "";
                 buyActionCardButton.IsEnabled = false;
@@ -708,13 +708,13 @@ namespace osadniciZKatanuGUI
 
         private void noneStatue(Game gm)
         {
-            bool road = gm.ActualPlayer.Materials.IsPossibleDelete(gm.materialForRoad) && !gm.wasBuildSomething && gm.ActualPlayer.RoadRemaining > 0;
-            bool village = gm.ActualPlayer.Materials.IsPossibleDelete(gm.materialForVillage) && !gm.wasBuildSomething && gm.ActualPlayer.VillageRemaining > 0 && gm.ActualPlayer.IsThereFreeSpaceForVillage();
-            bool town = gm.ActualPlayer.Materials.IsPossibleDelete(gm.materialForTown) && !gm.wasBuildSomething && gm.ActualPlayer.TownRemaining > 0 && gm.ActualPlayer.Village.Count > 0;
+            bool road = gm.ActualPlayer.PlProp.Materials.IsPossibleDelete(gm.GmProp.MaterialsForRoad) && !gm.GmProp.wasBuildSomething && gm.ActualPlayer.PlProp.RoadRemaining > 0;
+            bool village = gm.ActualPlayer.PlProp.Materials.IsPossibleDelete(gm.GmProp.MaterialsForVillage) && !gm.GmProp.wasBuildSomething && gm.ActualPlayer.PlProp.VillageRemaining > 0 && gm.ActualPlayer.IsThereFreeSpaceForVillage();
+            bool town = gm.ActualPlayer.PlProp.Materials.IsPossibleDelete(gm.GmProp.MaterialsForTown) && !gm.GmProp.wasBuildSomething && gm.ActualPlayer.PlProp.TownRemaining > 0 && gm.ActualPlayer.PlProp.Village.Count > 0;
             string result;
 
             fsSelectionListbox.Visibility = Visibility.Hidden;
-            buyActionCardButton.IsEnabled = gm.ActualPlayer.Materials.IsPossibleDelete(gm.materialForActionCard) && !gm.wasBuildSomething;
+            buyActionCardButton.IsEnabled = gm.ActualPlayer.PlProp.Materials.IsPossibleDelete(gm.GmProp.MaterialsForActionCard) && !gm.GmProp.wasBuildSomething;
             changeMaterialButton.IsEnabled = ExchangePossibility(gm).Count > 0;
             startGameButton.IsEnabled = true;
 
@@ -776,18 +776,18 @@ namespace osadniciZKatanuGUI
 
         List<Game.materials> ExchangePossibility(Game gm)
         {
-            List<Game.materials> result = new List<GameDesc.materials>();
-            foreach (var curMat in gm.ActualPlayer.Materials.ExchangePossibility(gm.NoPortRate))
+            List<Game.materials> result = new List<Game.materials>();
+            foreach (var curMat in gm.ActualPlayer.PlProp.Materials.ExchangePossibility(gm.GmProp.NoPortRate))
             {
                 if (!result.Contains(curMat)) { result.Add(curMat); }
             }
-            foreach (var curMat in gm.ActualPlayer.Materials.ExchangePossibility(gm.ActualPlayer.PortForMaterial, gm.SpecialPortRate))
+            foreach (var curMat in gm.ActualPlayer.PlProp.Materials.ExchangePossibility(gm.ActualPlayer.PlProp.PortForMaterial, gm.GmProp.SpecialPortRate))
             {
                 if (!result.Contains(curMat)) { result.Add(curMat); }
             }
-            if (gm.ActualPlayer.UniversalPort)
+            if (gm.ActualPlayer.PlProp.UniversalPort)
             {
-                foreach (var curMat in gm.ActualPlayer.Materials.ExchangePossibility(gm.UniversalPortRate))
+                foreach (var curMat in gm.ActualPlayer.PlProp.Materials.ExchangePossibility(gm.GmProp.UniversalPortRate))
                 {
                     if (!result.Contains(curMat)) { result.Add(curMat); }
                 }
@@ -797,28 +797,28 @@ namespace osadniciZKatanuGUI
 
         void DrawStatueFirstPhaseOfTheGame(Game gm)
         {
-            DrawActualPlayer(gm.ActualPlayer.Color);
+            DrawActualPlayer(gm.ActualPlayer.PlProp.Color);
             if (startGameButton.IsEnabled)
             {
                 gameEventLabel.Content = "";
             }
             else
             {
-                gameEventLabel.Content = curLang.PlayerFirstAndSecondMoveToString(gm.ActualPlayer.Color);
+                gameEventLabel.Content = curLang.PlayerFirstAndSecondMoveToString(gm.ActualPlayer.PlProp.Color);
             }
         }
 
-        void DrawActualPlayer(GameDesc.color actualPlayerColor)
+        void DrawActualPlayer(Game.color actualPlayerColor)
         {
             actualPlayerLabel.Content = curLang.PlayerMoveToString(actualPlayerColor);
         
             SolidColorBrush curBrush;
             switch (actualPlayerColor)
             {
-                case GameDesc.color.blue: curBrush = Brushes.Blue; break;
-                case GameDesc.color.red: curBrush = Brushes.Red; break;
-                case GameDesc.color.white: curBrush = Brushes.Black; break;
-                case GameDesc.color.yellow: curBrush = Brushes.YellowGreen; break;
+                case Game.color.blue: curBrush = Brushes.Blue; break;
+                case Game.color.red: curBrush = Brushes.Red; break;
+                case Game.color.white: curBrush = Brushes.Black; break;
+                case Game.color.yellow: curBrush = Brushes.YellowGreen; break;
                 default: curBrush = Brushes.Black; break;
             }
 
@@ -828,13 +828,13 @@ namespace osadniciZKatanuGUI
 
         void DrawPointsAndKnights(Player actPlayer)
         {
-            pointsLabel.Content = curLang.Points() + actPlayer.Points + ", " + curLang.Knights() + actPlayer.Knights;
+            pointsLabel.Content = curLang.Points() + actPlayer.PlProp.Points + ", " + curLang.Knights() + actPlayer.PlProp.Knights;
         }
 
         void DrawActionCardsList(Player actPlayer)
         {
             actionCardListbox.Items.Clear();
-            foreach (var currentActionCard in actPlayer.ActionCards.ActionCards)
+            foreach (var currentActionCard in actPlayer.PlProp.ActionCards.ActionCards)
             {
                 if (currentActionCard.Quantity != 0)
                 {
@@ -857,17 +857,17 @@ namespace osadniciZKatanuGUI
 
             foreach (var curMat in changeList)
             {
-                if (gm.ActualPlayer.PortForMaterial.Contains(curMat))
+                if (gm.ActualPlayer.PlProp.PortForMaterial.Contains(curMat))
                 {
-                    fsSelectionListbox.Items.Add(curLang.MaterialToString(curMat) + " " + gm.SpecialPortRate + ":1");
+                    fsSelectionListbox.Items.Add(curLang.MaterialToString(curMat) + " " + gm.GmProp.SpecialPortRate + ":1");
                 }
-                else if (gm.ActualPlayer.UniversalPort)
+                else if (gm.ActualPlayer.PlProp.UniversalPort)
                 {
-                    fsSelectionListbox.Items.Add(curLang.MaterialToString(curMat) + " " + gm.UniversalPortRate + ":1");
+                    fsSelectionListbox.Items.Add(curLang.MaterialToString(curMat) + " " + gm.GmProp.UniversalPortRate + ":1");
                 }
                 else
                 {
-                    fsSelectionListbox.Items.Add(curLang.MaterialToString(curMat) + " " + gm.NoPortRate + ":1");
+                    fsSelectionListbox.Items.Add(curLang.MaterialToString(curMat) + " " + gm.GmProp.NoPortRate + ":1");
                 }
             }
             gameEventLabel.Content = curLang.PickMaterialLabel();
@@ -879,7 +879,7 @@ namespace osadniciZKatanuGUI
             List<Object> mats = new List<Object>();
             foreach (Game.materials curMat in Enum.GetValues(typeof(Game.materials)))
             {
-                if (curMat != GameDesc.materials.noMaterial && curMat != GameDesc.materials.desert)
+                if (curMat != Game.materials.noMaterial && curMat != Game.materials.desert)
                 {
                     mats.Add(curMat);
                 }
@@ -910,8 +910,8 @@ namespace osadniciZKatanuGUI
             if (mvDesc is FirstPhaseGameMove)
             {
                 FirstPhaseGameMove cM = (FirstPhaseGameMove)mvDesc;
-                DrawVillage(gm.GameBorderData.FindVerticesByCoordinate(cM.VillageCoord.Coordinate));
-                DrawRoad(gm.GameBorderData.FindEdgeByCoordinate(cM.RoadCoord.CentreCoordinate));
+                DrawVillage(gm.GmProp.GameBorderData.FindVerticesByCoordinate(cM.VillageCoord.Coordinate));
+                DrawRoad(gm.GmProp.GameBorderData.FindEdgeByCoordinate(cM.RoadCoord.CentreCoordinate));
             }
             else if (mvDesc is ThiefMove)
             {
@@ -921,17 +921,17 @@ namespace osadniciZKatanuGUI
             else if (mvDesc is BuildRoadMove)
             {
                 BuildRoadMove cM = (BuildRoadMove)mvDesc;
-                DrawRoad(gm.GameBorderData.FindEdgeByCoordinate(cM.BuildingCoord.CentreCoordinate));
+                DrawRoad(gm.GmProp.GameBorderData.FindEdgeByCoordinate(cM.BuildingCoord.CentreCoordinate));
             }
             else if (mvDesc is BuildVillageMove)
             {
                 BuildVillageMove cM = (BuildVillageMove)mvDesc;
-                DrawVillage(gm.GameBorderData.FindVerticesByCoordinate(cM.BuildingCoord.Coordinate));
+                DrawVillage(gm.GmProp.GameBorderData.FindVerticesByCoordinate(cM.BuildingCoord.Coordinate));
             }
             else if(mvDesc is BuildTownMove)
             {
                 BuildTownMove cM = (BuildTownMove)mvDesc;
-                DrawTown(gm.GameBorderData.FindVerticesByCoordinate(cM.BuildingCoord.Coordinate)); 
+                DrawTown(gm.GmProp.GameBorderData.FindVerticesByCoordinate(cM.BuildingCoord.Coordinate)); 
             }
             else if (mvDesc is BuyActionCardMove)
             {
@@ -957,8 +957,8 @@ namespace osadniciZKatanuGUI
             else if (mvDesc is TwoRoadMove)
             {
                 TwoRoadMove cM = (TwoRoadMove)mvDesc;
-                DrawRoad(gm.GameBorderData.FindEdgeByCoordinate(cM.FirstRoad.CentreCoordinate));
-                DrawRoad(gm.GameBorderData.FindEdgeByCoordinate(cM.SecondRoad.CentreCoordinate));
+                DrawRoad(gm.GmProp.GameBorderData.FindEdgeByCoordinate(cM.FirstRoad.CentreCoordinate));
+                DrawRoad(gm.GmProp.GameBorderData.FindEdgeByCoordinate(cM.SecondRoad.CentreCoordinate));
             }
         }
     }

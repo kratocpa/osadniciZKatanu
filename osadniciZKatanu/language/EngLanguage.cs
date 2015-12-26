@@ -9,18 +9,18 @@ namespace osadniciZKatanu
     public class EngLanguage : ILanguage
     {
         public string ResultOfRollTheDiceToString() { return "Result of roll the dice: "; }
-        public string ColorToString(GameDesc.color playerColor)
+        public string ColorToString(Game.color playerColor)
         {
             string result = "";
             switch (playerColor)
             {
-                case GameDesc.color.blue: result = "blue";
+                case Game.color.blue: result = "blue";
                     break;
-                case GameDesc.color.red: result = "red";
+                case Game.color.red: result = "red";
                     break;
-                case GameDesc.color.white: result = "white";
+                case Game.color.white: result = "white";
                     break;
-                case GameDesc.color.yellow: result = "yellow";
+                case Game.color.yellow: result = "yellow";
                     break;
             }
             return result;
@@ -74,11 +74,11 @@ namespace osadniciZKatanu
             }
             return result;
         }
-        public string PlayerFirstAndSecondMoveToString(GameDesc.color playerColor)
+        public string PlayerFirstAndSecondMoveToString(Game.color playerColor)
         {
             return ColorToString(playerColor) + " player build village and road";
         }
-        public string PlayerMoveToString(GameDesc.color playerColor)
+        public string PlayerMoveToString(Game.color playerColor)
         {
             return ColorToString(playerColor) + " player is on the move";
         }
@@ -130,7 +130,7 @@ namespace osadniciZKatanu
         {
             return "I am playing knight. I moved thief to field number " + fieldID;
         }
-        public string MoveDescKnight(int fieldID, GameDesc.color plCol)
+        public string MoveDescKnight(int fieldID, Game.color plCol)
         {
             return "I am playing knight. I moved thief to field number " + fieldID + ", I stole " + ColorToString(plCol) + " player";
         }
@@ -138,11 +138,11 @@ namespace osadniciZKatanu
         {
             return "I am playing coupon";
         }
-        public string MoveDescMatFromPl(GameDesc.materials mat)
+        public string MoveDescMatFromPl(Game.materials mat)
         {
             return "I am playing one material from players. I picked " + MaterialToString(mat);
         }
-        public string MoveDescTwoMat(GameDesc.materials fsMat, GameDesc.materials scMat)
+        public string MoveDescTwoMat(Game.materials fsMat, Game.materials scMat)
         {
             return "I am playing two free materials. I picked " + MaterialToString(fsMat) + " and " + MaterialToString(scMat);
         }
@@ -166,7 +166,7 @@ namespace osadniciZKatanu
         {
             return "I bought action card.";
         }
-        public string MoveDescExchangeMat(GameDesc.materials matFrom, GameDesc.materials matTo)
+        public string MoveDescExchangeMat(Game.materials matFrom, Game.materials matTo)
         {
             return "I am changing " + MaterialToString(matFrom) + " to " + MaterialToString(matTo);
         }
@@ -174,7 +174,7 @@ namespace osadniciZKatanu
         {
             return "I am moving thief to field with number " + fieldID;
         }
-        public string MoveDescThief(int fieldID, GameDesc.color plCol)
+        public string MoveDescThief(int fieldID, Game.color plCol)
         {
             return "I moved thief to field with number " + fieldID + ", I stole " + ColorToString(plCol);
         }

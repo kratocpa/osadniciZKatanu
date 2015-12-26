@@ -10,9 +10,9 @@ namespace osadniciZKatanu
     {
         public List<Vertex> VerticesNeighbors { get; private set; }
 
-        public void SetMaterial(GameDesc.materials changedMaterial) { Material = changedMaterial; }
+        public void SetMaterial(Game.materials changedMaterial) { Material = changedMaterial; }
 
-        public Face(Coord faceCoordinate_, GameDesc.materials faceMaterial_, int probabilityNumber_)
+        public Face(Coord faceCoordinate_, Game.materials faceMaterial_, int probabilityNumber_)
             : base(faceCoordinate_, faceMaterial_, probabilityNumber_)
         {
             VerticesNeighbors = new List<Vertex>();

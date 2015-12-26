@@ -9,22 +9,22 @@ namespace osadniciZKatanu
     public class CzechLanguage : ILanguage
     {
         public string ResultOfRollTheDiceToString() { return "Výsledek hodu kostkami: "; }
-        public string ColorToString(GameDesc.color playerColor)
+        public string ColorToString(Game.color playerColor)
         {
             return ColorToString(playerColor, 1);
         }
-        public string ColorToString(GameDesc.color playerColor, int declension)
+        public string ColorToString(Game.color playerColor, int declension)
         {
             string result = "";
             switch (playerColor)
             {
-                case GameDesc.color.blue: result = BlueWithDeclension(declension);
+                case Game.color.blue: result = BlueWithDeclension(declension);
                     break;
-                case GameDesc.color.red: result = RedWithDeclension(declension);
+                case Game.color.red: result = RedWithDeclension(declension);
                     break;
-                case GameDesc.color.white: result = WhiteWithDeclension(declension);
+                case Game.color.white: result = WhiteWithDeclension(declension);
                     break;
-                case GameDesc.color.yellow: result = YellowWithDeclension(declension);
+                case Game.color.yellow: result = YellowWithDeclension(declension);
                     break;
             }
             return result;
@@ -240,11 +240,11 @@ namespace osadniciZKatanu
             }
             return result;
         }
-        public string PlayerFirstAndSecondMoveToString(GameDesc.color playerColor)
+        public string PlayerFirstAndSecondMoveToString(Game.color playerColor)
         {
             return ColorToString(playerColor) + " hráč postaví vesnici a cestu";
         }
-        public string PlayerMoveToString(GameDesc.color playerColor)
+        public string PlayerMoveToString(Game.color playerColor)
         {
             return ColorToString(playerColor) + " hráč je na tahu";
         }
@@ -296,7 +296,7 @@ namespace osadniciZKatanu
         {
             return "Hraji rytíře. Přesouvám zloděje na pole " + fieldID;
         }
-        public string MoveDescKnight(int fieldID, GameDesc.color plCol)
+        public string MoveDescKnight(int fieldID, Game.color plCol)
         {
             return "Hraji rytíře. Přesouvám zloděje na pole " + fieldID + ", okrádám " + ColorToString(plCol, 2);
         }
@@ -304,11 +304,11 @@ namespace osadniciZKatanu
         {
             return "Hraji kupón";
         }
-        public string MoveDescMatFromPl(GameDesc.materials mat)
+        public string MoveDescMatFromPl(Game.materials mat)
         {
             return "Hraji kartu jeden materiál od hráčů. Vybírám " + MaterialToString(mat, 4);
         }
-        public string MoveDescTwoMat(GameDesc.materials fsMat, GameDesc.materials scMat)
+        public string MoveDescTwoMat(Game.materials fsMat, Game.materials scMat)
         {
             return "Hraji kartu dvě suroviny zadarmo. Vybírám " + MaterialToString(fsMat, 4) + " a " + MaterialToString(scMat, 4);
         }
@@ -332,7 +332,7 @@ namespace osadniciZKatanu
         {
             return "Kupuji Akční kartu";
         }
-        public string MoveDescExchangeMat(GameDesc.materials matFrom, GameDesc.materials matTo)
+        public string MoveDescExchangeMat(Game.materials matFrom, Game.materials matTo)
         {
             return "Měním " + MaterialToString(matFrom, 4) + " za " + MaterialToString(matTo, 4);
         }
@@ -340,7 +340,7 @@ namespace osadniciZKatanu
         {
             return "Přesouvám zloděje na pole " + fieldID;
         }
-        public string MoveDescThief(int fieldID, GameDesc.color plCol)
+        public string MoveDescThief(int fieldID, Game.color plCol)
         {
             return "Přesouvám zloděje na pole " + fieldID + ", okrádám " + ColorToString(plCol, 2);
         }

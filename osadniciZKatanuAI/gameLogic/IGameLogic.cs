@@ -9,7 +9,7 @@ namespace osadniciZKatanuAI
 {
     public interface IGameLogic
     {
-        Move GenerateMove(GameDesc gmDesc);
+        Move GenerateMove(GameProperties gmProp, PlayerProperties plProp);
         List<Move> GetAllPossibleMoves();
     }
 }

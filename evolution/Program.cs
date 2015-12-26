@@ -23,14 +23,11 @@ namespace evolution
             System.IO.StreamWriter bestPerGen = new System.IO.StreamWriter("bestParamPerGen.txt");
             System.IO.StreamWriter evolutionPop = new System.IO.StreamWriter("wholePopulationPerGen.txt");
 
-            GameProperties gmProp = new GameProperties();
-            gmProp.LoadFromXml();
-
             EvolutionAlgorithm eva;
             ISelector rouSel = new RouletteWheelSelector();
             IOperator mating = new OnePtXOver(xOverProb);
             IOperator mutation = new IntegerMutation(mutationProb, genChangeProb);
-            IFitnessEvaluator fitEval = new OneStrategyEvaluator(gmProp);
+            IFitnessEvaluator fitEval = new OneStrategyEvaluator();
             Population parents = new Population(individumSize, 0, 300);
             Population offspring;
 

@@ -17,24 +17,24 @@ namespace osadniciZKatanu
             fitnessMove = 0;
         }
 
-        public Move(GameDesc.materials matFrom, GameDesc.materials matTo)
+        public Move(Game.materials matFrom, Game.materials matTo)
         {
             ChangedMaterials = new List<DoubleMaterials>();
             fitnessMove = 0;
             ChangedMaterials.Add(new DoubleMaterials(matFrom, matTo));
         }
 
-        public void ChangeMaterial(GameDesc.materials matFrom, GameDesc.materials matTo)
+        public void ChangeMaterial(Game.materials matFrom, Game.materials matTo)
         {
             ChangedMaterials.Add(new DoubleMaterials(matFrom, matTo));
         }
 
         public struct DoubleMaterials
         {
-            public readonly GameDesc.materials MatFrom;
-            public readonly GameDesc.materials MatTo;
+            public readonly Game.materials MatFrom;
+            public readonly Game.materials MatTo;
 
-            public DoubleMaterials(GameDesc.materials matFrom, GameDesc.materials matTo)
+            public DoubleMaterials(Game.materials matFrom, Game.materials matTo)
             {
                 MatFrom = matFrom;
                 MatTo = matTo;

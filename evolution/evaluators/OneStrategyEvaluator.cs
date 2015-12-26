@@ -17,12 +17,10 @@ namespace evolution
         Statistics statistic;
         GameProperties gmProp;
 
-        public OneStrategyEvaluator(GameProperties gmProp)
+        public OneStrategyEvaluator()
         {
-            CurLang = new CzechLanguage();
             GamesNum = 24;
             ViewProgressBar = false;
-            this.gmProp = gmProp;
         }
 
         public void Evaluate(Population pop)
@@ -40,13 +38,16 @@ namespace evolution
             int i = 0;
             while (i < GamesNum)
             {
-                List<Player> players = new List<Player>();
-                players.Add(new Player(GameDesc.color.red, false, gmProp));
-                players.Add(new Player(GameDesc.color.blue, false, gmProp));
-                players.Add(new Player(GameDesc.color.yellow, false, gmProp));
-                players.Add(new Player(GameDesc.color.white, false, gmProp));
+                GameProperties gmProp = new GameProperties(true, new CzechLanguage());
+                gmProp.LoadFromXml();
 
-                Simulator simul = new Simulator(players, true, CurLang, gmProp);
+                List<Player> players = new List<Player>();
+                players.Add(new Player(Game.color.red, false, gmProp));
+                players.Add(new Player(Game.color.blue, false, gmProp));
+                players.Add(new Player(Game.color.yellow, false, gmProp));
+                players.Add(new Player(Game.color.white, false, gmProp));
+                
+                Simulator simul = new Simulator(players, gmProp);
                 if (i % 4 == 0)
                 {
                     simul.firstPl = new MyGameLogic(curId.individualArray);

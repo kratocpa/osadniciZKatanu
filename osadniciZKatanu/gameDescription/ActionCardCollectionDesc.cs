@@ -14,11 +14,11 @@ namespace osadniciZKatanu
         public ActionCardCollectionDesc()
         {
             ActionCards = new List<ActionCardStruct>();
-            ActionCards.Add(new ActionCardStruct(GameDesc.actionCards.coupon, 0));
-            ActionCards.Add(new ActionCardStruct(GameDesc.actionCards.knight, 0));
-            ActionCards.Add(new ActionCardStruct(GameDesc.actionCards.materialsFromPlayers, 0));
-            ActionCards.Add(new ActionCardStruct(GameDesc.actionCards.twoMaterials, 0));
-            ActionCards.Add(new ActionCardStruct(GameDesc.actionCards.twoRoad, 0));
+            ActionCards.Add(new ActionCardStruct(Game.actionCards.coupon, 0));
+            ActionCards.Add(new ActionCardStruct(Game.actionCards.knight, 0));
+            ActionCards.Add(new ActionCardStruct(Game.actionCards.materialsFromPlayers, 0));
+            ActionCards.Add(new ActionCardStruct(Game.actionCards.twoMaterials, 0));
+            ActionCards.Add(new ActionCardStruct(Game.actionCards.twoRoad, 0));
 
             rnd = new Random();
         }
@@ -33,7 +33,7 @@ namespace osadniciZKatanu
             return sum;
         }
 
-        public GameDesc.actionCards PickRandomActionCard()
+        public Game.actionCards PickRandomActionCard()
         {
             int sum = GetSumAllActionCard();
 
@@ -50,15 +50,15 @@ namespace osadniciZKatanu
                     curSum += curAct.Quantity;
                 }
             }
-            return GameDesc.actionCards.noActionCard;
+            return Game.actionCards.noActionCard;
         }
 
         public class ActionCardStruct
         {
             public int Quantity { get; set; }
-            public GameDesc.actionCards ActionCardType { get; set; }
+            public Game.actionCards ActionCardType { get; set; }
 
-            public ActionCardStruct(GameDesc.actionCards actionCardType, int quantity)
+            public ActionCardStruct(Game.actionCards actionCardType, int quantity)
             {
                 ActionCardType = actionCardType;
                 Quantity = quantity;

@@ -7,66 +7,29 @@ using System.Xml;
 
 namespace osadniciZKatanu
 {
-    public class Game : GameDesc
+    public class Game
     {
         public List<Player> Players { get; private set; } // seznam hráčů
         public Player ActualPlayer { get; private set; } // hráč na tahu
-        public Player FirstPlayer { get; private set; } // první hráč v pořadí
-        public Player LastPlayer { get; private set; } // poslední hráč v pořadí
+        public Player FirstPlayer { get { if (Players != null) { return Players.First(); } else return null; } } // první hráč v pořadí
+        public Player LastPlayer { get { if (Players != null) { return Players.Last(); } else return null; } } // poslední hráč v pořadí
 
-        public Face ThiefFace { get; private set; } // stěna, na který je zloděj
-
-        public ActionCardCollection RemainingActionCards { get; private set; } // seznam zbývajících akčních karet
-        public MaterialCollection materialForVillage; // suroviny potřebné na stavbu vesnice
-        public MaterialCollection materialForTown; // suroviny potřebné na stavbu města
-        public MaterialCollection materialForActionCard; // suroviny potřebné na koupi akční karty
-        public MaterialCollection materialForRoad; // suroviny potřebné na stavbu cesty
+        public GameProperties GmProp;
         
-        public GameBorder GameBorderData; // popis hrací desky
-        public ILanguage CurLang { get; private set; } // jazyk hry
-        public bool EndGame { get { return ActualPlayer.Points >= MinPointsToWin; } }
-
+        public bool EndGame { get { return ActualPlayer.PlProp.Points >= GmProp.MinPointsToWin; } }
         private Random rand = new Random();
 
-        public Game(List<Player> players, bool isRandomGameBorder, ILanguage curLang, GameProperties gmProp)
-            : base(gmProp)
+        public enum color { red, blue, yellow, white, noColor };
+        public enum materials { brick, grain, sheep, stone, wood, desert, noMaterial };
+        public enum actionCards { coupon, knight, twoRoad, twoMaterials, materialsFromPlayers, noActionCard };
+        public enum state { start, firstPhaseOfGame, game, endGame };
+        public enum building { road, village, town };
+
+        public Game(List<Player> players, GameProperties gmProp)
         {
-            RemainingActionCards = (ActionCardCollection)gmProp.RemainingActionCards.Clone();
-            materialForRoad = (MaterialCollection)gmProp.MaterialsForRoad.Clone();
-            materialForVillage = (MaterialCollection)gmProp.MaterialsForVillage.Clone();
-            materialForTown = (MaterialCollection)gmProp.MaterialsForTown.Clone();
-            materialForActionCard = (MaterialCollection)gmProp.MaterialsForActionCard.Clone();
-
-            SetGameBorder st = new SetGameBorder();
-            GameBorderData = st.GenerateGameBorder(isRandomGameBorder, gmProp);
-
-            CurLang = curLang;
+            GmProp = gmProp;
             Players = players;
-
-            ThiefFace = GameBorderData.Faces.Find(x => x.Material == materials.desert);
-            ThiefFace.Thief = true;
-
-            FirstPlayer = Players.First();
-            LastPlayer = Players.Last();
             ActualPlayer = FirstPlayer;
-
-            wasBuildSomething = false;
-            wasUseActionCard = false;
-        }
-
-        public void Sychronize()
-        {
-            PlayersDesc.Clear();
-            foreach (Player curPl in Players)
-            {
-                curPl.Synchronize();
-                PlayersDesc.Add(curPl);
-            }
-
-            RemainingActionCardsDesc = RemainingActionCards;
-            ActualPlayerDesc = ActualPlayer;
-            ThiefFaceDesc = ThiefFace;
-            GameBorderDesc = GameBorderData;
         }
 
         #region game statue function
@@ -76,25 +39,25 @@ namespace osadniciZKatanu
             bool end = true;
             foreach (Player currentPlayer in Players)
             {
-                end = end && currentPlayer.FirstVillageCreated && currentPlayer.FirstPathCreated &&
-                    currentPlayer.SecondVillageCreated && currentPlayer.SecondPathCreated;
+                end = end && currentPlayer.PlProp.FirstVillageCreated && currentPlayer.PlProp.FirstPathCreated &&
+                    currentPlayer.PlProp.SecondVillageCreated && currentPlayer.PlProp.SecondPathCreated;
             }
             return end;
         }
 
         public void NextState()
         {
-            if (CurrentState != state.endGame)
+            if (GmProp.CurrentState != state.endGame)
             {
-                CurrentState++;
+                GmProp.CurrentState++;
             }
-            wasBuildSomething = false;
-            wasUseActionCard = false;
+            GmProp.wasBuildSomething = false;
+            GmProp.wasUseActionCard = false;
         }
 
         public void NextPlayer()
         {
-            switch (CurrentState)
+            switch (GmProp.CurrentState)
             {
                 case state.firstPhaseOfGame: NextFirstPhaseOfTheGame();
                     break;
@@ -102,16 +65,16 @@ namespace osadniciZKatanu
                     break;
             }
 
-            wasBuildSomething = false;
-            wasUseActionCard = false;
+            GmProp.wasBuildSomething = false;
+            GmProp.wasUseActionCard = false;
         }
 
         private void NextFirstPhaseOfTheGame()
         {
-            wasBuildSomething = false;
+            GmProp.wasBuildSomething = false;
             int cur = Players.FindIndex(x => x == ActualPlayer);
 
-            bool back_way = LastPlayer.SecondPathCreated && LastPlayer.SecondVillageCreated;
+            bool back_way = LastPlayer.PlProp.SecondPathCreated && LastPlayer.PlProp.SecondVillageCreated;
 
             if (back_way)
             {
@@ -129,7 +92,7 @@ namespace osadniciZKatanu
         private void Next()
         {
             int cur = Players.FindIndex(x => x == ActualPlayer);
-            if (ActualPlayer == LastPlayer) { ActualPlayer = FirstPlayer; Round++; }
+            if (ActualPlayer == LastPlayer) { ActualPlayer = FirstPlayer; GmProp.Round++; }
             else { ActualPlayer = Players.ElementAt(cur + 1); }
         }
 
@@ -146,7 +109,7 @@ namespace osadniciZKatanu
 
         public void GetMaterials(int num)
         {
-            List<Face> searchFc = GameBorderData.Faces.FindAll(x => x.ProbabilityNumber == num && !x.Thief);
+            List<Face> searchFc = GmProp.GameBorderData.Faces.FindAll(x => x.ProbabilityNumber == num && !x.Thief);
 
             foreach (Face curFc in searchFc)
             {
@@ -156,11 +119,11 @@ namespace osadniciZKatanu
                 {
                     if (curVx.Village)
                     {
-                        Players.Find(x => x.Color == curVx.Color).Materials.RaiseQuantity(curFc.Material, VillageProduction);
+                        Players.Find(x => x.PlProp.Color == curVx.Color).PlProp.Materials.RaiseQuantity(curFc.Material, GmProp.VillageProduction);
                     }
                     else if (curVx.Town)
                     {
-                        Players.Find(x => x.Color == curVx.Color).Materials.RaiseQuantity(curFc.Material, TownProduction);
+                        Players.Find(x => x.PlProp.Color == curVx.Color).PlProp.Materials.RaiseQuantity(curFc.Material, GmProp.TownProduction);
                     }
                 }
             }
@@ -168,7 +131,7 @@ namespace osadniciZKatanu
 
         public void GetMaterials()
         {
-            foreach (Face curFc in GameBorderData.Faces)
+            foreach (Face curFc in GmProp.GameBorderData.Faces)
             {
                 List<Vertex> verticesAround = curFc.VerticesNeighbors;
                 if (curFc.Material != materials.desert && curFc.Material != materials.noMaterial )
@@ -177,7 +140,7 @@ namespace osadniciZKatanu
                     {
                         if (curVx.Village)
                         {
-                            Players.Find(x => x.Color == curVx.Color).Materials.RaiseQuantity(curFc.Material, VillageProduction);
+                            Players.Find(x => x.PlProp.Color == curVx.Color).PlProp.Materials.RaiseQuantity(curFc.Material, GmProp.VillageProduction);
                         }
                     }
                 }
@@ -187,11 +150,11 @@ namespace osadniciZKatanu
 
         public void RollTheDice()
         {
-            FirstDice = rand.Next(1, 6);
-            SecondDice = rand.Next(1, 6);
-            if (FirstDice + SecondDice == 7)
+            GmProp.FirstDice = rand.Next(1, 6);
+            GmProp.SecondDice = rand.Next(1, 6);
+            if (GmProp.FirstDice + GmProp.SecondDice == 7)
             {
-                NeedToMoveThief = true;
+                GmProp.NeedToMoveThief = true;
             }
         }
 
@@ -200,7 +163,7 @@ namespace osadniciZKatanu
         {
             try
             {
-                if (NeedToMoveThief && !(mvDesc is ThiefMove)) { throw new IncorectMoveException("Need to move thief"); }
+                if (GmProp.NeedToMoveThief && !(mvDesc is ThiefMove)) { throw new IncorectMoveException("Need to move thief"); }
                 MakeExchangeMove(mvDesc);
 
                 if (mvDesc is FirstPhaseGameMove)
@@ -248,8 +211,8 @@ namespace osadniciZKatanu
                     MakeTwoRoadMove((TwoRoadMove)mvDesc);
                 }
 
-                if (ActualPlayer.Points >= MinPointsToWin) { CurrentState = state.endGame; }
-                return mvDesc.MoveDescription(CurLang);
+                if (ActualPlayer.PlProp.Points >= GmProp.MinPointsToWin) { GmProp.CurrentState = state.endGame; }
+                return mvDesc.MoveDescription(GmProp.CurLang);
             }
             catch(Exception ex)
             {
@@ -272,10 +235,10 @@ namespace osadniciZKatanu
 
         private void MakeFirstPhaseGameMove(FirstPhaseGameMove mvDesc)
         {
-            if (wasBuildSomething) { throw new TooMuchActionsException("this move was some done already"); }
+            if (GmProp.wasBuildSomething) { throw new TooMuchActionsException("this move was some done already"); }
 
-            if (ActualPlayer.FirstPathCreated && ActualPlayer.FirstVillageCreated &&
-                ActualPlayer.SecondPathCreated && ActualPlayer.SecondPathCreated)
+            if (ActualPlayer.PlProp.FirstPathCreated && ActualPlayer.PlProp.FirstVillageCreated &&
+                ActualPlayer.PlProp.SecondPathCreated && ActualPlayer.PlProp.SecondPathCreated)
             {
                 throw new IncorectMoveException("First and second roads and villages was created already");
             }
@@ -283,30 +246,30 @@ namespace osadniciZKatanu
             BuildVillage(mvDesc.VillageCoord.Coordinate, true);
             BuildRoad(mvDesc.RoadCoord.CentreCoordinate);
 
-            if (!ActualPlayer.FirstPathCreated && !ActualPlayer.FirstVillageCreated &&
-                !ActualPlayer.SecondPathCreated && !ActualPlayer.SecondPathCreated)
+            if (!ActualPlayer.PlProp.FirstPathCreated && !ActualPlayer.PlProp.FirstVillageCreated &&
+                !ActualPlayer.PlProp.SecondPathCreated && !ActualPlayer.PlProp.SecondPathCreated)
             {
-                ActualPlayer.FirstPathCreated = true;
-                ActualPlayer.FirstVillageCreated = true;
+                ActualPlayer.PlProp.FirstPathCreated = true;
+                ActualPlayer.PlProp.FirstVillageCreated = true;
             }
-            else if (ActualPlayer.FirstPathCreated && ActualPlayer.FirstVillageCreated &&
-                !ActualPlayer.SecondPathCreated && !ActualPlayer.SecondPathCreated)
+            else if (ActualPlayer.PlProp.FirstPathCreated && ActualPlayer.PlProp.FirstVillageCreated &&
+                !ActualPlayer.PlProp.SecondPathCreated && !ActualPlayer.PlProp.SecondPathCreated)
             {
-                ActualPlayer.SecondPathCreated = true;
-                ActualPlayer.SecondVillageCreated = true;
+                ActualPlayer.PlProp.SecondPathCreated = true;
+                ActualPlayer.PlProp.SecondVillageCreated = true;
             }
 
-            wasBuildSomething = true;
+            GmProp.wasBuildSomething = true;
         }
 
         private void MakeThiefMove(ThiefMove mvDesc)
         {
-            Face newThiefFace = GameBorderData.FindFaceByCoordinate(mvDesc.ThiefCoord.Coordinate);
-            if (newThiefFace == GameBorderData.noFace) { throw new WrongCoordinateException("Wrong thief coordinate"); }
+            Face newThiefFace = GmProp.GameBorderData.FindFaceByCoordinate(mvDesc.ThiefCoord.Coordinate);
+            if (newThiefFace == GmProp.GameBorderData.noFace) { throw new WrongCoordinateException("Wrong thief coordinate"); }
 
             newThiefFace.Thief = true;
-            ThiefFace.Thief = false;
-            ThiefFace = newThiefFace;
+            GmProp.ThiefFace.Thief = false;
+            GmProp.ThiefFace = newThiefFace;
             DropHalfMaterialsFromPlayers();
 
             if (mvDesc.RobbedPlayer != color.noColor)
@@ -315,160 +278,160 @@ namespace osadniciZKatanu
                 {
                     throw new WrongPlayerToRobbedException("Wrong Player to roobed exception");
                 }
-                if (mvDesc.RobbedPlayer == ActualPlayer.Color) 
+                if (mvDesc.RobbedPlayer == ActualPlayer.PlProp.Color) 
                 {
                     throw new WrongPlayerToRobbedException("Wrong Player to roobed exception");
                 }
-                Player robbedPl = Players.Find(x => x.Color == mvDesc.RobbedPlayer);
-                materials delMat = robbedPl.Materials.PickRandomMaterial();
+                Player robbedPl = Players.Find(x => x.PlProp.Color == mvDesc.RobbedPlayer);
+                materials delMat = robbedPl.PlProp.Materials.PickRandomMaterial();
                 if (delMat != materials.noMaterial)
                 {
-                    ActualPlayer.Materials.AddMaterial(delMat);
-                    robbedPl.Materials.DeleteMaterial(delMat);
+                    ActualPlayer.PlProp.Materials.AddMaterial(delMat);
+                    robbedPl.PlProp.Materials.DeleteMaterial(delMat);
                 }
             }
-            NeedToMoveThief = false;
+            GmProp.NeedToMoveThief = false;
         }
 
         private void MakeBuildRoadMove(BuildRoadMove mvDesc)
         {
-            if (wasBuildSomething) { throw new TooMuchActionsException("this kind of move was done already"); }
+            if (GmProp.wasBuildSomething) { throw new TooMuchActionsException("this kind of move was done already"); }
 
-            ActualPlayer.Materials.DeleteMaterials(materialForRoad);
+            ActualPlayer.PlProp.Materials.DeleteMaterials(GmProp.MaterialsForRoad);
             BuildRoad(mvDesc.BuildingCoord.CentreCoordinate);
-            wasBuildSomething = true;   
+            GmProp.wasBuildSomething = true;   
         }
 
         private void MakeBuildVillageMove(BuildVillageMove mvDesc)
         {
-            if (wasBuildSomething) { throw new TooMuchActionsException("this kind of move was done already"); }
-            ActualPlayer.Materials.DeleteMaterials(materialForVillage);
+            if (GmProp.wasBuildSomething) { throw new TooMuchActionsException("this kind of move was done already"); }
+            ActualPlayer.PlProp.Materials.DeleteMaterials(GmProp.MaterialsForVillage);
             BuildVillage(mvDesc.BuildingCoord.Coordinate, false);
-            wasBuildSomething = true;
+            GmProp.wasBuildSomething = true;
         }
 
         private void MakeBuildTownMove(BuildTownMove mvDesc)
         {
-            if (wasBuildSomething) { throw new TooMuchActionsException("this kind of move was done already"); }
-            ActualPlayer.Materials.DeleteMaterials(materialForTown);
+            if (GmProp.wasBuildSomething) { throw new TooMuchActionsException("this kind of move was done already"); }
+            ActualPlayer.PlProp.Materials.DeleteMaterials(GmProp.MaterialsForTown);
             BuildTown(mvDesc.BuildingCoord.Coordinate);
-            wasBuildSomething = true;
+            GmProp.wasBuildSomething = true;
         }
 
         private void MakeBuyActionCardMove()
         {
-            if (RemainingActionCards.GetSumAllActionCard() <= 0) { throw new NoActionCardException("No action card in packed"); }
-            if (wasBuildSomething) { throw new TooMuchActionsException("this move was some done already"); }
+            if (GmProp.RemainingActionCards.GetSumAllActionCard() <= 0) { throw new NoActionCardException("No action card in packed"); }
+            if (GmProp.wasBuildSomething) { throw new TooMuchActionsException("this move was some done already"); }
 
-            ActualPlayer.Materials.DeleteMaterials(materialForActionCard);
+            ActualPlayer.PlProp.Materials.DeleteMaterials(GmProp.MaterialsForActionCard);
 
-            GameDesc.actionCards pickAct = RemainingActionCards.PickRandomActionCard();
-            RemainingActionCards.DeleteActionCard(pickAct);
-            ActualPlayer.ActionCards.AddActionCard(pickAct);
+            Game.actionCards pickAct = GmProp.RemainingActionCards.PickRandomActionCard();
+            GmProp.RemainingActionCards.DeleteActionCard(pickAct);
+            ActualPlayer.PlProp.ActionCards.AddActionCard(pickAct);
 
-            wasBuildSomething = true;
+            GmProp.wasBuildSomething = true;
         }
 
         private void MakeCouponMove()
         {
-            if (wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
+            if (GmProp.wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
 
-            ActualPlayer.ActionCards.DeleteActionCard(actionCards.coupon);
-            ActualPlayer.Points++;
-            wasUseActionCard = true;
+            ActualPlayer.PlProp.ActionCards.DeleteActionCard(actionCards.coupon);
+            ActualPlayer.PlProp.Points++;
+            GmProp.wasUseActionCard = true;
         }
 
         private void MakeKnightMove(KnightMove mvDesc)
         {
-            if (wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
+            if (GmProp.wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
 
-            ActualPlayer.ActionCards.DeleteActionCard(actionCards.knight);
-            ActualPlayer.Knights++;
-            if (ActualPlayer.Knights > MaxKnights)
+            ActualPlayer.PlProp.ActionCards.DeleteActionCard(actionCards.knight);
+            ActualPlayer.PlProp.Knights++;
+            if (ActualPlayer.PlProp.Knights > GmProp.MaxKnights)
             {
-                Player prevLargestArmy = Players.Find(x => x.LargestArmy == true);
+                Player prevLargestArmy = Players.Find(x => x.PlProp.LargestArmy == true);
                 if (prevLargestArmy != null)
                 {
-                    prevLargestArmy.LargestArmy = false;
-                    prevLargestArmy.Points -= LargestArmyProduction;
+                    prevLargestArmy.PlProp.LargestArmy = false;
+                    prevLargestArmy.PlProp.Points -= GmProp.LargestArmyProduction;
                 }
-                ActualPlayer.LargestArmy = true;
-                ActualPlayer.Points += LargestArmyProduction;
-                MaxKnights = ActualPlayer.Knights;
+                ActualPlayer.PlProp.LargestArmy = true;
+                ActualPlayer.PlProp.Points += GmProp.LargestArmyProduction;
+                GmProp.MaxKnights = ActualPlayer.PlProp.Knights;
             }
             ThiefMove thiefMove = new ThiefMove(mvDesc.ThiefCoord, mvDesc.RobbedPlayer);
             MakeThiefMove(thiefMove);
-            wasUseActionCard = true;
+            GmProp.wasUseActionCard = true;
         }
 
         private void MakeMatFromPlayersMove(MaterialFromPlayersMove mvDesc)
         {
-            if (wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
+            if (GmProp.wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
 
-            ActualPlayer.ActionCards.DeleteActionCard(actionCards.materialsFromPlayers);
+            ActualPlayer.PlProp.ActionCards.DeleteActionCard(actionCards.materialsFromPlayers);
             int matNum = 0;
             foreach (Player curPl in Players)
             {
                 if (curPl != ActualPlayer)
                 {
-                    matNum += curPl.Materials.GetQuantity(mvDesc.PickedMaterial);
-                    curPl.Materials.SetQuantity(mvDesc.PickedMaterial, 0);
+                    matNum += curPl.PlProp.Materials.GetQuantity(mvDesc.PickedMaterial);
+                    curPl.PlProp.Materials.SetQuantity(mvDesc.PickedMaterial, 0);
                 }
             }            
-            ActualPlayer.Materials.RaiseQuantity(mvDesc.PickedMaterial, matNum);
-            wasUseActionCard = true;
+            ActualPlayer.PlProp.Materials.RaiseQuantity(mvDesc.PickedMaterial, matNum);
+            GmProp.wasUseActionCard = true;
         }
 
         private void MakeTwoMatMove(TwoMaterialsMove mvDesc)
         {
-            if (wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
+            if (GmProp.wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
 
-            ActualPlayer.ActionCards.DeleteActionCard(actionCards.twoMaterials);
-            ActualPlayer.Materials.AddMaterial(mvDesc.FirstMaterial);
-            ActualPlayer.Materials.AddMaterial(mvDesc.SecondMaterial);
-            wasUseActionCard = true;
+            ActualPlayer.PlProp.ActionCards.DeleteActionCard(actionCards.twoMaterials);
+            ActualPlayer.PlProp.Materials.AddMaterial(mvDesc.FirstMaterial);
+            ActualPlayer.PlProp.Materials.AddMaterial(mvDesc.SecondMaterial);
+            GmProp.wasUseActionCard = true;
         }
 
         private void MakeTwoRoadMove(TwoRoadMove mvDesc)
         {
-            if (wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
+            if (GmProp.wasUseActionCard) { throw new TooMuchActionsException("this kind of move was done already"); }
 
-            ActualPlayer.ActionCards.DeleteActionCard(actionCards.twoRoad);
+            ActualPlayer.PlProp.ActionCards.DeleteActionCard(actionCards.twoRoad);
             BuildRoad(mvDesc.FirstRoad.CentreCoordinate);
             BuildRoad(mvDesc.SecondRoad.CentreCoordinate);
-            wasUseActionCard = true;
+            GmProp.wasUseActionCard = true;
         }
 
         private void ChangeMaterial(materials from, materials to)
         {
-            if (ActualPlayer.PortForMaterial.Contains(from))
+            if (ActualPlayer.PlProp.PortForMaterial.Contains(from))
             {
-                ActualPlayer.Materials.DecreaseQuantity(from, SpecialPortRate);
+                ActualPlayer.PlProp.Materials.DecreaseQuantity(from, GmProp.SpecialPortRate);
             }
-            else if (ActualPlayer.UniversalPort)
+            else if (ActualPlayer.PlProp.UniversalPort)
             {
-                ActualPlayer.Materials.DecreaseQuantity(from, UniversalPortRate);
+                ActualPlayer.PlProp.Materials.DecreaseQuantity(from, GmProp.UniversalPortRate);
             }
             else
             {
-                ActualPlayer.Materials.DecreaseQuantity(from, NoPortRate);
+                ActualPlayer.PlProp.Materials.DecreaseQuantity(from, GmProp.NoPortRate);
             }
 
-            ActualPlayer.Materials.AddMaterial(to);
+            ActualPlayer.PlProp.Materials.AddMaterial(to);
         }
 
         private void DropHalfMaterialsFromPlayers()
         {
             foreach (Player curPlayer in Players)
             {
-                if (curPlayer.Materials.GetSumAllMaterial() > 7)
+                if (curPlayer.PlProp.Materials.GetSumAllMaterial() > 7)
                 {
-                    int sum = curPlayer.Materials.GetSumAllMaterial();
+                    int sum = curPlayer.PlProp.Materials.GetSumAllMaterial();
                     int curSum = 0;
                     while (curSum < sum / 2)
                     {
-                        materials delMat = curPlayer.Materials.PickRandomMaterial();
-                        curPlayer.Materials.DeleteMaterial(delMat);
+                        materials delMat = curPlayer.PlProp.Materials.PickRandomMaterial();
+                        curPlayer.PlProp.Materials.DeleteMaterial(delMat);
                         curSum++;
                     }
                 }
@@ -477,46 +440,46 @@ namespace osadniciZKatanu
 
         private void BuildRoad(Coord now)
         {
-            if (ActualPlayer.RoadRemaining <= 0) { throw new NoRoadLeftException("Player has no roads to build"); }
-            Edge addRoad = GameBorderData.FindEdgeByCoordinate(now);
-            if (addRoad == GameBorderData.noEdge) { throw new WrongCoordinateException("Wrong building coordinate"); }
+            if (ActualPlayer.PlProp.RoadRemaining <= 0) { throw new NoRoadLeftException("Player has no roads to build"); }
+            Edge addRoad = GmProp.GameBorderData.FindEdgeByCoordinate(now);
+            if (addRoad == GmProp.GameBorderData.noEdge) { throw new WrongCoordinateException("Wrong building coordinate"); }
             if (addRoad.Road) { throw new BuildingCollisionException("On this place is some building"); }
-            if (!addRoad.IsHereAdjacentRoadWithColor(ActualPlayer.Color) &&
-                !addRoad.IsHereAdjectedVillageWithColor(ActualPlayer.Color)) { throw new WrongLocationForBuildingException("Wrong location for build road"); }
+            if (!addRoad.IsHereAdjacentRoadWithColor(ActualPlayer.PlProp.Color) &&
+                !addRoad.IsHereAdjectedVillageWithColor(ActualPlayer.PlProp.Color)) { throw new WrongLocationForBuildingException("Wrong location for build road"); }
 
             ActualPlayer.AddRoad(addRoad);
 
-            if (ActualPlayer.LongestWayLength > LongestRoad)
+            if (ActualPlayer.PlProp.LongestWayLength > GmProp.LongestRoad)
             {
-                Player prevLongestRoad = Players.Find(x => x.LongestWay);
+                Player prevLongestRoad = Players.Find(x => x.PlProp.LongestWay);
                 if (prevLongestRoad != null) 
                 {
-                    prevLongestRoad.Points -= LongestRoadProduction;
-                    prevLongestRoad.LongestWay = false;
+                    prevLongestRoad.PlProp.Points -= GmProp.LongestRoadProduction;
+                    prevLongestRoad.PlProp.LongestWay = false;
                 }
-                ActualPlayer.Points += LongestRoadProduction;
-                ActualPlayer.LongestWay = true;
-                LongestRoad = ActualPlayer.LongestWayLength;
+                ActualPlayer.PlProp.Points += GmProp.LongestRoadProduction;
+                ActualPlayer.PlProp.LongestWay = true;
+                GmProp.LongestRoad = ActualPlayer.PlProp.LongestWayLength;
             }
         }
 
         private void BuildVillage(Coord now, bool firstOrSecondVillage)
         {
-            if (ActualPlayer.VillageRemaining <= 0) { throw new NoVillageLeftException("Player has no village to build"); }
-            Vertex addVillage = GameBorderData.FindVerticesByCoordinate(now);
-            if (addVillage == GameBorderData.noVertex) { throw new WrongCoordinateException("Wrong building coordinate"); }
+            if (ActualPlayer.PlProp.VillageRemaining <= 0) { throw new NoVillageLeftException("Player has no village to build"); }
+            Vertex addVillage = GmProp.GameBorderData.FindVerticesByCoordinate(now);
+            if (addVillage == GmProp.GameBorderData.noVertex) { throw new WrongCoordinateException("Wrong building coordinate"); }
             if (addVillage.Building) { throw new BuildingCollisionException("On this place is some building"); }
             if (addVillage.IsHereBuildingInNeighbour()) { throw new WrongLocationForBuildingException("Wrong location for build road"); }
-            if (!firstOrSecondVillage && !addVillage.IsHereAdjectedRoadWithColor(ActualPlayer.Color)) { throw new WrongLocationForBuildingException("Wrong location for build road"); }
+            if (!firstOrSecondVillage && !addVillage.IsHereAdjectedRoadWithColor(ActualPlayer.PlProp.Color)) { throw new WrongLocationForBuildingException("Wrong location for build road"); }
 
             ActualPlayer.AddVillage(addVillage);
-            ActualPlayer.Points += VillageProduction;
+            ActualPlayer.PlProp.Points += GmProp.VillageProduction;
 
             if (addVillage.Port)
             {
                 if (addVillage.PortMaterial == materials.noMaterial)
                 {
-                    ActualPlayer.UniversalPort = true;
+                    ActualPlayer.PlProp.UniversalPort = true;
                 }
                 else
                 {
@@ -527,16 +490,53 @@ namespace osadniciZKatanu
 
         private void BuildTown(Coord now)
         {
-            if (ActualPlayer.TownRemaining <= 0) { throw new NoTownLeftException("Player has no town to build"); }
-            Vertex addTown = GameBorderData.FindVerticesByCoordinate(now);
-            if (addTown == GameBorderData.noVertex) { throw new WrongCoordinateException("Wrong building coordinate"); }
-            if (!addTown.Village || !(addTown.Color==ActualPlayer.Color)) { throw new WrongLocationForBuildingException("Actual player has no village on this location"); }
+            if (ActualPlayer.PlProp.TownRemaining <= 0) { throw new NoTownLeftException("Player has no town to build"); }
+            Vertex addTown = GmProp.GameBorderData.FindVerticesByCoordinate(now);
+            if (addTown == GmProp.GameBorderData.noVertex) { throw new WrongCoordinateException("Wrong building coordinate"); }
+            if (!addTown.Village || !(addTown.Color==ActualPlayer.PlProp.Color)) { throw new WrongLocationForBuildingException("Actual player has no village on this location"); }
             
             ActualPlayer.AddTown(addTown);
-            ActualPlayer.Points -= VillageProduction;
-            ActualPlayer.Points += TownProduction;
+            ActualPlayer.PlProp.Points -= GmProp.VillageProduction;
+            ActualPlayer.PlProp.Points += GmProp.TownProduction;
         }
         #endregion
 
+
+        public static materials RecogniseMaterials(string strMaterials)
+        {
+            //TODO: přidat aby to nebylo case sensitive, tedy aby při vstupu např. GraIN vrátila funkce materials.grain
+            materials portMaterials;
+            switch (strMaterials)
+            {
+                case "brick": portMaterials = materials.brick; break;
+                case "grain": portMaterials = materials.grain; break;
+                case "desert": portMaterials = materials.desert; break;
+                case "noMaterial": portMaterials = materials.noMaterial; break;
+                case "sheep": portMaterials = materials.sheep; break;
+                case "stone": portMaterials = materials.stone; break;
+                case "wood": portMaterials = materials.wood; break;
+                default: portMaterials = materials.noMaterial; break;
+            }
+
+            return portMaterials;
+        }
+
+        public static actionCards RecogniseActionCard(string strActionCard)
+        {
+            //TODO: přidat aby to nebylo case sensitive
+            actionCards act;
+            switch (strActionCard)
+            {
+                case "coupon": act = actionCards.coupon; break;
+                case "knight": act = actionCards.knight; break;
+                case "materialsFromPlayers": act = actionCards.materialsFromPlayers; break;
+                case "noActionCard": act = actionCards.noActionCard; break;
+                case "twoMaterials": act = actionCards.twoMaterials; break;
+                case "twoRoad": act = actionCards.twoRoad; break;
+                default: act = actionCards.noActionCard; break;
+            }
+
+            return act;
+        }
     }
 }

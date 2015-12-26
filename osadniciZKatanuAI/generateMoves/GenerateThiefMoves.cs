@@ -24,13 +24,13 @@ namespace osadniciZKatanuAI
             exchange = new GenerateExchangeMoves(movesProp);
         }
 
-        public List<ThiefMove> Generate(GameDesc gmDesc)
+        public List<ThiefMove> Generate(GameProperties gmProp, PlayerProperties plProp)
         {
             List<ThiefMove> possibleMoves = new List<ThiefMove>();
 
-            foreach (var curFc in gmDesc.GameBorderDesc.facesDesc)
+            foreach (var curFc in gmProp.GameBorderData.Faces)
             {
-                foreach (var curMv in ComputeMoveThiefFaceFitness(curFc, gmDesc))
+                foreach (var curMv in ComputeMoveThiefFaceFitness(gmProp, plProp, curFc))
                 {
                     possibleMoves.Add(curMv);
                 }
@@ -39,19 +39,19 @@ namespace osadniciZKatanuAI
             return possibleMoves;
         }
 
-        private List<ThiefMove> ComputeMoveThiefFaceFitness(FaceDesc curFc, GameDesc gmDesc)
+        private List<ThiefMove> ComputeMoveThiefFaceFitness(GameProperties gmProp, PlayerProperties plProp, FaceDesc curFc)
         {
-            double[] prob = gmDesc.GameBorderDesc.probabilities;
+            double[] prob = gmProp.GameBorderData.probabilities;
             int countOfMyBuilding = 0;
             int countOfOtherBuilding = 0;
-            List<GameDesc.color> colors = new List<GameDesc.color>();
+            List<Game.color> colors = new List<Game.color>();
             List<ThiefMove> result = new List<ThiefMove>();
 
             foreach (var curVx in curFc.VerticesNeighborsDesc)
             {
                 if (curVx.Building)
                 {
-                    if (curVx.Color == gmDesc.ActualPlayerDesc.Color)
+                    if (curVx.Color == plProp.Color)
                     {
                         countOfMyBuilding++;
                     }

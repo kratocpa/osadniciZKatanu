@@ -27,7 +27,7 @@ namespace osadniciZKatanuGUI
 
         public void AddPossibleMoves(Move possibleMoves, Game gm)
         {
-            InfoTextBlock.Text += possibleMoves.MoveDescription(gm.CurLang);
+            InfoTextBlock.Text += possibleMoves.MoveDescription(gm.GmProp.CurLang);
             InfoTextBlock.Text += String.Format("\n fitness: {0}", possibleMoves.fitnessMove);
             InfoTextBlock.Text += "\n ----------------------------------------------  \n";
         }

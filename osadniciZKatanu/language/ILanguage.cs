@@ -9,11 +9,11 @@ namespace osadniciZKatanu
     public interface ILanguage
     {
         string ResultOfRollTheDiceToString();
-        string ColorToString(GameDesc.color playerColor);
+        string ColorToString(Game.color playerColor);
         string MaterialToString(Game.materials material);
         string NameOfActionCard(Game.actionCards actionCard);
-        string PlayerFirstAndSecondMoveToString(GameDesc.color playerColor);
-        string PlayerMoveToString(GameDesc.color playerColor);
+        string PlayerFirstAndSecondMoveToString(Game.color playerColor);
+        string PlayerMoveToString(Game.color playerColor);
         string PlayerMoveInformation();
         string Road();
         string Village();
@@ -54,18 +54,18 @@ namespace osadniciZKatanu
 
         string MoveDescFirstVillAndRoad(int villID, int roadID);
         string MoveDescKnight(int fieldID);
-        string MoveDescKnight(int fieldID, GameDesc.color plCol);
+        string MoveDescKnight(int fieldID, Game.color plCol);
         string MoveDescCoupon();
-        string MoveDescMatFromPl(GameDesc.materials mat);
-        string MoveDescTwoMat(GameDesc.materials fsMat, GameDesc.materials scMat);
+        string MoveDescMatFromPl(Game.materials mat);
+        string MoveDescTwoMat(Game.materials fsMat, Game.materials scMat);
         string MoveDescTwoRoad(int fsID, int scID);
         string MoveDescBuildRoad(int roadID);
         string MoveDescBuildVillage(int villageID);
         string MoveDescBuildTown(int townID);
         string MoveDescBuyActCard();
-        string MoveDescExchangeMat(GameDesc.materials matFrom, GameDesc.materials matTo);
+        string MoveDescExchangeMat(Game.materials matFrom, Game.materials matTo);
         string MoveDescThief(int fieldID);
-        string MoveDescThief(int fieldID, GameDesc.color plCol);
+        string MoveDescThief(int fieldID, Game.color plCol);
 
     }
 }

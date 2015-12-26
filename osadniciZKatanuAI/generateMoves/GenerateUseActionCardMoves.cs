@@ -28,24 +28,24 @@ namespace osadniciZKatanuAI
         }
 
 
-        public List<Move> Generate(GameDesc gmDesc)
+        public List<Move> Generate(GameProperties gmProp, PlayerProperties plProp)
         {
             List<Move> possibleMoves = new List<Move>();
             List<Move> toAdd = new List<Move>();
 
-            if (!gmDesc.wasUseActionCard)
+            if (!gmProp.wasUseActionCard)
             {
-                foreach (var curAct in gmDesc.ActualPlayerDesc.ActionCardsDesc.ActionCards)
+                foreach (var curAct in plProp.ActionCards.ActionCards)
                 {
                     if (curAct.Quantity > 0)
                     {
                         switch (curAct.ActionCardType)
                         {
-                            case GameDesc.actionCards.coupon: GenerateUseCouponActionCard(gmDesc, possibleMoves); break;
-                            case GameDesc.actionCards.knight: GenerateUseKnightActionCard(gmDesc, possibleMoves); break;
-                            case GameDesc.actionCards.materialsFromPlayers: GenerateUseMatFromPlActionCard(gmDesc, possibleMoves); break;
-                            case GameDesc.actionCards.twoMaterials: GenerateUseTwoMatActionCard(gmDesc, possibleMoves); break;
-                            case GameDesc.actionCards.twoRoad: GenerateUseTwoRoadActionCard(gmDesc, possibleMoves); break;
+                            case Game.actionCards.coupon: GenerateUseCouponActionCard(gmProp, possibleMoves); break;
+                            case Game.actionCards.knight: GenerateUseKnightActionCard(gmProp, plProp, possibleMoves); break;
+                            case Game.actionCards.materialsFromPlayers: GenerateUseMatFromPlActionCard(gmProp, plProp, possibleMoves); break;
+                            case Game.actionCards.twoMaterials: GenerateUseTwoMatActionCard(gmProp, plProp, possibleMoves); break;
+                            case Game.actionCards.twoRoad: GenerateUseTwoRoadActionCard(gmProp, plProp, possibleMoves); break;
                         }
 
                         
@@ -56,73 +56,73 @@ namespace osadniciZKatanuAI
             return possibleMoves;
         }
 
-        private void GenerateUseTwoRoadActionCard(GameDesc gmDesc, List<Move> possibleMove)
+        private void GenerateUseTwoRoadActionCard(GameProperties gmProp, PlayerProperties plProp, List<Move> possibleMove)
         {
             //List<TwoRoadMove> possibleTwoRoadMoves = new List<TwoRoadMove>();
-            if (gmDesc.ActualPlayerDesc.RoadRemaining > 1)
+            if (plProp.RoadRemaining > 1)
             {
-                List<EdgeDesc> possibleEdges, possibleEdgesSec;
+                List<Edge> possibleEdges, possibleEdgesSec;
                 double fitnessMove = 0;
-                EdgeDesc firstRoad, secondRoad;
+                Edge firstRoad, secondRoad;
 
-                possibleEdges = common.GeneratePossibleEdgesToBuildRoad(gmDesc);
+                possibleEdges = common.GeneratePossibleEdgesToBuildRoad(gmProp, plProp);
                 foreach (var curEg in possibleEdges)
                 {
                     firstRoad = curEg;
-                    fitnessMove = common.RateRoad(firstRoad, gmDesc);
-                    gmDesc.ActualPlayerDesc.RoadDesc.Add(firstRoad);
-                    possibleEdgesSec = common.GeneratePossibleEdgesToBuildRoad(gmDesc);
+                    fitnessMove = common.RateRoad(gmProp, plProp, firstRoad);
+                    plProp.Road.Add(firstRoad);
+                    possibleEdgesSec = common.GeneratePossibleEdgesToBuildRoad(gmProp, plProp);
                     foreach (var curEgSec in possibleEdgesSec)
                     {
                         if (curEgSec != curEg)
                         {
                             secondRoad = curEgSec;
-                            fitnessMove += common.RateRoad(secondRoad, gmDesc);
+                            fitnessMove += common.RateRoad(gmProp, plProp, secondRoad);
                             TwoRoadMove mvDesc = new TwoRoadMove(firstRoad, secondRoad);
                             fitnessMove = movesProp.weightUseTwoRoadGeneral;
                             mvDesc.fitnessMove = fitnessMove;
                             possibleMove.Add(mvDesc);
                         }
                     }
-                    gmDesc.ActualPlayerDesc.RoadDesc.Remove(firstRoad);
+                    plProp.Road.Remove(firstRoad);
                 }
             }
         }
 
-        private void GenerateUseCouponActionCard(GameDesc gmDesc, List<Move> possibleMove)
+        private void GenerateUseCouponActionCard(GameProperties gmProp, List<Move> possibleMove)
         {
             //List<CouponMove> possibleCouponMoves = new List<CouponMove>();
             CouponMove mvDesc = new CouponMove();
-            mvDesc.fitnessMove = RateUseActionCard(mvDesc, gmDesc);
+            mvDesc.fitnessMove = RateUseActionCard(mvDesc, gmProp);
             possibleMove.Add(mvDesc);
         }
 
-        private void GenerateUseKnightActionCard(GameDesc gmDesc, List<Move> possibleMove)
+        private void GenerateUseKnightActionCard(GameProperties gmProp, PlayerProperties plProp, List<Move> possibleMove)
         {
             //List<KnightMove> possibleMoves = new List<KnightMove>();
 
-            foreach (var curFc in gmDesc.GameBorderDesc.facesDesc)
+            foreach (var curFc in gmProp.GameBorderData.facesDesc)
             {
-                foreach (var curMv in ComputeMoveKnightFaceFitness(curFc, gmDesc))
+                foreach (var curMv in ComputeMoveKnightFaceFitness(gmProp, plProp, curFc))
                 {
                     possibleMove.Add(curMv);
                 }
             }
         }
 
-        private List<KnightMove> ComputeMoveKnightFaceFitness(FaceDesc curFc, GameDesc gmDesc)
+        private List<KnightMove> ComputeMoveKnightFaceFitness(GameProperties gmProp, PlayerProperties plProp, FaceDesc curFc)
         {
-            double[] prob = gmDesc.GameBorderDesc.probabilities;
+            double[] prob = gmProp.GameBorderData.probabilities;
             int countOfMyBuilding = 0;
             int countOfOtherBuilding = 0;
-            List<GameDesc.color> colors = new List<GameDesc.color>();
+            List<Game.color> colors = new List<Game.color>();
             List<KnightMove> result = new List<KnightMove>();
 
             foreach (var curVx in curFc.VerticesNeighborsDesc)
             {
                 if (curVx.Building)
                 {
-                    if (curVx.Color == gmDesc.ActualPlayerDesc.Color)
+                    if (curVx.Color == plProp.Color)
                     {
                         countOfMyBuilding++;
                     }
@@ -153,68 +153,68 @@ namespace osadniciZKatanuAI
             return result;
         }
 
-        private void GenerateUseMatFromPlActionCard(GameDesc gmDesc, List<Move> possibleMove)
+        private void GenerateUseMatFromPlActionCard(GameProperties gmProp, PlayerProperties plProp, List<Move> possibleMove)
         {
             //List<MaterialFromPlayersMove> possibleMatFromPlMoves = new List<MaterialFromPlayersMove>();
 
-            foreach (GameDesc.materials curMat in Enum.GetValues(typeof(GameDesc.materials)))
+            foreach (Game.materials curMat in Enum.GetValues(typeof(Game.materials)))
             {
-                if (curMat != GameDesc.materials.desert && curMat != GameDesc.materials.noMaterial)
+                if (curMat != Game.materials.desert && curMat != Game.materials.noMaterial)
                 {
                     MaterialFromPlayersMove mvDesc = new MaterialFromPlayersMove(curMat);
-                    mvDesc.fitnessMove = RateMateFromPl(curMat, gmDesc);
+                    mvDesc.fitnessMove = RateMateFromPl(gmProp, plProp, curMat);
                     possibleMove.Add(mvDesc);
                 }
             }
         }
 
-        private double RateMateFromPl(GameDesc.materials curMat, GameDesc gmDesc)
+        private double RateMateFromPl(GameProperties gmProp, PlayerProperties plProp, Game.materials curMat)
         {
-            return movesProp.weightUseMatFromPlGeneral / (gmDesc.ActualPlayerDesc.MaterialsDesc.GetQuantity(curMat) + 1);
+            return movesProp.weightUseMatFromPlGeneral / (plProp.Materials.GetQuantity(curMat) + 1);
         }
 
-        private void GenerateUseTwoMatActionCard(GameDesc gmDesc, List<Move> possibleMove)
+        private void GenerateUseTwoMatActionCard(GameProperties gmProp, PlayerProperties plProp, List<Move> possibleMove)
         {
             //List<TwoMaterialsMove> possibleMatFromPlMoves = new List<TwoMaterialsMove>();
             TwoMaterialsMove mvDesc;
 
-            if (!gmDesc.wasBuildSomething)
+            if (!gmProp.wasBuildSomething)
             {
-                if (exchange.CountOfMissingMaterials(gmDesc.materialForRoadDesc, gmDesc.ActualPlayerDesc.MaterialsDesc) <= 2)
+                if (exchange.CountOfMissingMaterials(gmProp.MaterialsForRoad, plProp.Materials) <= 2)
                 {
-                    mvDesc = MakeMoveTwoMatActionCard(gmDesc.materialForRoadDesc, gmDesc);
+                    mvDesc = MakeMoveTwoMatActionCard(gmProp, plProp, gmProp.MaterialsForRoad);
                     mvDesc.fitnessMove = movesProp.weightUseTwoMatRoadGeneral;
                     possibleMove.Add(mvDesc);
                 }
-                if (exchange.CountOfMissingMaterials(gmDesc.materialForVillageDesc, gmDesc.ActualPlayerDesc.MaterialsDesc) <= 2)
+                if (exchange.CountOfMissingMaterials(gmProp.MaterialsForVillage, plProp.Materials) <= 2)
                 {
-                    mvDesc = MakeMoveTwoMatActionCard(gmDesc.materialForVillageDesc, gmDesc);
+                    mvDesc = MakeMoveTwoMatActionCard(gmProp, plProp, gmProp.MaterialsForVillage);
                     mvDesc.fitnessMove = movesProp.weightUseTwoMatVillageGeneral;
                     possibleMove.Add(mvDesc);
                 }
-                if (exchange.CountOfMissingMaterials(gmDesc.materialForTownDesc, gmDesc.ActualPlayerDesc.MaterialsDesc) <= 2)
+                if (exchange.CountOfMissingMaterials(gmProp.MaterialsForTown, plProp.Materials) <= 2)
                 {
-                    mvDesc = MakeMoveTwoMatActionCard(gmDesc.materialForTownDesc, gmDesc);
+                    mvDesc = MakeMoveTwoMatActionCard(gmProp, plProp, gmProp.MaterialsForTown);
                     mvDesc.fitnessMove = movesProp.weightUseTwoMatTownGeneral;
                     possibleMove.Add(mvDesc);
                 }
-                if (exchange.CountOfMissingMaterials(gmDesc.materialForActionCardDesc, gmDesc.ActualPlayerDesc.MaterialsDesc) <= 2)
+                if (exchange.CountOfMissingMaterials(gmProp.MaterialsForActionCard, plProp.Materials) <= 2)
                 {
-                    mvDesc = MakeMoveTwoMatActionCard(gmDesc.materialForActionCardDesc, gmDesc);
+                    mvDesc = MakeMoveTwoMatActionCard(gmProp, plProp, gmProp.MaterialsForActionCard);
                     mvDesc.fitnessMove = movesProp.weightUseTwoMatActGeneral;
                     possibleMove.Add(mvDesc);
                 }
             }
         }
 
-        private TwoMaterialsMove MakeMoveTwoMatActionCard(MaterialCollectionDesc whatIWant, GameDesc gmDesc)
+        private TwoMaterialsMove MakeMoveTwoMatActionCard(GameProperties gmProp, PlayerProperties plProp, MaterialCollectionDesc whatIWant)
         {
-            GameDesc.materials firstMat = GameDesc.materials.noMaterial;
-            GameDesc.materials secondMat = GameDesc.materials.noMaterial;
+            Game.materials firstMat = Game.materials.noMaterial;
+            Game.materials secondMat = Game.materials.noMaterial;
 
             foreach (var curMat in whatIWant.Materials)
             {
-                int myQuant = gmDesc.ActualPlayerDesc.MaterialsDesc.GetQuantity(curMat.MaterialType);
+                int myQuant = plProp.Materials.GetQuantity(curMat.MaterialType);
                 int whatIWantQuant = curMat.Quantity;
                 if (whatIWantQuant > myQuant)
                 {
@@ -226,7 +226,7 @@ namespace osadniciZKatanuAI
                     }
                     else
                     {
-                        if (firstMat == GameDesc.materials.noMaterial)
+                        if (firstMat == Game.materials.noMaterial)
                         {
                             firstMat = curMat.MaterialType;
                         }
@@ -240,20 +240,20 @@ namespace osadniciZKatanuAI
             }
 
             #warning lepsi algoritmus na vybrani druhe suroviny
-            if (firstMat == GameDesc.materials.noMaterial)
+            if (firstMat == Game.materials.noMaterial)
             {
-                firstMat = GameDesc.materials.brick;
+                firstMat = Game.materials.brick;
             }
-            if (secondMat == GameDesc.materials.noMaterial)
+            if (secondMat == Game.materials.noMaterial)
             {
-                secondMat = GameDesc.materials.brick;
+                secondMat = Game.materials.brick;
             }
 
             TwoMaterialsMove mvDesc = new TwoMaterialsMove(firstMat, secondMat);
             return mvDesc;
         }
 
-        private double RateUseActionCard(Move mvDesc, GameDesc gmDesc)
+        private double RateUseActionCard(Move mvDesc, GameProperties gmProp)
         {
             return movesProp.weightUseActionCardGeneral;
         }

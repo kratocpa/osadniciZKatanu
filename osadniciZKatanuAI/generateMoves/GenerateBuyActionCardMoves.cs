@@ -25,24 +25,24 @@ namespace osadniciZKatanuAI
             exchange = new GenerateExchangeMoves(movesProp);
         }
 
-        public List<BuyActionCardMove> Generate(GameDesc gmDesc)
+        public List<BuyActionCardMove> Generate(GameProperties gmProp, PlayerProperties plProp)
         {
             List<BuyActionCardMove> possibleBuyActCardMoves = new List<BuyActionCardMove>();
 
-            if (gmDesc.ActualPlayerDesc.MaterialsDesc.IsPossibleDelete(gmDesc.materialForActionCardDesc) &&
-                gmDesc.RemainingActionCardsDesc.GetSumAllActionCard() > 0 &&
-                !gmDesc.wasBuildSomething)
+            if (plProp.Materials.IsPossibleDelete(gmProp.MaterialsForActionCard) &&
+                !gmProp.actionCardsPackedIsEmpty &&
+                !gmProp.wasBuildSomething)
             {
                 BuyActionCardMove mvDesc = new BuyActionCardMove();
-                mvDesc.fitnessMove = RateBuyActionCard(gmDesc);
+                mvDesc.fitnessMove = RateBuyActionCard(gmProp);
                 possibleBuyActCardMoves.Add(mvDesc);
             }
-            else if (!gmDesc.wasBuildSomething && gmDesc.RemainingActionCardsDesc.GetSumAllActionCard() > 0)
+            else if (!gmProp.wasBuildSomething && gmProp.RemainingActionCards.GetSumAllActionCard() > 0)
             {
-                BuyActionCardMove mvDesc = (BuyActionCardMove)exchange.Generate(gmDesc.materialForActionCardDesc, gmDesc, GenerateExchangeMoves.typeMove.buyActionCard);
+                BuyActionCardMove mvDesc = (BuyActionCardMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForActionCard, GenerateExchangeMoves.typeMove.buyActionCard);
                 if (mvDesc != null)
                 {
-                    mvDesc.fitnessMove = RateBuyActionCard(gmDesc);
+                    mvDesc.fitnessMove = RateBuyActionCard(gmProp);
                     possibleBuyActCardMoves.Add(mvDesc);
                 }
             }
@@ -50,7 +50,7 @@ namespace osadniciZKatanuAI
             return possibleBuyActCardMoves;
         }
 
-        private double RateBuyActionCard(GameDesc gmDesc)
+        private double RateBuyActionCard(GameProperties gmProp)
         {
             return movesProp.weightBuyActionCardGeneral;
         }

@@ -8,10 +8,10 @@ namespace osadniciZKatanu
 {
     public class TwoMaterialsMove : Move
     {
-        public GameDesc.materials FirstMaterial { get; private set; }
-        public GameDesc.materials SecondMaterial { get; private set; }
+        public Game.materials FirstMaterial { get; private set; }
+        public Game.materials SecondMaterial { get; private set; }
 
-        public TwoMaterialsMove(GameDesc.materials firstMaterial, GameDesc.materials secondMaterial)
+        public TwoMaterialsMove(Game.materials firstMaterial, Game.materials secondMaterial)
         {
             FirstMaterial = firstMaterial;
             SecondMaterial = secondMaterial;

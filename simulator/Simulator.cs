@@ -24,46 +24,42 @@ namespace simulator
         public System.IO.StreamWriter output { set; get; }
 
         IGameLogic actAI;
-        GameDesc gmDes;
+        //GameDesc gmDes;
         Move mvDes;
         string moveToStr;
 
-        public Simulator(List<Player> players, bool randomGameBorder, ILanguage curLang, GameProperties gmProp)
+        public Simulator(List<Player> players, GameProperties gmProp)
         {
-            gm = new Game(players, randomGameBorder, curLang, gmProp);
-            this.curLang = curLang;
+            gm = new Game(players, gmProp);
             this.output = output;
         }
 
-        public GameDesc run()
+        public Game run()
         {
             if (gm.Players.Count < 2 || gm.Players.Count > 4) { throw new WrongNumberOfPlayersException("Wrong number of players. Two, three or four players is okey."); }
             gm.NextState();
             while (!gm.EndGame)
             {
-                if (gm.Round > MAX_ROUNDS) { throw new TooManyRoundsException("Too many rounds"); }
+                if (gm.GmProp.Round > MAX_ROUNDS) { throw new TooManyRoundsException("Too many rounds"); }
 
                 actAI = PickCurrentPlayer();
 
-                if (gm.CurrentState == GameDesc.state.firstPhaseOfGame)
+                if (gm.GmProp.CurrentState == Game.state.firstPhaseOfGame)
                 {
                     RunFirstPhaseOfGame();
                 }
-                else if (gm.CurrentState == GameDesc.state.game)
+                else if (gm.GmProp.CurrentState == Game.state.game)
                 {
                     runGame();
                 }
 
             }
-            gm.Sychronize();
             return gm;
         }
 
         private void RunFirstPhaseOfGame()
         {
-            gm.Sychronize();
-            gmDes = gm;
-            mvDes = actAI.GenerateMove(gmDes);
+            mvDes = actAI.GenerateMove(gm.GmProp, gm.ActualPlayer.PlProp);
             moveToStr = gm.MakeMove(mvDes);
 
             if (moveToStr != null && !gm.EndOfFirstPhaseOfTheGame())
@@ -87,17 +83,16 @@ namespace simulator
         private void runGame()
         {
             gm.RollTheDice();
-            if (gm.FallenNum != 7) { gm.GetMaterials(gm.FallenNum); }
-            else { gm.NeedToMoveThief = true; }
+            if (gm.GmProp.FallenNum != 7) { gm.GetMaterials(gm.GmProp.FallenNum); }
+            else { gm.GmProp.NeedToMoveThief = true; }
 
             WriteHead();
             int counter = 0;
             do
             {
                 if (counter > MAX_MOVES) { throw new TooManyMovesException("Too many moves"); }
-                gm.Sychronize();
-                gmDes = gm;
-                mvDes = actAI.GenerateMove(gmDes);
+
+                mvDes = actAI.GenerateMove(gm.GmProp, gm.ActualPlayer.PlProp);
                 moveToStr = gm.MakeMove(mvDes);
                 WriteMove(moveToStr);
                 counter++;
@@ -108,12 +103,12 @@ namespace simulator
 
         IGameLogic PickCurrentPlayer()
         {
-            switch (gm.ActualPlayer.Color)
+            switch (gm.ActualPlayer.PlProp.Color)
             {
-                case GameDesc.color.red: return firstPl;
-                case GameDesc.color.blue: return secondPl;
-                case GameDesc.color.yellow: return thirdPl;
-                case GameDesc.color.white: return fourthPl;
+                case Game.color.red: return firstPl;
+                case Game.color.blue: return secondPl;
+                case Game.color.yellow: return thirdPl;
+                case Game.color.white: return fourthPl;
                 default: return null;
             }
         }
@@ -122,7 +117,7 @@ namespace simulator
         {
             if (output != null)
             {
-                output.WriteLine(curLang.ColorToString(gm.ActualPlayer.Color) + ": ");
+                output.WriteLine(gm.GmProp.CurLang.ColorToString(gm.ActualPlayer.PlProp.Color) + ": ");
             }
         }
 

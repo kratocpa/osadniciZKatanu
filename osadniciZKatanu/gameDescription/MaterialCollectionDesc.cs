@@ -14,16 +14,16 @@ namespace osadniciZKatanu
         public MaterialCollectionDesc()
         {
             Materials = new List<MaterialStruct>();
-            Materials.Add(new MaterialStruct(GameDesc.materials.brick, 0));
-            Materials.Add(new MaterialStruct(GameDesc.materials.grain, 0));
-            Materials.Add(new MaterialStruct(GameDesc.materials.sheep, 0));
-            Materials.Add(new MaterialStruct(GameDesc.materials.stone, 0));
-            Materials.Add(new MaterialStruct(GameDesc.materials.wood, 0));
+            Materials.Add(new MaterialStruct(Game.materials.brick, 0));
+            Materials.Add(new MaterialStruct(Game.materials.grain, 0));
+            Materials.Add(new MaterialStruct(Game.materials.sheep, 0));
+            Materials.Add(new MaterialStruct(Game.materials.stone, 0));
+            Materials.Add(new MaterialStruct(Game.materials.wood, 0));
 
             rnd = new Random();
         }
 
-        public GameDesc.materials PickRandomMaterial()
+        public Game.materials PickRandomMaterial()
         {
             int sum = GetSumAllMaterial();
 
@@ -40,7 +40,7 @@ namespace osadniciZKatanu
                     curSum += curMat.Quantity;
                 }
             }
-            return GameDesc.materials.noMaterial;
+            return Game.materials.noMaterial;
         }
         
 
@@ -54,7 +54,7 @@ namespace osadniciZKatanu
             return sum;
         }
 
-        public int GetQuantity(GameDesc.materials searchedMaterial)
+        public int GetQuantity(Game.materials searchedMaterial)
         {
             return Materials.Find(x => x.MaterialType == searchedMaterial).Quantity;
         }
@@ -71,7 +71,7 @@ namespace osadniciZKatanu
 
         public List<Game.materials> ExchangePossibility(int portRate)
         {
-            List<Game.materials> possibility = new List<GameDesc.materials>();
+            List<Game.materials> possibility = new List<Game.materials>();
             foreach (var curMat in Materials)
             {
                 if (curMat.Quantity >= portRate)
@@ -84,7 +84,7 @@ namespace osadniciZKatanu
 
         public List<Game.materials> ExchangePossibility(List<Game.materials> portMat, int portRate)
         {
-            List<Game.materials> possibility = new List<GameDesc.materials>();
+            List<Game.materials> possibility = new List<Game.materials>();
             foreach (var curMat in portMat)
             {
                 if (GetQuantity(curMat) >= portRate)
@@ -99,9 +99,9 @@ namespace osadniciZKatanu
         public class MaterialStruct
         {
             public int Quantity { get; set; }
-            public GameDesc.materials MaterialType { get; set; }
+            public Game.materials MaterialType { get; set; }
 
-            public MaterialStruct(GameDesc.materials materialType, int quantity)
+            public MaterialStruct(Game.materials materialType, int quantity)
             {
                 MaterialType = materialType;
                 Quantity = quantity;

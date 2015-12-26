@@ -10,7 +10,7 @@ namespace osadniciZKatanu
     {
         public Vertex noVertex = new Vertex(new Coord(-1, -1));
         public Edge noEdge = new Edge(Tuple.Create(new Coord(-1, -1), new Coord(-1, -1)));
-        public Face noFace = new Face(new Coord(-1, -1), GameDesc.materials.noMaterial, 0);
+        public Face noFace = new Face(new Coord(-1, -1), Game.materials.noMaterial, 0);
 
         public List<Vertex> Vertices;
         public List<Edge> Edges;

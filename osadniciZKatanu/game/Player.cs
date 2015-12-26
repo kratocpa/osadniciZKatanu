@@ -7,83 +7,56 @@ using System.Xml;
 
 namespace osadniciZKatanu
 {
-    public class Player : PlayerDesc
+    public class Player
     {
-        public MaterialCollection Materials { get; private set; } // suroviny hráče
         public MaterialCollection CurrentAddedMaterials { get; private set; } // suroviny, které se tomuto hráči toto kolo přičetli
         public MaterialCollection CurrentDeletedMaterials { get; private set; }
-        public ActionCardCollection ActionCards { get; private set; } // seznam nevyložených akčních karet hráče
-        public ActionCardCollection LinedActionCards { get; private set; } // seznam vyložených akčních karet hráče
-        public List<Vertex> Village { get; private set; } // seznam postavených vesnic hráče
-        public List<Vertex> Town { get; private set; } // seznam postavenách měst hráče
-        public List<Edge> Road { get; private set; } // seznam postavených cest hráče
 
-        public Player(GameDesc.color playerColor, bool real, GameProperties gmProp)
-            : base(playerColor, real, gmProp)
+        public PlayerProperties PlProp;
+
+        public Player(Game.color playerColor, bool real, GameProperties gmProp)
         {
-            Village = new List<Vertex>();
-            Town = new List<Vertex>();
-            Road = new List<Edge>();
-
-            ActionCards = new ActionCardCollection();
-            LinedActionCards = new ActionCardCollection();
-            Materials = new MaterialCollection();
+            PlProp = new PlayerProperties(playerColor, real, gmProp.RoadRemaining, gmProp.VillageRemaining, gmProp.TownRemaining);
             CurrentAddedMaterials = new MaterialCollection();
             CurrentDeletedMaterials = new MaterialCollection();
         }
 
-        public void Synchronize()
+        public void AddPort(Game.materials materialPort)
         {
-            MaterialsDesc = Materials;
-            ActionCardsDesc = ActionCards;
-            LinedActionCardsDesc = LinedActionCards;
-
-            VillageDesc.Clear();
-            foreach (Vertex curVx in Village) { VillageDesc.Add(curVx); }
-
-            TownDesc.Clear();
-            foreach (Vertex curVx in Town) { TownDesc.Add(curVx); }
-
-            RoadDesc.Clear();
-            foreach (Edge curEg in Road) { RoadDesc.Add(curEg); }
-        }
-
-        public void AddPort(GameDesc.materials materialPort)
-        {
-            if (!PortForMaterial.Contains(materialPort))
+            if (!PlProp.PortForMaterial.Contains(materialPort))
             {
-                PortForMaterial.Add(materialPort);
+                PlProp.PortForMaterial.Add(materialPort);
             }
         }
 
         public void AddVillage(Vertex village)
         {
-            village.SetVillage(Color);
-            Village.Add(village);
-            VillageRemaining--;
+            village.SetVillage(PlProp.Color);
+            PlProp.Village.Add(village);
+            PlProp.VillageRemaining--;
         }
 
         public void AddTown(Vertex town)
         {
-            town.SetTown(Color);
-            Town.Add(town);
-            Village.Remove(Village.Find(x => x.Coordinate.X == town.Coordinate.X && x.Coordinate.Y == town.Coordinate.Y));
-            TownRemaining--;
-            VillageRemaining++;
+            town.SetTown(PlProp.Color);
+            PlProp.Town.Add(town);
+            PlProp.Village.Remove(PlProp.Village.Find(x => x.Coordinate.X == town.Coordinate.X && x.Coordinate.Y == town.Coordinate.Y));
+            PlProp.TownRemaining--;
+            PlProp.VillageRemaining++;
         }
 
         public void AddRoad(Edge road)
         {
-            road.SetRoad(Color);
-            Road.Add(road);
+            road.SetRoad(PlProp.Color);
+            PlProp.Road.Add(road);
 
             foreach (Vertex curVx in road.VertexNeighbors)
             {
-                var to = FindFurthermostVertex(0, curVx, Road);
-                LongestWayLength = Math.Max(LongestWayLength, to);
+                var to = FindFurthermostVertex(0, curVx, PlProp.Road);
+                PlProp.LongestWayLength = Math.Max(PlProp.LongestWayLength, to);
             }
 
-            RoadRemaining--;
+            PlProp.RoadRemaining--;
         }
 
         /// <summary>
@@ -92,7 +65,7 @@ namespace osadniciZKatanu
         /// <param name="deletedEdge"></param>
         /// <param name="deletedList"></param>
         /// <returns>vrátí seznam bez hranuy která se měla smazat</returns>
-        List<Edge> DeleteEdge(Edge deletedEdge, List<Edge> deletedList)
+        public static List<Edge> DeleteEdge(Edge deletedEdge, List<Edge> deletedList)
         {
             var finalList = new List<Edge>();
             foreach (var curEdge in deletedList)
@@ -112,7 +85,7 @@ namespace osadniciZKatanu
         /// <param name="initialVertex"></param>
         /// <param name="roadList"></param>
         /// <returns> první hodnota dvojice je nejvzdálenější vrchol, druhý hodnota je dílka najité cesty </returns>
-        int FindFurthermostVertex(int distance, Vertex initialVertex, List<Edge> roadList)
+        public static int FindFurthermostVertex(int distance, Vertex initialVertex, List<Edge> roadList)
         {
             List<Vertex> succesor = new List<Vertex>();
             List<int> furthermostVertices = new List<int>();
@@ -147,7 +120,7 @@ namespace osadniciZKatanu
         public bool IsThereFreeSpaceForVillage()
         {
             bool succes = false;
-            foreach (var curEg in Road)
+            foreach (var curEg in PlProp.Road)
             {
                 succes = succes || (!curEg.VertexNeighborsDesc.First().Building && !curEg.VertexNeighborsDesc.First().IsHereBuildingInNeighbour());
                 succes = succes || (!curEg.VertexNeighborsDesc.Last().Building && !curEg.VertexNeighborsDesc.Last().IsHereBuildingInNeighbour());
