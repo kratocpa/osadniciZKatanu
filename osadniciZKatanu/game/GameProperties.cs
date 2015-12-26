@@ -310,7 +310,7 @@ namespace osadniciZKatanu
                         var curL = new Tuple<Coord, Coord>(fsCurVx.Coordinate, scCurVx.Coordinate);
                         foreach (var findL in edges)
                         {
-                            if (GameBorderDesc.SameLine(curL, findL.Coordinate))
+                            if (GameBorder.SameLine(curL, findL.Coordinate))
                             {
                                 notAdd = true;
                             }

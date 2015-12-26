@@ -47,7 +47,6 @@
     <Compile Include="game\MaterialCollection.cs" />
     <Compile Include="gameBorder\SetGameBorder.cs" />
     <Compile Include="gameBorder\Vertex.cs" />
-    <Compile Include="gameDescription\GameBorderDesc.cs" />
     <Compile Include="gameBorder\Coord.cs" />
     <Compile Include="game\Game.cs" />
     <Compile Include="game\GameProperties.cs" />

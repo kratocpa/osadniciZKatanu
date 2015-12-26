@@ -101,7 +101,7 @@ namespace osadniciZKatanuAI
         {
             //List<KnightMove> possibleMoves = new List<KnightMove>();
 
-            foreach (var curFc in gmProp.GameBorderData.facesDesc)
+            foreach (var curFc in gmProp.GameBorderData.Faces)
             {
                 foreach (var curMv in ComputeMoveKnightFaceFitness(gmProp, plProp, curFc))
                 {

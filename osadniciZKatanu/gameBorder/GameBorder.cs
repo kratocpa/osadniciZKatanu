@@ -6,8 +6,21 @@ using System.Threading.Tasks;
 
 namespace osadniciZKatanu
 {
-    public class GameBorder : GameBorderDesc
+    public class GameBorder
     {
+        private const int MAX_DISTANCE_BEETWEN_TWO_SAME_VERTICES = 10;
+        private const int DISTANCE_BEETWEN_NEIGHBORING_FACE_AND_VERTEX = 80;
+        private const int DISTANCE_BEETWEN_NEIGHBORING_TWO_VERTICES = 80;
+
+        //na pozici "i" je počet možností, kterými muže padnout číslo "i+2" (0 ani 1 nemůže padnout) 
+        private double[] countNumbersFit;
+
+        //počet všech kombinací vzniklých na hracích kostkách
+        private double allPossibilities;
+
+        //na pozici "i" je pravděpodobnost, že padne součet na kostkách "i+2" (0 ani 1 nemůže padnout)
+        public double[] probabilities;
+
         public Vertex noVertex = new Vertex(new Coord(-1, -1));
         public Edge noEdge = new Edge(Tuple.Create(new Coord(-1, -1), new Coord(-1, -1)));
         public Face noFace = new Face(new Coord(-1, -1), Game.materials.noMaterial, 0);
@@ -21,28 +34,11 @@ namespace osadniciZKatanu
             Vertices = vertices;
             Edges = edges;
             Faces = faces;
-        }
 
-        public void Synchronize()
-        {
-            verticesDesc.Clear();
-            edgesDesc.Clear();
-            facesDesc.Clear();
+            countNumbersFit = new double[] { 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1 };
+            allPossibilities = 36;
 
-            foreach (Vertex curVx in Vertices)
-            {
-                verticesDesc.Add(curVx);
-            }
-
-            foreach (Edge curEg in Edges)
-            {
-                edgesDesc.Add(curEg);
-            }
-
-            foreach (Face curFc in Faces)
-            {
-                facesDesc.Add(curFc);
-            }
+            ComputeProbabilities();
         }
 
         public Vertex FindVerticesByCoordinate(Coord coordinate)
@@ -80,6 +76,48 @@ namespace osadniciZKatanu
                 }
             }
             return noEdge;
+        }
+
+        public static bool SamePoints(Coord firstPoint, Coord secondPoint)
+        {
+            return IsAproximatly(firstPoint, secondPoint, MAX_DISTANCE_BEETWEN_TWO_SAME_VERTICES);
+        }
+
+        public static bool SameLine(Tuple<Coord, Coord> firstLine, Tuple<Coord, Coord> secondLine)
+        {
+            return (SamePoints(firstLine.Item1, secondLine.Item1) && SamePoints(firstLine.Item2, secondLine.Item2)) ||
+                (SamePoints(firstLine.Item1, secondLine.Item2) && SamePoints(firstLine.Item2, secondLine.Item1));
+        }
+
+        public static bool SameLine(Edge firstEg, Edge secEg)
+        {
+            return SameLine(firstEg.Coordinate, secEg.Coordinate);
+        }
+
+        public static bool IsAproximatly(Coord first, Coord second, int min)
+        {
+            if (first.X - second.X < min && first.X - second.X > -min &&
+                first.Y - second.Y < min && first.Y - second.Y > -min)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool IsAproximatly(Vertex first, Vertex second, int min)
+        {
+            return IsAproximatly(first.Coordinate, second.Coordinate, min);
+        }
+
+        //spočítá pravděpodobnosti, s jakýma padají jednotlivá čísla
+        private void ComputeProbabilities()
+        {
+            int numberCount = countNumbersFit.Count();
+            probabilities = new double[numberCount];
+            for (int i = 0; i < numberCount; i++)
+            {
+                probabilities[i] = countNumbersFit[i] / allPossibilities;
+            }
         }
 
     }

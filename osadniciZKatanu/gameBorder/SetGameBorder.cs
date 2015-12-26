@@ -41,7 +41,6 @@ namespace osadniciZKatanu
             }
 
             GameBorder res = new GameBorder(vertices, edges, faces);
-            res.Synchronize();
 
             return res;
         }
@@ -162,23 +161,23 @@ namespace osadniciZKatanu
         bool NeighboringFaceAndVertex(Vertex vertex, Face face)
         {
             int maxDistance = 80;
-            return GameBorderDesc.IsAproximatly(vertex.Coordinate, face.Coordinate, maxDistance);
+            return GameBorder.IsAproximatly(vertex.Coordinate, face.Coordinate, maxDistance);
         }
 
         bool NeighboringEdgeAndVertex(Vertex vertex, Edge edge)
         {
-            if (GameBorderDesc.SamePoints(vertex.Coordinate, edge.Coordinate.Item1) ||
-                GameBorderDesc.SamePoints(vertex.Coordinate, edge.Coordinate.Item2)) { return true; }
+            if (GameBorder.SamePoints(vertex.Coordinate, edge.Coordinate.Item1) ||
+                GameBorder.SamePoints(vertex.Coordinate, edge.Coordinate.Item2)) { return true; }
             return false;
         }
 
         bool NeighboringEdgeAndEdge(Edge firstEdge, Edge secondEdge)
         {
-            if ((GameBorderDesc.SamePoints(firstEdge.Coordinate.Item1, secondEdge.Coordinate.Item1) ||
-                GameBorderDesc.SamePoints(firstEdge.Coordinate.Item1, secondEdge.Coordinate.Item2) ||
-                GameBorderDesc.SamePoints(firstEdge.Coordinate.Item2, secondEdge.Coordinate.Item1) ||
-                GameBorderDesc.SamePoints(firstEdge.Coordinate.Item2, secondEdge.Coordinate.Item2)) &&
-                !GameBorderDesc.SameLine(firstEdge.Coordinate, secondEdge.Coordinate)) { return true; }
+            if ((GameBorder.SamePoints(firstEdge.Coordinate.Item1, secondEdge.Coordinate.Item1) ||
+                GameBorder.SamePoints(firstEdge.Coordinate.Item1, secondEdge.Coordinate.Item2) ||
+                GameBorder.SamePoints(firstEdge.Coordinate.Item2, secondEdge.Coordinate.Item1) ||
+                GameBorder.SamePoints(firstEdge.Coordinate.Item2, secondEdge.Coordinate.Item2)) &&
+                !GameBorder.SameLine(firstEdge.Coordinate, secondEdge.Coordinate)) { return true; }
 
             return false;
         }
@@ -186,8 +185,8 @@ namespace osadniciZKatanu
         public static bool NeighboringVertices(Vertex firstVertices, Vertex secondVertices)
         {
             int maxDistance = 80;
-            return GameBorderDesc.IsAproximatly(firstVertices.Coordinate, secondVertices.Coordinate, maxDistance) &&
-                !GameBorderDesc.SamePoints(firstVertices.Coordinate, secondVertices.Coordinate);
+            return GameBorder.IsAproximatly(firstVertices.Coordinate, secondVertices.Coordinate, maxDistance) &&
+                !GameBorder.SamePoints(firstVertices.Coordinate, secondVertices.Coordinate);
         }
     }
 }
