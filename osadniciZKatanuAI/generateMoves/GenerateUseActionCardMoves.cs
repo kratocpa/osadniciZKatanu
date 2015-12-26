@@ -207,7 +207,7 @@ namespace osadniciZKatanuAI
             }
         }
 
-        private TwoMaterialsMove MakeMoveTwoMatActionCard(GameProperties gmProp, PlayerProperties plProp, MaterialCollectionDesc whatIWant)
+        private TwoMaterialsMove MakeMoveTwoMatActionCard(GameProperties gmProp, PlayerProperties plProp, MaterialCollection whatIWant)
         {
             Game.materials firstMat = Game.materials.noMaterial;
             Game.materials secondMat = Game.materials.noMaterial;

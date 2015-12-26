@@ -15,7 +15,6 @@ namespace evolution
         public int GamesNum { get; set; }
         public bool ViewProgressBar { get; set; }
         Statistics statistic;
-        GameProperties gmProp;
 
         public OneStrategyEvaluator()
         {
