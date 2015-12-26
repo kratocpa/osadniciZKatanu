@@ -38,7 +38,7 @@ namespace evolution
             while (i < GamesNum)
             {
                 GameProperties gmProp = new GameProperties(true, new CzechLanguage());
-                gmProp.LoadFromXml();
+                //gmProp.LoadFromXml();
 
                 List<Player> players = new List<Player>();
                 players.Add(new Player(Game.color.red, false, gmProp));

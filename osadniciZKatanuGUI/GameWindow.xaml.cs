@@ -62,7 +62,7 @@ namespace osadniciZKatanuGUI
 
             players = new List<Player>();
             GameProperties gmProp = new GameProperties(randomGameBorder, curLang);
-            gmProp.LoadFromXml();
+            //gmProp.LoadFromXml();
             curEv = gameEvent.none;
 
             switch (playerCount)
@@ -85,7 +85,7 @@ namespace osadniciZKatanuGUI
             }
 
             gm = new Game(players, gmProp);
-            dr.DrawGameBorder(gm.GmProp.GameBorderData);
+            dr.DrawGameBorder(gmProp.GameBorderData);
             if (helpfullID)
             {
                 dr.DrawHelpfullID(gm);

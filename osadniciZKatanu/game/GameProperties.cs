@@ -82,7 +82,7 @@ namespace osadniciZKatanu
             ThiefFace = GameBorderData.Faces.Find(x => x.Material == Game.materials.desert);
         }
 
-        public void LoadFromXml()
+        private void LoadFromXml()
         {
             SetGameSettings();
             SetPlayerSettings();

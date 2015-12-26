@@ -47,10 +47,8 @@
     <Compile Include="game\MaterialCollection.cs" />
     <Compile Include="gameBorder\SetGameBorder.cs" />
     <Compile Include="gameBorder\Vertex.cs" />
-    <Compile Include="gameDescription\ActionCardCollectionDesc.cs" />
     <Compile Include="gameDescription\GameBorderDesc.cs" />
-    <Compile Include="gameDescription\MaterialCollectionDesc.cs" />
-    <Compile Include="gameDescription\Coord.cs" />
+    <Compile Include="gameBorder\Coord.cs" />
     <Compile Include="game\Game.cs" />
     <Compile Include="game\GameProperties.cs" />
     <Compile Include="game\Player.cs" />

@@ -28,7 +28,7 @@ namespace simulator
             while(i<gamesNum)
             {
                 gmProp = new GameProperties(true, curLang);
-                gmProp.LoadFromXml();
+                //gmProp.LoadFromXml();
 
                 List<Player> players = new List<Player>();
                 players.Add(new Player(Game.color.red, false, gmProp));
