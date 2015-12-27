@@ -10,18 +10,22 @@ namespace osadniciZKatanuAI
     class CommonFeatures
     {
         GenerateMovesProperties movesProp;
+        GameProperties gmProp;
+        PlayerProperties plProp;
         
         public CommonFeatures()
         {
             movesProp = new GenerateMovesProperties();
         }
 
-        public CommonFeatures(GenerateMovesProperties movesProp)
+        public CommonFeatures(GenerateMovesProperties movesProp, GameProperties gmProp, PlayerProperties plProp)
         {
             this.movesProp = movesProp;
+            this.gmProp = gmProp;
+            this.plProp = plProp;
         }
 
-        public List<Edge> GeneratePossibleEdgesToBuildRoad(GameProperties gmProp, PlayerProperties plProp)
+        public List<Edge> GeneratePossibleEdgesToBuildRoad()
         {
             List<Edge> possibleEdges = new List<Edge>();
             foreach (Edge curEg in plProp.Road)
@@ -38,11 +42,11 @@ namespace osadniciZKatanuAI
             return possibleEdges;
         }
 
-        public double RateRoad(GameProperties gmProp, PlayerProperties plProp, Edge curEg)
+        public double RateRoad(Edge curEg)
         {
             double fitness;
             fitness = movesProp.weightRoadGeneral;
-            int newLength = LengthOfNewPath(gmProp, plProp, curEg);
+            int newLength = LengthOfNewPath(curEg);
             if (newLength > plProp.LongestWayLength)
             {
                 if (newLength > gmProp.LongestRoad)
@@ -71,7 +75,7 @@ namespace osadniciZKatanuAI
             return succes;
         }
 
-        public int LengthOfNewPath(GameProperties gmProp, PlayerProperties plProp, Edge newEg)
+        public int LengthOfNewPath(Edge newEg)
         {
             List<Edge> newRoadList = new List<Edge>();
 
@@ -86,6 +90,5 @@ namespace osadniciZKatanuAI
                 Player.FindFurthermostVertex(0, newEg.VertexNeighbors[1], newRoadList)
             );
         }
-
     }
 }

@@ -25,51 +25,51 @@ namespace osadniciZKatanuAI
 
         public List<FirstPhaseGameMove> GenerateFirstRoadAndVillage(GameProperties gmProp, PlayerProperties plProp)
         {
-            GenerateFsAndScMoves gener = new GenerateFsAndScMoves(movesProp);
-            return gener.Generate(gmProp, plProp);
+            GenerateFsAndScMoves gener = new GenerateFsAndScMoves(movesProp, gmProp, plProp);
+            return gener.Generate();
         }
 
         public List<FirstPhaseGameMove> GenerateSecondRoadAndVillage(GameProperties gmProp, PlayerProperties plProp)
         {
-            GenerateFsAndScMoves gener = new GenerateFsAndScMoves(movesProp);
-            return gener.Generate(gmProp, plProp);
+            GenerateFsAndScMoves gener = new GenerateFsAndScMoves(movesProp, gmProp, plProp);
+            return gener.Generate();
         }
 
         public List<BuildRoadMove> GenerateBuildRoadMoves(GameProperties gmProp, PlayerProperties plProp)
         {
-            GenerateRoadMoves gener = new GenerateRoadMoves(movesProp);
-            return gener.Generate(gmProp, plProp);
+            GenerateRoadMoves gener = new GenerateRoadMoves(movesProp, gmProp, plProp);
+            return gener.Generate();
         }
 
         public List<ThiefMove> GenerateThiefMoves(GameProperties gmProp, PlayerProperties plProp)
         {
-            GenerateThiefMoves gener = new GenerateThiefMoves(movesProp);
-            return gener.Generate(gmProp, plProp);
+            GenerateThiefMoves gener = new GenerateThiefMoves(movesProp, gmProp, plProp);
+            return gener.Generate();
         }
 
         public List<BuildVillageMove> GenerateBuildVillageMoves(GameProperties gmProp, PlayerProperties plProp)
         {
-            GenerateVillageMoves gener = new GenerateVillageMoves(movesProp);
-            return gener.Generate(gmProp, plProp);
+            GenerateVillageMoves gener = new GenerateVillageMoves(movesProp, gmProp, plProp);
+            return gener.Generate();
         }
 
         public List<BuildTownMove> GenerateBuildTownMoves(GameProperties gmProp, PlayerProperties plProp)
         {
-            GenerateTownMoves gener = new GenerateTownMoves(movesProp);
-            return gener.Generate(gmProp, plProp);
+            GenerateTownMoves gener = new GenerateTownMoves(movesProp, gmProp, plProp);
+            return gener.Generate();
         }
 
 
         public List<BuyActionCardMove> GenerateBuyActionCardMoves(GameProperties gmProp, PlayerProperties plProp)
         {
-            GenerateBuyActionCardMoves gener = new GenerateBuyActionCardMoves(movesProp);
-            return gener.Generate(gmProp, plProp);
+            GenerateBuyActionCardMoves gener = new GenerateBuyActionCardMoves(movesProp, gmProp, plProp);
+            return gener.Generate();
         }
 
         public List<Move> GenerateUseActionCardMoves(GameProperties gmProp, PlayerProperties plProp)
         {
-            GenerateUseActionCardMoves gener = new GenerateUseActionCardMoves(movesProp);
-            return gener.Generate(gmProp, plProp);
+            GenerateUseActionCardMoves gener = new GenerateUseActionCardMoves(movesProp, gmProp, plProp);
+            return gener.Generate();
         }
     }
 }

@@ -13,19 +13,24 @@ namespace osadniciZKatanuAI
         GenerateMovesProperties movesProp;
         GenerateExchangeMoves exchange;
 
+        GameProperties gmProp;
+        PlayerProperties plProp;
+
         public GenerateBuyActionCardMoves()
         {
             movesProp = new GenerateMovesProperties();
             exchange = new GenerateExchangeMoves();
         }
 
-        public GenerateBuyActionCardMoves(GenerateMovesProperties movesProp)
+        public GenerateBuyActionCardMoves(GenerateMovesProperties movesProp, GameProperties gmProp, PlayerProperties plProp)
         {
             this.movesProp = movesProp;
-            exchange = new GenerateExchangeMoves(movesProp);
+            this.gmProp = gmProp;
+            this.plProp = plProp;
+            exchange = new GenerateExchangeMoves(movesProp, gmProp, plProp);
         }
 
-        public List<BuyActionCardMove> Generate(GameProperties gmProp, PlayerProperties plProp)
+        public List<BuyActionCardMove> Generate()
         {
             List<BuyActionCardMove> possibleBuyActCardMoves = new List<BuyActionCardMove>();
 
@@ -34,15 +39,15 @@ namespace osadniciZKatanuAI
                 !gmProp.wasBuildSomething)
             {
                 BuyActionCardMove mvDesc = new BuyActionCardMove();
-                mvDesc.fitnessMove = RateBuyActionCard(gmProp);
+                mvDesc.fitnessMove = RateBuyActionCard();
                 possibleBuyActCardMoves.Add(mvDesc);
             }
             else if (!gmProp.wasBuildSomething && gmProp.RemainingActionCards.GetSumAllActionCard() > 0)
             {
-                BuyActionCardMove mvDesc = (BuyActionCardMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForActionCard, GenerateExchangeMoves.typeMove.buyActionCard);
+                BuyActionCardMove mvDesc = (BuyActionCardMove)exchange.Generate(gmProp.MaterialsForActionCard, GenerateExchangeMoves.typeMove.buyActionCard);
                 if (mvDesc != null)
                 {
-                    mvDesc.fitnessMove = RateBuyActionCard(gmProp);
+                    mvDesc.fitnessMove = RateBuyActionCard();
                     possibleBuyActCardMoves.Add(mvDesc);
                 }
             }
@@ -50,7 +55,7 @@ namespace osadniciZKatanuAI
             return possibleBuyActCardMoves;
         }
 
-        private double RateBuyActionCard(GameProperties gmProp)
+        private double RateBuyActionCard()
         {
             return movesProp.weightBuyActionCardGeneral;
         }

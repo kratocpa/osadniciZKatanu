@@ -10,18 +10,23 @@ namespace osadniciZKatanuAI
     class GenerateExchangeMoves
     {
         GenerateMovesProperties movesProp;
+        GameProperties gmProp;
+        PlayerProperties plProp;
+
         public enum typeMove { buyActionCard, buildRoad, buildVillage, buildTown };
         public GenerateExchangeMoves()
         {
             movesProp = new GenerateMovesProperties();
         }
 
-        public GenerateExchangeMoves(GenerateMovesProperties movesProp)
+        public GenerateExchangeMoves(GenerateMovesProperties movesProp, GameProperties gmProp, PlayerProperties plProp)
         {
             this.movesProp = movesProp;
+            this.gmProp = gmProp;
+            this.plProp = plProp;
         }
 
-        public Move Generate(GameProperties gmProp, PlayerProperties plProp, MaterialCollection whatIWant, typeMove tm)
+        public Move Generate(MaterialCollection whatIWant, typeMove tm)
         {
             Move result = new Move();
 

@@ -18,7 +18,7 @@ namespace evolution
 
         public OneStrategyEvaluator()
         {
-            GamesNum = 24;
+            GamesNum = 100;
             ViewProgressBar = false;
         }
 

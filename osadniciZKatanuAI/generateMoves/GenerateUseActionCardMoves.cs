@@ -13,6 +13,9 @@ namespace osadniciZKatanuAI
         GenerateExchangeMoves exchange;
         CommonFeatures common;
 
+        GameProperties gmProp;
+        PlayerProperties plProp;
+
         public GenerateUseActionCardMoves()
         {
             movesProp = new GenerateMovesProperties();
@@ -20,15 +23,17 @@ namespace osadniciZKatanuAI
             common = new CommonFeatures();
         }
 
-        public GenerateUseActionCardMoves(GenerateMovesProperties movesProp)
+        public GenerateUseActionCardMoves(GenerateMovesProperties movesProp, GameProperties gmProp, PlayerProperties plProp)
         {
             this.movesProp = movesProp;
-            exchange = new GenerateExchangeMoves(movesProp);
-            common = new CommonFeatures(movesProp);
+            this.gmProp = gmProp;
+            this.plProp = plProp;
+            exchange = new GenerateExchangeMoves(movesProp, gmProp, plProp);
+            common = new CommonFeatures(movesProp, gmProp, plProp);
         }
 
 
-        public List<Move> Generate(GameProperties gmProp, PlayerProperties plProp)
+        public List<Move> Generate()
         {
             List<Move> possibleMoves = new List<Move>();
             List<Move> toAdd = new List<Move>();
@@ -41,11 +46,11 @@ namespace osadniciZKatanuAI
                     {
                         switch (curAct.ActionCardType)
                         {
-                            case Game.actionCards.coupon: GenerateUseCouponActionCard(gmProp, possibleMoves); break;
-                            case Game.actionCards.knight: GenerateUseKnightActionCard(gmProp, plProp, possibleMoves); break;
-                            case Game.actionCards.materialsFromPlayers: GenerateUseMatFromPlActionCard(gmProp, plProp, possibleMoves); break;
-                            case Game.actionCards.twoMaterials: GenerateUseTwoMatActionCard(gmProp, plProp, possibleMoves); break;
-                            case Game.actionCards.twoRoad: GenerateUseTwoRoadActionCard(gmProp, plProp, possibleMoves); break;
+                            case Game.actionCards.coupon: GenerateUseCouponActionCard(possibleMoves); break;
+                            case Game.actionCards.knight: GenerateUseKnightActionCard(possibleMoves); break;
+                            case Game.actionCards.materialsFromPlayers: GenerateUseMatFromPlActionCard(possibleMoves); break;
+                            case Game.actionCards.twoMaterials: GenerateUseTwoMatActionCard(possibleMoves); break;
+                            case Game.actionCards.twoRoad: GenerateUseTwoRoadActionCard(possibleMoves); break;
                         }
 
                         
@@ -56,7 +61,7 @@ namespace osadniciZKatanuAI
             return possibleMoves;
         }
 
-        private void GenerateUseTwoRoadActionCard(GameProperties gmProp, PlayerProperties plProp, List<Move> possibleMove)
+        private void GenerateUseTwoRoadActionCard(List<Move> possibleMove)
         {
             //List<TwoRoadMove> possibleTwoRoadMoves = new List<TwoRoadMove>();
             if (plProp.RoadRemaining > 1)
@@ -65,19 +70,19 @@ namespace osadniciZKatanuAI
                 double fitnessMove = 0;
                 Edge firstRoad, secondRoad;
 
-                possibleEdges = common.GeneratePossibleEdgesToBuildRoad(gmProp, plProp);
+                possibleEdges = common.GeneratePossibleEdgesToBuildRoad();
                 foreach (var curEg in possibleEdges)
                 {
                     firstRoad = curEg;
-                    fitnessMove = common.RateRoad(gmProp, plProp, firstRoad);
+                    fitnessMove = common.RateRoad(firstRoad);
                     plProp.Road.Add(firstRoad);
-                    possibleEdgesSec = common.GeneratePossibleEdgesToBuildRoad(gmProp, plProp);
+                    possibleEdgesSec = common.GeneratePossibleEdgesToBuildRoad();
                     foreach (var curEgSec in possibleEdgesSec)
                     {
                         if (curEgSec != curEg)
                         {
                             secondRoad = curEgSec;
-                            fitnessMove += common.RateRoad(gmProp, plProp, secondRoad);
+                            fitnessMove += common.RateRoad(secondRoad);
                             TwoRoadMove mvDesc = new TwoRoadMove(firstRoad, secondRoad);
                             fitnessMove = movesProp.weightUseTwoRoadGeneral;
                             mvDesc.fitnessMove = fitnessMove;
@@ -89,28 +94,28 @@ namespace osadniciZKatanuAI
             }
         }
 
-        private void GenerateUseCouponActionCard(GameProperties gmProp, List<Move> possibleMove)
+        private void GenerateUseCouponActionCard(List<Move> possibleMove)
         {
             //List<CouponMove> possibleCouponMoves = new List<CouponMove>();
             CouponMove mvDesc = new CouponMove();
-            mvDesc.fitnessMove = RateUseActionCard(mvDesc, gmProp);
+            mvDesc.fitnessMove = RateUseActionCard();
             possibleMove.Add(mvDesc);
         }
 
-        private void GenerateUseKnightActionCard(GameProperties gmProp, PlayerProperties plProp, List<Move> possibleMove)
+        private void GenerateUseKnightActionCard(List<Move> possibleMove)
         {
             //List<KnightMove> possibleMoves = new List<KnightMove>();
 
             foreach (var curFc in gmProp.GameBorderData.Faces)
             {
-                foreach (var curMv in ComputeMoveKnightFaceFitness(gmProp, plProp, curFc))
+                foreach (var curMv in ComputeMoveKnightFaceFitness(curFc))
                 {
                     possibleMove.Add(curMv);
                 }
             }
         }
 
-        private List<KnightMove> ComputeMoveKnightFaceFitness(GameProperties gmProp, PlayerProperties plProp, Face curFc)
+        private List<KnightMove> ComputeMoveKnightFaceFitness(Face curFc)
         {
             double[] prob = gmProp.GameBorderData.probabilities;
             int countOfMyBuilding = 0;
@@ -153,7 +158,7 @@ namespace osadniciZKatanuAI
             return result;
         }
 
-        private void GenerateUseMatFromPlActionCard(GameProperties gmProp, PlayerProperties plProp, List<Move> possibleMove)
+        private void GenerateUseMatFromPlActionCard(List<Move> possibleMove)
         {
             //List<MaterialFromPlayersMove> possibleMatFromPlMoves = new List<MaterialFromPlayersMove>();
 
@@ -162,18 +167,18 @@ namespace osadniciZKatanuAI
                 if (curMat != Game.materials.desert && curMat != Game.materials.noMaterial)
                 {
                     MaterialFromPlayersMove mvDesc = new MaterialFromPlayersMove(curMat);
-                    mvDesc.fitnessMove = RateMateFromPl(gmProp, plProp, curMat);
+                    mvDesc.fitnessMove = RateMateFromPl(curMat);
                     possibleMove.Add(mvDesc);
                 }
             }
         }
 
-        private double RateMateFromPl(GameProperties gmProp, PlayerProperties plProp, Game.materials curMat)
+        private double RateMateFromPl(Game.materials curMat)
         {
             return movesProp.weightUseMatFromPlGeneral / (plProp.Materials.GetQuantity(curMat) + 1);
         }
 
-        private void GenerateUseTwoMatActionCard(GameProperties gmProp, PlayerProperties plProp, List<Move> possibleMove)
+        private void GenerateUseTwoMatActionCard(List<Move> possibleMove)
         {
             //List<TwoMaterialsMove> possibleMatFromPlMoves = new List<TwoMaterialsMove>();
             TwoMaterialsMove mvDesc;
@@ -182,32 +187,32 @@ namespace osadniciZKatanuAI
             {
                 if (exchange.CountOfMissingMaterials(gmProp.MaterialsForRoad, plProp.Materials) <= 2)
                 {
-                    mvDesc = MakeMoveTwoMatActionCard(gmProp, plProp, gmProp.MaterialsForRoad);
+                    mvDesc = MakeMoveTwoMatActionCard(gmProp.MaterialsForRoad);
                     mvDesc.fitnessMove = movesProp.weightUseTwoMatRoadGeneral;
                     possibleMove.Add(mvDesc);
                 }
                 if (exchange.CountOfMissingMaterials(gmProp.MaterialsForVillage, plProp.Materials) <= 2)
                 {
-                    mvDesc = MakeMoveTwoMatActionCard(gmProp, plProp, gmProp.MaterialsForVillage);
+                    mvDesc = MakeMoveTwoMatActionCard(gmProp.MaterialsForVillage);
                     mvDesc.fitnessMove = movesProp.weightUseTwoMatVillageGeneral;
                     possibleMove.Add(mvDesc);
                 }
                 if (exchange.CountOfMissingMaterials(gmProp.MaterialsForTown, plProp.Materials) <= 2)
                 {
-                    mvDesc = MakeMoveTwoMatActionCard(gmProp, plProp, gmProp.MaterialsForTown);
+                    mvDesc = MakeMoveTwoMatActionCard(gmProp.MaterialsForTown);
                     mvDesc.fitnessMove = movesProp.weightUseTwoMatTownGeneral;
                     possibleMove.Add(mvDesc);
                 }
                 if (exchange.CountOfMissingMaterials(gmProp.MaterialsForActionCard, plProp.Materials) <= 2)
                 {
-                    mvDesc = MakeMoveTwoMatActionCard(gmProp, plProp, gmProp.MaterialsForActionCard);
+                    mvDesc = MakeMoveTwoMatActionCard(gmProp.MaterialsForActionCard);
                     mvDesc.fitnessMove = movesProp.weightUseTwoMatActGeneral;
                     possibleMove.Add(mvDesc);
                 }
             }
         }
 
-        private TwoMaterialsMove MakeMoveTwoMatActionCard(GameProperties gmProp, PlayerProperties plProp, MaterialCollection whatIWant)
+        private TwoMaterialsMove MakeMoveTwoMatActionCard(MaterialCollection whatIWant)
         {
             Game.materials firstMat = Game.materials.noMaterial;
             Game.materials secondMat = Game.materials.noMaterial;
@@ -253,7 +258,7 @@ namespace osadniciZKatanuAI
             return mvDesc;
         }
 
-        private double RateUseActionCard(Move mvDesc, GameProperties gmProp)
+        private double RateUseActionCard()
         {
             return movesProp.weightUseActionCardGeneral;
         }

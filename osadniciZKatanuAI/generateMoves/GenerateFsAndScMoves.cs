@@ -11,18 +11,22 @@ namespace osadniciZKatanuAI
     {
 
         GenerateMovesProperties movesProp;
+        GameProperties gmProp;
+        PlayerProperties plProp;
 
         public GenerateFsAndScMoves()
         {
             movesProp = new GenerateMovesProperties();
         }
 
-        public GenerateFsAndScMoves(GenerateMovesProperties movesProp)
+        public GenerateFsAndScMoves(GenerateMovesProperties movesProp, GameProperties gmProp, PlayerProperties plProp)
         {
             this.movesProp = movesProp;
+            this.gmProp = gmProp;
+            this.plProp = plProp;
         }
 
-        public List<FirstPhaseGameMove> Generate(GameProperties gmProp, PlayerProperties plProp)
+        public List<FirstPhaseGameMove> Generate()
         {
             List<FirstPhaseGameMove> possibleMoves = new List<FirstPhaseGameMove>();
             double fitness;
@@ -31,11 +35,11 @@ namespace osadniciZKatanuAI
             {
                 if (curVx.IsFreePlaceForVillage())
                 {
-                    fitness = ComputeVertexFitness(gmProp, plProp, curVx);
+                    fitness = ComputeVertexFitness(curVx);
                     foreach (var curEg in curVx.EdgeNeighbors)
                     {
                         FirstPhaseGameMove mvDesc = new FirstPhaseGameMove(curVx, curEg);
-                        fitness += ComputeEdgeFitness(gmProp, plProp, curEg);
+                        fitness += ComputeEdgeFitness(curEg);
                         mvDesc.fitnessMove = fitness;
                         possibleMoves.Add(mvDesc);
                     }
@@ -45,14 +49,14 @@ namespace osadniciZKatanuAI
             return possibleMoves;
         }
 
-        private double ComputeEdgeFitness(GameProperties gmProp, PlayerProperties plProp, Edge edge)
+        private double ComputeEdgeFitness(Edge edge)
         {
             return movesProp.weightEdgeGeneral;
         }
 
-        private double ComputeVertexFitness(GameProperties gmProp, PlayerProperties plProp, Vertex vertex)
+        private double ComputeVertexFitness(Vertex vertex)
         {
-            List<Game.materials> matWhatIHave = WhatIHave(gmProp, plProp);
+            List<Game.materials> matWhatIHave = WhatIHave();
 
             double[] prob = gmProp.GameBorderData.probabilities;
             double fitness = 0;
@@ -82,7 +86,7 @@ namespace osadniciZKatanuAI
             return fitness;
         }
 
-        private List<Game.materials> WhatIHave(GameProperties gmProp, PlayerProperties plProp)
+        private List<Game.materials> WhatIHave()
         {
             List<Game.materials> matWhatIHave = new List<Game.materials>();
 

@@ -12,25 +12,30 @@ namespace osadniciZKatanuAI
         GenerateMovesProperties movesProp;
         GenerateExchangeMoves exchange;
 
+        GameProperties gmProp;
+        PlayerProperties plProp;
+
         public GenerateThiefMoves()
         {
             movesProp = new GenerateMovesProperties();
             exchange = new GenerateExchangeMoves();
         }
 
-        public GenerateThiefMoves(GenerateMovesProperties movesProp)
+        public GenerateThiefMoves(GenerateMovesProperties movesProp, GameProperties gmProp, PlayerProperties plProp)
         {
             this.movesProp = movesProp;
-            exchange = new GenerateExchangeMoves(movesProp);
+            this.gmProp = gmProp;
+            this.plProp = plProp;
+            exchange = new GenerateExchangeMoves(movesProp, gmProp, plProp);
         }
 
-        public List<ThiefMove> Generate(GameProperties gmProp, PlayerProperties plProp)
+        public List<ThiefMove> Generate()
         {
             List<ThiefMove> possibleMoves = new List<ThiefMove>();
 
             foreach (var curFc in gmProp.GameBorderData.Faces)
             {
-                foreach (var curMv in ComputeMoveThiefFaceFitness(gmProp, plProp, curFc))
+                foreach (var curMv in ComputeMoveThiefFaceFitness(curFc))
                 {
                     possibleMoves.Add(curMv);
                 }
@@ -39,7 +44,7 @@ namespace osadniciZKatanuAI
             return possibleMoves;
         }
 
-        private List<ThiefMove> ComputeMoveThiefFaceFitness(GameProperties gmProp, PlayerProperties plProp, Face curFc)
+        private List<ThiefMove> ComputeMoveThiefFaceFitness(Face curFc)
         {
             double[] prob = gmProp.GameBorderData.probabilities;
             int countOfMyBuilding = 0;

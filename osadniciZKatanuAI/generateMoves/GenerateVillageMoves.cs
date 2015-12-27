@@ -12,19 +12,24 @@ namespace osadniciZKatanuAI
         GenerateMovesProperties movesProp;
         GenerateExchangeMoves exchange;
 
+        GameProperties gmProp;
+        PlayerProperties plProp;
+
         public GenerateVillageMoves()
         {
             movesProp = new GenerateMovesProperties();
             exchange = new GenerateExchangeMoves();
         }
 
-        public GenerateVillageMoves(GenerateMovesProperties movesProp)
+        public GenerateVillageMoves(GenerateMovesProperties movesProp, GameProperties gmProp, PlayerProperties plProp)
         {
             this.movesProp = movesProp;
-            exchange = new GenerateExchangeMoves(movesProp);
+            this.gmProp = gmProp;
+            this.plProp = plProp;
+            exchange = new GenerateExchangeMoves(movesProp, gmProp, plProp);
         }
 
-        public List<BuildVillageMove> Generate(GameProperties gmProp, PlayerProperties plProp)
+        public List<BuildVillageMove> Generate()
         {
             List<BuildVillageMove> possibleVillageMoves = new List<BuildVillageMove>();
 
@@ -40,13 +45,13 @@ namespace osadniciZKatanuAI
             }
             else if (plProp.VillageRemaining > 0)
             {
-                BuildVillageMove mvDesc = (BuildVillageMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForVillage, GenerateExchangeMoves.typeMove.buildVillage);
+                BuildVillageMove mvDesc = (BuildVillageMove)exchange.Generate(gmProp.MaterialsForVillage, GenerateExchangeMoves.typeMove.buildVillage);
                 if (mvDesc != null)
                 {
                     var possibleVertices = GeneratePossibleVerticesToBuildVillage(gmProp, plProp);
                     foreach (var curVx in possibleVertices)
                     {
-                        mvDesc = (BuildVillageMove)exchange.Generate(gmProp, plProp, gmProp.MaterialsForVillage, GenerateExchangeMoves.typeMove.buildVillage);
+                        mvDesc = (BuildVillageMove)exchange.Generate(gmProp.MaterialsForVillage, GenerateExchangeMoves.typeMove.buildVillage);
                         mvDesc.fitnessMove = RateVillage(gmProp, plProp, curVx);
                         mvDesc.BuildVillage(curVx);
                         possibleVillageMoves.Add(mvDesc);

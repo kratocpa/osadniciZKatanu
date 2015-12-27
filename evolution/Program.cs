@@ -38,6 +38,9 @@ namespace evolution
             eva.operators.Add(mutation);
             eva.eval = fitEval;
 
+            int cX = Console.CursorLeft;
+            int cY = Console.CursorTop;
+
             while (eva.generationNo < numOfGeneration)
             {
                 fitEval.Evaluate(parents);
@@ -45,7 +48,9 @@ namespace evolution
                 //PrintPopulation(parents, evolutionPop, eva.generationNo);
                 offspring = eva.Evolve(parents);
                 parents = offspring;
-                
+                Console.CursorLeft = cX;
+                Console.CursorTop = cY;
+                Console.Write(eva.generationNo);
             }
 
         }
@@ -94,8 +99,9 @@ namespace evolution
             }
             avarageFit = avarageFit / pop.sizeOfPopulation;
             XmlElement par = (XmlElement)el.AppendChild(doc.CreateElement("bestParameter"));
+            
             PrintIndividum(best, par, generation, avarageFit);
-            output.WriteLine(" ({0})", avarageFit);
+            output.WriteLine(" ({0}), ({1})", avarageFit, best.fitness);
 
             output.WriteLine(doc.OuterXml);
             output.Flush();
