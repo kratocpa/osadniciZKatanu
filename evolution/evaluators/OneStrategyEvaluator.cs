@@ -15,11 +15,13 @@ namespace evolution
         public int GamesNum { get; set; }
         public bool ViewProgressBar { get; set; }
         Statistics statistic;
+        string fs, sc, th;
 
-        public OneStrategyEvaluator()
+        public OneStrategyEvaluator(string fs, string sc, string th)
         {
             GamesNum = 100;
             ViewProgressBar = false;
+            this.fs = fs; this.sc = sc; this.th = th;
         }
 
         public void Evaluate(Population pop)
@@ -33,6 +35,7 @@ namespace evolution
         public double FitnessFunction(Individual curId)
         {
             statistic = new Statistics(CurLang, GamesNum, ViewProgressBar);
+            int res = 0;
 
             int i = 0;
             while (i < GamesNum)
@@ -50,29 +53,31 @@ namespace evolution
                 if (i % 4 == 0)
                 {
                     simul.firstPl = new MyGameLogic(curId.individualArray);
-                    simul.secondPl = new MyGameLogic();
-                    simul.thirdPl = new MyGameLogic();
-                    simul.fourthPl = new MyGameLogic();
+                    if (fs != "def") { simul.secondPl = new MyGameLogic(fs); } else { simul.secondPl = new MyGameLogic(); }
+                    if (sc != "def") { simul.thirdPl = new MyGameLogic(sc); } else { simul.thirdPl = new MyGameLogic(); }
+                    if (th != "def") { simul.fourthPl = new MyGameLogic(th); } else { simul.fourthPl = new MyGameLogic(); }
                 }
                 else if (i % 4 == 1)
                 {
-                    simul.firstPl = new MyGameLogic();
+                    if (th != "def") { simul.firstPl = new MyGameLogic(th); } else { simul.firstPl = new MyGameLogic(); }                    
                     simul.secondPl = new MyGameLogic(curId.individualArray);
-                    simul.thirdPl = new MyGameLogic();
-                    simul.fourthPl = new MyGameLogic();
+                    if (fs != "def") { simul.thirdPl = new MyGameLogic(fs); } else { simul.thirdPl = new MyGameLogic(); }
+                    if (sc != "def") { simul.fourthPl = new MyGameLogic(sc); } else { simul.fourthPl = new MyGameLogic(); }
+                    
+
                 }
                 else if (i % 4 == 2)
                 {
-                    simul.firstPl = new MyGameLogic();
-                    simul.secondPl = new MyGameLogic();
+                    if (sc != "def") { simul.firstPl = new MyGameLogic(sc); } else { simul.firstPl = new MyGameLogic(); }
+                    if (th != "def") { simul.secondPl = new MyGameLogic(th); } else { simul.secondPl = new MyGameLogic(); }
                     simul.thirdPl = new MyGameLogic(curId.individualArray);
-                    simul.fourthPl = new MyGameLogic();
+                    if (fs != "def") { simul.fourthPl = new MyGameLogic(fs); } else { simul.fourthPl = new MyGameLogic(); }
                 }
                 else if (i % 4 == 3)
                 {
-                    simul.firstPl = new MyGameLogic();
-                    simul.secondPl = new MyGameLogic();
-                    simul.thirdPl = new MyGameLogic();
+                    if (fs != "def") { simul.firstPl = new MyGameLogic(fs); } else { simul.firstPl = new MyGameLogic(); }
+                    if (sc != "def") { simul.secondPl = new MyGameLogic(sc); } else { simul.secondPl = new MyGameLogic(); }
+                    if (th != "def") { simul.thirdPl = new MyGameLogic(th); } else { simul.thirdPl = new MyGameLogic(); }
                     simul.fourthPl = new MyGameLogic(curId.individualArray);
                 }
 
@@ -80,6 +85,10 @@ namespace evolution
                 {
                     var result = simul.run();
                     statistic.AddToStatistic(result);
+                    if (i % 4 == 0 && result.ActualPlayer.PlProp.Color == Game.color.red) { res++; }
+                    else if (i % 4 == 1 && result.ActualPlayer.PlProp.Color == Game.color.blue) { res++; }
+                    else if (i % 4 == 2 && result.ActualPlayer.PlProp.Color == Game.color.yellow) { res++; }
+                    else if (i % 4 == 3 && result.ActualPlayer.PlProp.Color == Game.color.white) { res++; }
                 }
                 catch (TooManyMovesException e)
                 {
@@ -94,7 +103,7 @@ namespace evolution
                 i++;
             }
 
-            return statistic.RedWins;
+            return res;
         }
     }
 }

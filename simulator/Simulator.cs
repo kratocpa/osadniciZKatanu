@@ -20,7 +20,6 @@ namespace simulator
         public IGameLogic thirdPl { set; get; }
         public IGameLogic fourthPl { set; get; }
         Game gm;
-        ILanguage curLang;
         public System.IO.StreamWriter output { set; get; }
 
         IGameLogic actAI;

@@ -40,7 +40,8 @@ namespace osadniciZKatanuGUI
         {
             InitializeComponent();
             showMoves = showMoves_;
-            gmLogic = new MyGameLogic(BestParameters.newBest);
+            //gmLogic = new MyGameLogic(BestParameters.newBest);
+            gmLogic = new MyGameLogic("param.xml");
             information = new Information();
 
             switch (gameLanguage)

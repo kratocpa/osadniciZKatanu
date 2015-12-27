@@ -27,9 +27,18 @@ namespace evolution
             ISelector rouSel = new RouletteWheelSelector();
             IOperator mating = new OnePtXOver(xOverProb);
             IOperator mutation = new IntegerMutation(mutationProb, genChangeProb);
-            IFitnessEvaluator fitEval = new OneStrategyEvaluator();
+            
             Population parents = new Population(individumSize, 0, 300);
             Population offspring;
+
+            Console.WriteLine();
+            Console.Write("zadejte prvniho hrace: ");
+            string fs = Console.ReadLine();
+            Console.Write("zadejte druheho hrace: ");
+            string sc = Console.ReadLine();
+            Console.Write("zadejte tretiho hrace: ");
+            string th = Console.ReadLine();
+            IFitnessEvaluator fitEval = new OneStrategyEvaluator(fs, sc, th);
 
             parents.GenerateRandomPopulation(popSize);
             eva = new EvolutionAlgorithm(popSize);
