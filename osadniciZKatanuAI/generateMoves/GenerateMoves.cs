@@ -23,6 +23,12 @@ namespace osadniciZKatanuAI
             movesProp.LoadFromArray(param);
         }
 
+        public GenerateMoves(string filename)
+        {
+            movesProp = new GenerateMovesProperties();
+            movesProp.LoadFromXml(filename);
+        }
+
         public List<FirstPhaseGameMove> GenerateFirstRoadAndVillage(GameProperties gmProp, PlayerProperties plProp)
         {
             GenerateFsAndScMoves gener = new GenerateFsAndScMoves(movesProp, gmProp, plProp);

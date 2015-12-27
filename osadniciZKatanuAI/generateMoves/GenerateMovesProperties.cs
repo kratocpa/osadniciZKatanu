@@ -103,7 +103,7 @@ namespace osadniciZKatanuAI
                 propDoc.Load(fileName);
                 foreach (var par in Parameters)
                 {
-                    double p = double.Parse(propDoc.Attributes["weightGoodNumbers"].Value, System.Globalization.CultureInfo.InvariantCulture);
+                    par.Scale = double.Parse(propDoc.DocumentElement.Attributes[par.Name].Value, System.Globalization.CultureInfo.InvariantCulture);
                 }
             }
             catch(Exception ex)

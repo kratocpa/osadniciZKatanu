@@ -26,6 +26,11 @@ namespace osadniciZKatanuAI
             genMov = new GenerateMoves(param);
         }
 
+        public MyGameLogic(string filename)
+        {
+            genMov = new GenerateMoves(filename);
+        }
+
         public Move GenerateMove(GameProperties gmProp, PlayerProperties plProp)
         {
             this.gmProp = gmProp;

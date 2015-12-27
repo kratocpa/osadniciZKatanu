@@ -37,7 +37,7 @@ namespace simulator
                 players.Add(new Player(Game.color.white, false, gmProp));
 
                 Simulator simul = new Simulator(players, gmProp);
-                simul.firstPl = new MyGameLogic();
+                simul.firstPl = new MyGameLogic("param.xml");
                 simul.secondPl = new MyGameLogic();
                 simul.thirdPl = new MyGameLogic();
                 simul.fourthPl = new MyGameLogic();
