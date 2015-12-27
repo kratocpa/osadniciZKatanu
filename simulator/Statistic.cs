@@ -81,6 +81,14 @@ namespace simulator
             output.WriteLine("Cerveny vyhral: " + RedWins + ", Modry vyhral: " + BlueWins + ", Zluty vyhral: " + YellowWins + ", Bily vyhral: " + WhiteWins);
         }
 
+        public string GetOverallStatistic()
+        {
+            string res = "Max kol: " + maxNumRound + ", min kol: " + minNumRound + ", prumerne kol: " + avrNumRound / numGames + ", nedohrane hry: " + unfinishedGames;
+            res+="\n";
+            res += "Cerveny vyhral: " + RedWins + ", Modry vyhral: " + BlueWins + ", Zluty vyhral: " + YellowWins + ", Bily vyhral: " + WhiteWins;
+            return res;
+        }
+
         public void PrintGameResult(Game result, System.IO.TextWriter output)
         {
             output.WriteLine("počet kol: " + result.GmProp.Round);

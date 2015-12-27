@@ -24,15 +24,15 @@ namespace simulator
 
             GameProperties gmProp;
 
-            Console.WriteLine();
-            Console.Write("zadejte prvniho hrace: ");
-            string fs = Console.ReadLine();
-            Console.Write("zadejte druheho hrace: ");
-            string sc = Console.ReadLine();
-            Console.Write("zadejte tretiho hrace: ");
-            string th = Console.ReadLine();
-            Console.Write("zadejte ctvrteho hrace: ");
-            string fo = Console.ReadLine();
+            //Console.WriteLine();
+            //Console.Write("zadejte prvniho hrace: ");
+            //string fs = Console.ReadLine();
+            //Console.Write("zadejte druheho hrace: ");
+            //string sc = Console.ReadLine();
+            //Console.Write("zadejte tretiho hrace: ");
+            //string th = Console.ReadLine();
+            //Console.Write("zadejte ctvrteho hrace: ");
+            //string fo = Console.ReadLine();
 
 
             int i = 0;
@@ -44,14 +44,16 @@ namespace simulator
                 List<Player> players = new List<Player>();
                 players.Add(new Player(Game.color.red, false, gmProp));
                 players.Add(new Player(Game.color.blue, false, gmProp));
-                players.Add(new Player(Game.color.yellow, false, gmProp));
-                players.Add(new Player(Game.color.white, false, gmProp));
+                //players.Add(new Player(Game.color.yellow, false, gmProp));
+                //players.Add(new Player(Game.color.white, false, gmProp));
 
                 Simulator simul = new Simulator(players, gmProp);
-                if (fs != "def") { simul.firstPl = new MyGameLogic(fs); } else { simul.firstPl = new MyGameLogic(); }
-                if (sc != "def") { simul.secondPl = new MyGameLogic(sc); } else { simul.secondPl = new MyGameLogic(); }
-                if (th != "def") { simul.thirdPl = new MyGameLogic(th); } else { simul.thirdPl = new MyGameLogic(); }
-                if (fo != "def") { simul.fourthPl = new MyGameLogic(fo); } else { simul.fourthPl = new MyGameLogic(); }
+                simul.firstPl = new MyGameLogic("bestParam.xml");
+                simul.secondPl = new MyGameLogic("superbest.xml");
+                //if (fs != "def") { simul.firstPl = new MyGameLogic(fs); } else { simul.firstPl = new MyGameLogic(); }
+                //if (sc != "def") { simul.secondPl = new MyGameLogic(sc); } else { simul.secondPl = new MyGameLogic(); }
+                //if (th != "def") { simul.thirdPl = new MyGameLogic(th); } else { simul.thirdPl = new MyGameLogic(); }
+                //if (fo != "def") { simul.fourthPl = new MyGameLogic(fo); } else { simul.fourthPl = new MyGameLogic(); }
                 simul.output = movesWr;
 
                 try
