@@ -63,7 +63,7 @@ namespace osadniciZKatanuGUI
 
             players = new List<Player>();
             GameProperties gmProp = new GameProperties(randomGameBorder, curLang);
-            //gmProp.LoadFromXml();
+            gmProp.LoadFromXml();
             curEv = gameEvent.none;
 
             switch (playerCount)

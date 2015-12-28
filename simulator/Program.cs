@@ -40,7 +40,7 @@ namespace simulator
             {
                 gmProp = new GameProperties(true, curLang);
                 //gmProp.LoadFromXml();
-
+                
                 List<Player> players = new List<Player>();
                 players.Add(new Player(Game.color.red, false, gmProp));
                 players.Add(new Player(Game.color.blue, false, gmProp));

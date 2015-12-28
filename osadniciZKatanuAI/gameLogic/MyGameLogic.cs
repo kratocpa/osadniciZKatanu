@@ -108,32 +108,33 @@ namespace osadniciZKatanuAI
                 foreach (var curIt in genMov.GenerateThiefMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
                 return possibleMoves;
             }
-
-            if (!gmProp.wasBuildSomething)
+            else
             {
-                foreach (var curIt in genMov.GenerateBuildRoadMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
-            }
+                if (!gmProp.wasBuildSomething)
+                {
+                    foreach (var curIt in genMov.GenerateBuildRoadMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
+                }
 
-            if (!gmProp.wasBuildSomething)
-            {
-                foreach (var curIt in genMov.GenerateBuildVillageMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
-            }
+                if (!gmProp.wasBuildSomething)
+                {
+                    foreach (var curIt in genMov.GenerateBuildVillageMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
+                }
 
-            if (!gmProp.wasBuildSomething)
-            {
-                foreach (var curIt in genMov.GenerateBuildTownMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
-            }
+                if (!gmProp.wasBuildSomething)
+                {
+                    foreach (var curIt in genMov.GenerateBuildTownMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
+                }
 
-            if (!gmProp.wasBuildSomething)
-            {
-                foreach (var curIt in genMov.GenerateBuyActionCardMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
-            }
+                if (!gmProp.wasBuildSomething)
+                {
+                    foreach (var curIt in genMov.GenerateBuyActionCardMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
+                }
 
-            if (!gmProp.wasUseActionCard)
-            {
-                foreach (var curIt in genMov.GenerateUseActionCardMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
+                if (!gmProp.wasUseActionCard)
+                {
+                    foreach (var curIt in genMov.GenerateUseActionCardMoves(gmProp, plProp)) { possibleMoves.Add(curIt); }
+                }
             }
-
             return possibleMoves;
         }
 

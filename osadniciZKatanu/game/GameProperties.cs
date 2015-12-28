@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace osadniciZKatanu
 {
-    public class GameProperties
+    public class GameProperties : ICloneable
     {
         public int MinPointsToWin { get; set; }
         public int LongestRoad { get; set; }
@@ -52,6 +52,7 @@ namespace osadniciZKatanu
         private List<Edge> edges;
 
         private SetGameBorder st;
+        private bool randomGameBorder;
 
         public GameProperties(bool isRandomGameBorder, ILanguage curLang)
         {
@@ -66,8 +67,8 @@ namespace osadniciZKatanu
             edges = new List<Edge>();
 
             st = new SetGameBorder();
-
-            LoadFromXml();
+            randomGameBorder = isRandomGameBorder;
+            //LoadFromXml();
 
             Round = 0;
             CurrentState = Game.state.start;
@@ -77,16 +78,17 @@ namespace osadniciZKatanu
             wasBuildSomething = false;
             wasUseActionCard = false;
             CurLang = curLang;
-            GameBorderData = st.GenerateGameBorder(isRandomGameBorder, vertices, faces, edges);
-
-            ThiefFace = GameBorderData.Faces.Find(x => x.Material == Game.materials.desert);
+            //GameBorderData = st.GenerateGameBorder(isRandomGameBorder, vertices, faces, edges);
+            //ThiefFace = GameBorderData.Faces.Find(x => x.Material == Game.materials.desert);
         }
 
-        private void LoadFromXml()
+        public void LoadFromXml()
         {
             SetGameSettings();
             SetPlayerSettings();
             SetGameBorderSetings();
+            GameBorderData = st.GenerateGameBorder(randomGameBorder, vertices, faces, edges);
+            ThiefFace = GameBorderData.Faces.Find(x => x.Material == Game.materials.desert);
         }
 
         /// <summary>
@@ -324,6 +326,53 @@ namespace osadniciZKatanu
                     }
                 }
             }
+        }
+
+        public object Clone()
+        {
+            GameProperties clonGP = new GameProperties(this.randomGameBorder, this.CurLang);
+            clonGP.MinPointsToWin = this.MinPointsToWin;
+            clonGP.LongestRoad = this.LongestRoad;
+            clonGP.MaxKnights = this.MaxKnights;
+
+            clonGP.VillageProduction = this.VillageProduction;
+            clonGP.TownProduction = this.TownProduction;
+            clonGP.LongestRoadProduction = this.LongestRoadProduction;
+            clonGP.LargestArmyProduction = this.LargestArmyProduction;
+
+            clonGP.SpecialPortRate = this.SpecialPortRate;
+            clonGP.UniversalPortRate = this.UniversalPortRate;
+            clonGP.NoPortRate = this.NoPortRate;
+
+            clonGP.RoadRemaining = this.RoadRemaining;
+            clonGP.VillageRemaining = this.VillageRemaining;
+            clonGP.TownRemaining = this.TownRemaining;
+
+            clonGP.RemainingActionCards = (ActionCardCollection)this.RemainingActionCards.Clone();
+            clonGP.MaterialsForRoad = (MaterialCollection)this.MaterialsForRoad.Clone();
+            clonGP.MaterialsForVillage = (MaterialCollection)this.MaterialsForVillage.Clone();
+            clonGP.MaterialsForTown = (MaterialCollection)this.MaterialsForTown.Clone();
+            clonGP.MaterialsForActionCard = (MaterialCollection)this.MaterialsForActionCard.Clone();
+
+            clonGP.ThiefFace = (Face)this.ThiefFace.Clone();
+
+            clonGP.Round = this.Round;
+            clonGP.CurrentState = this.CurrentState;
+            clonGP.FirstDice = this.FirstDice;
+            clonGP.SecondDice = this.SecondDice;
+            clonGP.NeedToMoveThief = this.NeedToMoveThief;
+            clonGP.wasBuildSomething = this.wasBuildSomething;
+            clonGP.wasUseActionCard = this.wasUseActionCard;
+
+            clonGP.CurLang = this.CurLang;
+
+            foreach (Vertex curVx in this.vertices) { clonGP.vertices.Add((Vertex)curVx.Clone()); }
+            foreach (Edge curEg in this.edges) { clonGP.edges.Add((Edge)curEg.Clone()); }
+            foreach (Face curFc in this.faces) { clonGP.faces.Add((Face)curFc.Clone()); }
+
+            GameBorderData = st.GenerateGameBorder(randomGameBorder, vertices, faces, edges);
+            clonGP.GameBorderData = clonGP.st.GenerateGameBorder(this.randomGameBorder, clonGP.vertices, clonGP.faces, clonGP.edges);
+            return clonGP;
         }
     }
 }

@@ -32,6 +32,7 @@ namespace simulatorGUI
         string foPl;
         int rounds;
         bool rndGmBr;
+        bool rotatePl;
         int plCt;
         string resultStr;
 
@@ -125,12 +126,13 @@ namespace simulatorGUI
         private void simulate()
         {
             Statistics statistic = new Statistics(new EngLanguage(), rounds, false);
-            GameProperties gmProp;
+            GameProperties GmProp = new GameProperties(rndGmBr, new EngLanguage());
+            GmProp.LoadFromXml();
             int i = 0;
            
             while (i < rounds)
             {
-                gmProp = new GameProperties(rndGmBr, new EngLanguage());
+                GameProperties gmProp = (GameProperties)GmProp.Clone();
 
                 List<Player> players = new List<Player>();
                 players.Add(new Player(Game.color.red, false, gmProp));

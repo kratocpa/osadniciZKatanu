@@ -119,6 +119,5 @@ namespace osadniciZKatanu
                 probabilities[i] = countNumbersFit[i] / allPossibilities;
             }
         }
-
     }
 }
