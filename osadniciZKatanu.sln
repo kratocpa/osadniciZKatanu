@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osadniciZKatanuGUI", "osadn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "simulatorGUI", "simulatorGUI\simulatorGUI.csproj", "{65684223-0B9E-4E90-AA92-A10D0ADB518C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "evolutionGUI", "evolutionGUI\evolutionGUI.csproj", "{8CF9F279-83F7-4265-89EE-C83849A89C5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{65684223-0B9E-4E90-AA92-A10D0ADB518C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65684223-0B9E-4E90-AA92-A10D0ADB518C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65684223-0B9E-4E90-AA92-A10D0ADB518C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CF9F279-83F7-4265-89EE-C83849A89C5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CF9F279-83F7-4265-89EE-C83849A89C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CF9F279-83F7-4265-89EE-C83849A89C5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CF9F279-83F7-4265-89EE-C83849A89C5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

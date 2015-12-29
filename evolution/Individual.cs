@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace evolution
 {
-    class Individual : ICloneable
+    public class Individual : ICloneable
     {
         public int upper, lower, seed;
         public int[] individualArray;

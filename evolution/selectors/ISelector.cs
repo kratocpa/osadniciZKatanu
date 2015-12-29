@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace evolution
 {
-    interface ISelector
+    public interface ISelector
     {
         Population Select(Population from, int howMany);
     }

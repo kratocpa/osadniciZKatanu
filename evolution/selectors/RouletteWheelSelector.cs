@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace evolution
 {
-    class RouletteWheelSelector : ISelector
+    public class RouletteWheelSelector : ISelector
     {
         Random rnd;
 

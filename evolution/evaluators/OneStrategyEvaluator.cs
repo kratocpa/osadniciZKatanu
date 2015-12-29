@@ -9,7 +9,7 @@ using osadniciZKatanuAI;
 
 namespace evolution
 {
-    class OneStrategyEvaluator : IFitnessEvaluator
+    public class OneStrategyEvaluator : IFitnessEvaluator
     {
         public ILanguage CurLang { get; set; }
         public int GamesNum { get; set; }
@@ -17,9 +17,9 @@ namespace evolution
         Statistics statistic;
         string fs, sc, th;
 
-        public OneStrategyEvaluator(string fs, string sc, string th)
+        public OneStrategyEvaluator(string fs, string sc, string th, int gamesNum)
         {
-            GamesNum = 1000;
+            GamesNum = gamesNum;
             ViewProgressBar = false;
             this.fs = fs; this.sc = sc; this.th = th;
         }
@@ -35,7 +35,6 @@ namespace evolution
         public double FitnessFunction(Individual curId)
         {
             statistic = new Statistics(CurLang, GamesNum, ViewProgressBar);
-            int res = 0;
 
             int i = 0;
             while (i < GamesNum)
@@ -43,52 +42,17 @@ namespace evolution
                 GameProperties gmProp = new GameProperties(true, new CzechLanguage());
                 gmProp.LoadFromXml();
 
-                List<Player> players = new List<Player>();
-                players.Add(new Player(Game.color.red, false, gmProp));
-                players.Add(new Player(Game.color.blue, false, gmProp));
-                players.Add(new Player(Game.color.yellow, false, gmProp));
-                players.Add(new Player(Game.color.white, false, gmProp));
-                
-                Simulator simul = new Simulator(players, gmProp);
-                if (i % 4 == 0)
-                {
-                    simul.redPl = new MyGameLogic(curId.individualArray);
-                    if (fs != "def") { simul.bluePl = new MyGameLogic(fs); } else { simul.bluePl = new MyGameLogic(); }
-                    if (sc != "def") { simul.yellowPl = new MyGameLogic(sc); } else { simul.yellowPl = new MyGameLogic(); }
-                    if (th != "def") { simul.whitePl = new MyGameLogic(th); } else { simul.whitePl = new MyGameLogic(); }
-                }
-                else if (i % 4 == 1)
-                {
-                    if (th != "def") { simul.redPl = new MyGameLogic(th); } else { simul.redPl = new MyGameLogic(); }                    
-                    simul.bluePl = new MyGameLogic(curId.individualArray);
-                    if (fs != "def") { simul.yellowPl = new MyGameLogic(fs); } else { simul.yellowPl = new MyGameLogic(); }
-                    if (sc != "def") { simul.whitePl = new MyGameLogic(sc); } else { simul.whitePl = new MyGameLogic(); }
-                    
+                Simulator simul = new Simulator(simulateFourPlayers(true, gmProp, i), gmProp);
 
-                }
-                else if (i % 4 == 2)
-                {
-                    if (sc != "def") { simul.redPl = new MyGameLogic(sc); } else { simul.redPl = new MyGameLogic(); }
-                    if (th != "def") { simul.bluePl = new MyGameLogic(th); } else { simul.bluePl = new MyGameLogic(); }
-                    simul.yellowPl = new MyGameLogic(curId.individualArray);
-                    if (fs != "def") { simul.whitePl = new MyGameLogic(fs); } else { simul.whitePl = new MyGameLogic(); }
-                }
-                else if (i % 4 == 3)
-                {
-                    if (fs != "def") { simul.redPl = new MyGameLogic(fs); } else { simul.redPl = new MyGameLogic(); }
-                    if (sc != "def") { simul.bluePl = new MyGameLogic(sc); } else { simul.bluePl = new MyGameLogic(); }
-                    if (th != "def") { simul.yellowPl = new MyGameLogic(th); } else { simul.yellowPl = new MyGameLogic(); }
-                    simul.whitePl = new MyGameLogic(curId.individualArray);
-                }
+                simul.redPl = new MyGameLogic(curId.individualArray);
+                if (fs != "") { simul.bluePl = new MyGameLogic(fs); } else { simul.bluePl = new MyGameLogic(); }
+                if (sc != "") { simul.yellowPl = new MyGameLogic(sc); } else { simul.yellowPl = new MyGameLogic(); }
+                if (th != "") { simul.whitePl = new MyGameLogic(th); } else { simul.whitePl = new MyGameLogic(); }
 
                 try
                 {
                     var result = simul.run();
                     statistic.AddToStatistic(result);
-                    if (i % 4 == 0 && result.ActualPlayer.PlProp.Color == Game.color.red) { res++; }
-                    else if (i % 4 == 1 && result.ActualPlayer.PlProp.Color == Game.color.blue) { res++; }
-                    else if (i % 4 == 2 && result.ActualPlayer.PlProp.Color == Game.color.yellow) { res++; }
-                    else if (i % 4 == 3 && result.ActualPlayer.PlProp.Color == Game.color.white) { res++; }
                 }
                 catch (TooManyMovesException e)
                 {
@@ -103,7 +67,51 @@ namespace evolution
                 i++;
             }
 
-            return res;
+            return statistic.RedWins;
+        }
+
+        private List<Player> simulateFourPlayers(bool rotatePl, GameProperties gmProp, int gameNum)
+        {
+            List<Player> players = new List<Player>();
+            if (rotatePl)
+            {
+                if (gameNum % 4 == 0)
+                {
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                    players.Add(new Player(Game.color.white, false, gmProp));
+                }
+                else if (gameNum % 4 == 1)
+                {
+                    players.Add(new Player(Game.color.white, false, gmProp));
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                }
+                else if (gameNum % 4 == 2)
+                {
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                    players.Add(new Player(Game.color.white, false, gmProp));
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                }
+                else
+                {
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                    players.Add(new Player(Game.color.white, false, gmProp));
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                }
+            }
+            else
+            {
+                players.Add(new Player(Game.color.red, false, gmProp));
+                players.Add(new Player(Game.color.blue, false, gmProp));
+                players.Add(new Player(Game.color.yellow, false, gmProp));
+                players.Add(new Player(Game.color.white, false, gmProp));
+            }
+            return players;
         }
     }
 }

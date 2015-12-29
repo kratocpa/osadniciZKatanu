@@ -50,6 +50,7 @@
     <Compile Include="operators\OnePtXOver.cs" />
     <Compile Include="operators\IOperator.cs" />
     <Compile Include="Population.cs" />
+    <Compile Include="Printer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="selectors\RouletteWheelSelector.cs" />

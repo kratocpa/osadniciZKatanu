@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace evolution
 {
-    class OnePtXOver : IOperator
+    public class OnePtXOver : IOperator
     {
         double xOverProb;
         Random rnd;

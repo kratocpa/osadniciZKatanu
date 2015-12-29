@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace evolution
 {
-    class EvolutionAlgorithm
+    public class EvolutionAlgorithm
     {
 
         public int popSize, generationNo;

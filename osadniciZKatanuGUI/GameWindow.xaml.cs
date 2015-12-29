@@ -78,10 +78,11 @@ namespace osadniciZKatanuGUI
                     players.Add(new Player(Game.color.yellow, yellowIsPlayer, gmProp));
                     break;
                 case 4:
+                    players.Add(new Player(Game.color.white, whiteIsPlayer, gmProp));
                     players.Add(new Player(Game.color.red, redIsPlayer, gmProp));
                     players.Add(new Player(Game.color.blue, blueIsPlayer, gmProp));
                     players.Add(new Player(Game.color.yellow, yellowIsPlayer, gmProp));
-                    players.Add(new Player(Game.color.white, whiteIsPlayer, gmProp));
+                    
                     break;
             }
 

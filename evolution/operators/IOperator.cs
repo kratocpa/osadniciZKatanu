@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace evolution
 {
-    interface IOperator
+    public interface IOperator
     {
         Population Operate(Population parrents);
     }

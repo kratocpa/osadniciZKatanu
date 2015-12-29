@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace evolution
 {
-    interface IFitnessEvaluator
+    public interface IFitnessEvaluator
     {
         void Evaluate(Population pop);
     }

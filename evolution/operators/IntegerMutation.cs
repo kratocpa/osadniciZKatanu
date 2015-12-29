@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace evolution
 {
-    class IntegerMutation : IOperator
+    public class IntegerMutation : IOperator
     {
         double mutationProb;
         double genChangeProb;

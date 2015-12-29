@@ -303,17 +303,24 @@ namespace simulatorGUI
             scPl = scPlayerTextBox.Text;
             thPl = thPlayerTextBox.Text;
             foPl = foPlayerTextBox.Text;
-            rounds = Int32.Parse(roundTextBox.Text);
-            rndGmBr = false;
-            if (rndCheckBox.IsChecked == true) { rndGmBr = true; }
-            rotatePl = false;
-            if (rotatePlCheckBox.IsChecked == true) { rotatePl = true; }
-            progressBar.Minimum = 0;
-            progressBar.Maximum = rounds;
-            progressBar.Value = 0;
-            Thread t = new Thread(new ThreadStart(simulate));
-            t.Start();
-            startButton.IsEnabled = false;
+            try
+            {
+                rounds = Int32.Parse(roundTextBox.Text);
+                rndGmBr = false;
+                if (rndCheckBox.IsChecked == true) { rndGmBr = true; }
+                rotatePl = false;
+                if (rotatePlCheckBox.IsChecked == true) { rotatePl = true; }
+                progressBar.Minimum = 0;
+                progressBar.Maximum = rounds;
+                progressBar.Value = 0;
+                Thread t = new Thread(new ThreadStart(simulate));
+                t.Start();
+                startButton.IsEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
         }
 
         private void playerCountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

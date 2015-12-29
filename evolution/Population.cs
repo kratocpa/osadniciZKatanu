@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace evolution
 {
-    class Population : ICloneable
+    public class Population : ICloneable
     {
         public List<Individual> population;
         public int sizeOfPopulation;
