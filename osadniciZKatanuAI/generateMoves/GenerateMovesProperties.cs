@@ -98,18 +98,12 @@ namespace osadniciZKatanuAI
         {
             XmlDocument propDoc = new XmlDocument();
 
-            try
-            {
                 propDoc.Load(fileName);
                 foreach (var par in Parameters)
                 {
                     par.Scale = double.Parse(propDoc.DocumentElement.Attributes[par.Name].Value, System.Globalization.CultureInfo.InvariantCulture);
                 }
-            }
-            catch(Exception ex)
-            {
-                Console.Write(ex.Message);
-            }
+
             return true;
         }
 

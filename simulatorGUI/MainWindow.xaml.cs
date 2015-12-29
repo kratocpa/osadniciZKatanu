@@ -129,25 +129,37 @@ namespace simulatorGUI
             GameProperties GmProp = new GameProperties(rndGmBr, new EngLanguage());
             GmProp.LoadFromXml();
             int i = 0;
-           
+
             while (i < rounds)
             {
                 GameProperties gmProp = (GameProperties)GmProp.Clone();
-
                 List<Player> players = new List<Player>();
-                players.Add(new Player(Game.color.red, false, gmProp));
-                players.Add(new Player(Game.color.blue, false, gmProp));
-                players.Add(new Player(Game.color.yellow, false, gmProp));
-                players.Add(new Player(Game.color.white, false, gmProp));
-
-                Simulator simul = new Simulator(players, gmProp);
-                if (fsPl != "") { simul.firstPl = new MyGameLogic(fsPl); } else { simul.firstPl = new MyGameLogic(); }
-                if (scPl != "") { simul.secondPl = new MyGameLogic(scPl); } else { simul.secondPl = new MyGameLogic(); }
-                if (thPl != "") { simul.thirdPl = new MyGameLogic(thPl); } else { simul.thirdPl = new MyGameLogic(); }
-                if (foPl != "") { simul.fourthPl = new MyGameLogic(foPl); } else { simul.fourthPl = new MyGameLogic(); }
-                
+                Simulator simul;
                 try
                 {
+                    if (plCt == 2)
+                    {
+                        simul = new Simulator(simulateTwoPlayers(rotatePl, gmProp, i), gmProp);
+                        if (fsPl != "") { simul.redPl = new MyGameLogic(fsPl); } else { simul.redPl = new MyGameLogic(); }
+                        if (scPl != "") { simul.bluePl = new MyGameLogic(scPl); } else { simul.bluePl = new MyGameLogic(); }
+                    }
+                    else if (plCt == 3)
+                    {
+                        simul = new Simulator(simulateThreePlayers(rotatePl, gmProp, i), gmProp);
+                        if (fsPl != "") { simul.redPl = new MyGameLogic(fsPl); } else { simul.redPl = new MyGameLogic(); }
+                        if (scPl != "") { simul.bluePl = new MyGameLogic(scPl); } else { simul.bluePl = new MyGameLogic(); }
+                        if (thPl != "") { simul.yellowPl = new MyGameLogic(thPl); } else { simul.yellowPl = new MyGameLogic(); }
+                    }
+                    else
+                    {
+                        simul = new Simulator(simulateFourPlayers(rotatePl, gmProp, i), gmProp);
+                        if (fsPl != "") { simul.redPl = new MyGameLogic(fsPl); } else { simul.redPl = new MyGameLogic(); }
+                        if (scPl != "") { simul.bluePl = new MyGameLogic(scPl); } else { simul.bluePl = new MyGameLogic(); }
+                        if (thPl != "") { simul.yellowPl = new MyGameLogic(thPl); } else { simul.yellowPl = new MyGameLogic(); }
+                        if (foPl != "") { simul.whitePl = new MyGameLogic(foPl); } else { simul.whitePl = new MyGameLogic(); }
+                    }
+
+
                     var result = simul.run();
                     statistic.AddToStatistic(result);
                 }
@@ -165,6 +177,11 @@ namespace simulatorGUI
                 {
                     resultLabel.Content = ("\n" + ex.Message + " in game number " + i);
                 }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message);
+                    break;
+                }
 
 
                 progressBar.Dispatcher.BeginInvoke(new Action(() => { progressBar.Value = i; }));
@@ -179,17 +196,118 @@ namespace simulatorGUI
             startButton.Dispatcher.BeginInvoke(new Action(() => { startButton.IsEnabled = true; }));
         }
 
+        private List<Player> simulateFourPlayers(bool rotatePl, GameProperties gmProp, int gameNum)
+        {
+            List<Player> players = new List<Player>();
+            if (rotatePl)
+            {
+                if (gameNum % 4 == 0)
+                {
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                    players.Add(new Player(Game.color.white, false, gmProp));
+                }
+                else if (gameNum % 4 == 1)
+                {
+                    players.Add(new Player(Game.color.white, false, gmProp));
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                }
+                else if (gameNum % 4 == 2)
+                {
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                    players.Add(new Player(Game.color.white, false, gmProp));
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                }
+                else
+                {
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                    players.Add(new Player(Game.color.white, false, gmProp));
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                }
+            }
+            else
+            {
+                players.Add(new Player(Game.color.red, false, gmProp));
+                players.Add(new Player(Game.color.blue, false, gmProp));
+                players.Add(new Player(Game.color.yellow, false, gmProp));
+                players.Add(new Player(Game.color.white, false, gmProp));
+            }
+            return players;
+        }
+
+        private List<Player> simulateThreePlayers(bool rotatePl, GameProperties gmProp, int gameNum)
+        {
+            List<Player> players = new List<Player>();
+            if (rotatePl)
+            {
+                if (gameNum % 3 == 0)
+                {
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                }
+                else if (gameNum % 3 == 1)
+                {
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                }
+                else if (gameNum % 3 == 2)
+                {
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                    players.Add(new Player(Game.color.yellow, false, gmProp));
+                    players.Add(new Player(Game.color.red, false, gmProp));                   
+                }
+            }
+            else
+            {
+                players.Add(new Player(Game.color.red, false, gmProp));
+                players.Add(new Player(Game.color.blue, false, gmProp));
+                players.Add(new Player(Game.color.yellow, false, gmProp));
+            }
+            return players;
+        }
+
+        private List<Player> simulateTwoPlayers(bool rotatePl, GameProperties gmProp, int gameNum)
+        {
+            List<Player> players = new List<Player>();
+            if (rotatePl)
+            {
+                if (gameNum % 2 == 0)
+                {
+                    players.Add(new Player(Game.color.red, false, gmProp));
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                }
+                else if (gameNum % 2 == 1)
+                {
+                    players.Add(new Player(Game.color.blue, false, gmProp));
+                    players.Add(new Player(Game.color.red, false, gmProp));      
+                }
+            }
+            else
+            {
+                players.Add(new Player(Game.color.red, false, gmProp));
+                players.Add(new Player(Game.color.blue, false, gmProp));
+            }
+            return players;
+        }
+
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
-            
-
             fsPl = fsPlayerTextBox.Text;
             scPl = scPlayerTextBox.Text;
             thPl = thPlayerTextBox.Text;
             foPl = foPlayerTextBox.Text;
-            rounds=Int32.Parse(roundTextBox.Text);
-            rndGmBr=false;
+            rounds = Int32.Parse(roundTextBox.Text);
+            rndGmBr = false;
             if (rndCheckBox.IsChecked == true) { rndGmBr = true; }
+            rotatePl = false;
+            if (rotatePlCheckBox.IsChecked == true) { rotatePl = true; }
             progressBar.Minimum = 0;
             progressBar.Maximum = rounds;
             progressBar.Value = 0;
@@ -198,5 +316,56 @@ namespace simulatorGUI
             startButton.IsEnabled = false;
         }
 
+        private void playerCountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (playerCountComboBox.SelectedIndex == 0)
+            {
+                fsPlayerButton.IsEnabled = true;
+                fsPlayerTextBox.IsEnabled = true;
+                scPlayerButton.IsEnabled = true;
+                scPlayerTextBox.IsEnabled = true;
+                thPlayerButton.IsEnabled = false;
+                thPlayerTextBox.IsEnabled = false;
+                foPlayerButton.IsEnabled = false;
+                foPlayerTextBox.IsEnabled = false;
+                plCt = 2;
+            }
+            else if (playerCountComboBox.SelectedIndex == 1)
+            {
+                fsPlayerButton.IsEnabled = true;
+                fsPlayerTextBox.IsEnabled = true;
+                scPlayerButton.IsEnabled = true;
+                scPlayerTextBox.IsEnabled = true;
+                thPlayerButton.IsEnabled = true;
+                thPlayerTextBox.IsEnabled = true;
+                foPlayerButton.IsEnabled = false;
+                foPlayerTextBox.IsEnabled = false;
+                plCt = 3;
+            }
+            else if (playerCountComboBox.SelectedIndex == 2)
+            {
+                fsPlayerButton.IsEnabled = true;
+                fsPlayerTextBox.IsEnabled = true;
+                scPlayerButton.IsEnabled = true;
+                scPlayerTextBox.IsEnabled = true;
+                thPlayerButton.IsEnabled = true;
+                thPlayerTextBox.IsEnabled = true;
+                foPlayerButton.IsEnabled = true;
+                foPlayerTextBox.IsEnabled = true;
+                plCt = 4;
+            }
+            else
+            {
+                fsPlayerButton.IsEnabled = false;
+                fsPlayerTextBox.IsEnabled = false;
+                scPlayerButton.IsEnabled = false;
+                scPlayerTextBox.IsEnabled = false;
+                thPlayerButton.IsEnabled = false;
+                thPlayerTextBox.IsEnabled = false;
+                foPlayerButton.IsEnabled = false;
+                foPlayerTextBox.IsEnabled = false;
+            }
+            
+        }
     }
 }

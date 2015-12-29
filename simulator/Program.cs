@@ -48,8 +48,8 @@ namespace simulator
                 //players.Add(new Player(Game.color.white, false, gmProp));
 
                 Simulator simul = new Simulator(players, gmProp);
-                simul.firstPl = new MyGameLogic("bestParam.xml");
-                simul.secondPl = new MyGameLogic("superbest.xml");
+                simul.redPl = new MyGameLogic("bestParam.xml");
+                simul.bluePl = new MyGameLogic("superbest.xml");
                 //if (fs != "def") { simul.firstPl = new MyGameLogic(fs); } else { simul.firstPl = new MyGameLogic(); }
                 //if (sc != "def") { simul.secondPl = new MyGameLogic(sc); } else { simul.secondPl = new MyGameLogic(); }
                 //if (th != "def") { simul.thirdPl = new MyGameLogic(th); } else { simul.thirdPl = new MyGameLogic(); }

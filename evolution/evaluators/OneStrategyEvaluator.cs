@@ -19,7 +19,7 @@ namespace evolution
 
         public OneStrategyEvaluator(string fs, string sc, string th)
         {
-            GamesNum = 100;
+            GamesNum = 1000;
             ViewProgressBar = false;
             this.fs = fs; this.sc = sc; this.th = th;
         }
@@ -41,7 +41,7 @@ namespace evolution
             while (i < GamesNum)
             {
                 GameProperties gmProp = new GameProperties(true, new CzechLanguage());
-                //gmProp.LoadFromXml();
+                gmProp.LoadFromXml();
 
                 List<Player> players = new List<Player>();
                 players.Add(new Player(Game.color.red, false, gmProp));
@@ -52,33 +52,33 @@ namespace evolution
                 Simulator simul = new Simulator(players, gmProp);
                 if (i % 4 == 0)
                 {
-                    simul.firstPl = new MyGameLogic(curId.individualArray);
-                    if (fs != "def") { simul.secondPl = new MyGameLogic(fs); } else { simul.secondPl = new MyGameLogic(); }
-                    if (sc != "def") { simul.thirdPl = new MyGameLogic(sc); } else { simul.thirdPl = new MyGameLogic(); }
-                    if (th != "def") { simul.fourthPl = new MyGameLogic(th); } else { simul.fourthPl = new MyGameLogic(); }
+                    simul.redPl = new MyGameLogic(curId.individualArray);
+                    if (fs != "def") { simul.bluePl = new MyGameLogic(fs); } else { simul.bluePl = new MyGameLogic(); }
+                    if (sc != "def") { simul.yellowPl = new MyGameLogic(sc); } else { simul.yellowPl = new MyGameLogic(); }
+                    if (th != "def") { simul.whitePl = new MyGameLogic(th); } else { simul.whitePl = new MyGameLogic(); }
                 }
                 else if (i % 4 == 1)
                 {
-                    if (th != "def") { simul.firstPl = new MyGameLogic(th); } else { simul.firstPl = new MyGameLogic(); }                    
-                    simul.secondPl = new MyGameLogic(curId.individualArray);
-                    if (fs != "def") { simul.thirdPl = new MyGameLogic(fs); } else { simul.thirdPl = new MyGameLogic(); }
-                    if (sc != "def") { simul.fourthPl = new MyGameLogic(sc); } else { simul.fourthPl = new MyGameLogic(); }
+                    if (th != "def") { simul.redPl = new MyGameLogic(th); } else { simul.redPl = new MyGameLogic(); }                    
+                    simul.bluePl = new MyGameLogic(curId.individualArray);
+                    if (fs != "def") { simul.yellowPl = new MyGameLogic(fs); } else { simul.yellowPl = new MyGameLogic(); }
+                    if (sc != "def") { simul.whitePl = new MyGameLogic(sc); } else { simul.whitePl = new MyGameLogic(); }
                     
 
                 }
                 else if (i % 4 == 2)
                 {
-                    if (sc != "def") { simul.firstPl = new MyGameLogic(sc); } else { simul.firstPl = new MyGameLogic(); }
-                    if (th != "def") { simul.secondPl = new MyGameLogic(th); } else { simul.secondPl = new MyGameLogic(); }
-                    simul.thirdPl = new MyGameLogic(curId.individualArray);
-                    if (fs != "def") { simul.fourthPl = new MyGameLogic(fs); } else { simul.fourthPl = new MyGameLogic(); }
+                    if (sc != "def") { simul.redPl = new MyGameLogic(sc); } else { simul.redPl = new MyGameLogic(); }
+                    if (th != "def") { simul.bluePl = new MyGameLogic(th); } else { simul.bluePl = new MyGameLogic(); }
+                    simul.yellowPl = new MyGameLogic(curId.individualArray);
+                    if (fs != "def") { simul.whitePl = new MyGameLogic(fs); } else { simul.whitePl = new MyGameLogic(); }
                 }
                 else if (i % 4 == 3)
                 {
-                    if (fs != "def") { simul.firstPl = new MyGameLogic(fs); } else { simul.firstPl = new MyGameLogic(); }
-                    if (sc != "def") { simul.secondPl = new MyGameLogic(sc); } else { simul.secondPl = new MyGameLogic(); }
-                    if (th != "def") { simul.thirdPl = new MyGameLogic(th); } else { simul.thirdPl = new MyGameLogic(); }
-                    simul.fourthPl = new MyGameLogic(curId.individualArray);
+                    if (fs != "def") { simul.redPl = new MyGameLogic(fs); } else { simul.redPl = new MyGameLogic(); }
+                    if (sc != "def") { simul.bluePl = new MyGameLogic(sc); } else { simul.bluePl = new MyGameLogic(); }
+                    if (th != "def") { simul.yellowPl = new MyGameLogic(th); } else { simul.yellowPl = new MyGameLogic(); }
+                    simul.whitePl = new MyGameLogic(curId.individualArray);
                 }
 
                 try

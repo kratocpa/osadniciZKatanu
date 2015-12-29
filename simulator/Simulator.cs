@@ -15,10 +15,10 @@ namespace simulator
         public const int MAX_MOVES = 20;
         public const int MAX_ROUNDS = 5000;
 
-        public IGameLogic firstPl { set; get; }
-        public IGameLogic secondPl { set; get; }
-        public IGameLogic thirdPl { set; get; }
-        public IGameLogic fourthPl { set; get; }
+        public IGameLogic redPl { set; get; }
+        public IGameLogic bluePl { set; get; }
+        public IGameLogic yellowPl { set; get; }
+        public IGameLogic whitePl { set; get; }
         Game gm;
         public System.IO.StreamWriter output { set; get; }
 
@@ -104,10 +104,10 @@ namespace simulator
         {
             switch (gm.ActualPlayer.PlProp.Color)
             {
-                case Game.color.red: return firstPl;
-                case Game.color.blue: return secondPl;
-                case Game.color.yellow: return thirdPl;
-                case Game.color.white: return fourthPl;
+                case Game.color.red: return redPl;
+                case Game.color.blue: return bluePl;
+                case Game.color.yellow: return yellowPl;
+                case Game.color.white: return whitePl;
                 default: return null;
             }
         }
