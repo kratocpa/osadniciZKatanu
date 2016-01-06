@@ -12,10 +12,10 @@ namespace osadniciZKatanu
         public Coord CentreCoordinate { get; protected set; } // souřadnice středu cesty
         public bool Road { get; protected set; } // true - je zde cesta, false - není
         public Game.color Color { get; protected set; } // barva cesty, pokud zde nějaká je, jinak noColor
-        public int ID { get; set; }
+        public int ID { get; set; } // ID hrany
 
-        public List<Edge> EdgeNeighbors { get; private set; }
-        public List<Vertex> VertexNeighbors { get; private set; }
+        public List<Edge> EdgeNeighbors { get; private set; } // seznam hran, které sousedí s touto hranou
+        public List<Vertex> VertexNeighbors { get; private set; } // seznam vrcholů které sousedí s touto hranou (vždy právě 2)
 
         public void SetRoad(Game.color playerColor_) { Color = playerColor_; Road = true; }
 

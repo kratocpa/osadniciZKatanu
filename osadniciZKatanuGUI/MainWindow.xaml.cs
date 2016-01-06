@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Forms;
 
 namespace osadniciZKatanuGUI
 {
@@ -59,7 +60,8 @@ namespace osadniciZKatanuGUI
                 yellowIsPlayerRadioButton.IsChecked == true,
                 whiteIsPlayerRadioButton.IsChecked == true,
                 helpfullID.IsChecked == true,
-                showMoves.IsChecked == true);
+                showMoves.IsChecked == true,
+                pickAITextBox.Text);
 
             gameWindow.Show();
             this.Close();
@@ -87,6 +89,26 @@ namespace osadniciZKatanuGUI
             blueStackPanel.Visibility = Visibility.Visible;
             whiteStackPanel.Visibility = Visibility.Visible;
             yellowStackPanel.Visibility = Visibility.Visible;
+        }
+
+        private void pickAIButton_Click(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new System.Windows.Forms.OpenFileDialog();
+            fileDialog.InitialDirectory = System.IO.Directory.GetCurrentDirectory();
+            var result = fileDialog.ShowDialog();
+            switch (result)
+            {
+                case System.Windows.Forms.DialogResult.OK:
+                    var file = fileDialog.FileName;
+                    pickAITextBox.Text = file;
+                    pickAITextBox.ToolTip = file;
+                    break;
+                case System.Windows.Forms.DialogResult.Cancel:
+                default:
+                    pickAITextBox.Text = null;
+                    pickAITextBox.ToolTip = null;
+                    break;
+            }
         }
 
     }

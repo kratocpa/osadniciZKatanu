@@ -9,28 +9,28 @@ namespace osadniciZKatanu
 {
     public class GameProperties : ICloneable
     {
-        public int MinPointsToWin { get; set; }
-        public int LongestRoad { get; set; }
-        public int MaxKnights { get; set; }
+        public int MinPointsToWin { get; set; } // minimální počet bodů k vítězství
+        public int LongestRoad { get; set; } // zatím nejdelší cesta (na začátku je hodnota 4)
+        public int MaxKnights { get; set; } // nejvíc rytířů které má nějaký hráč (na začátku 2)
 
-        public int VillageProduction { get; set; }
-        public int TownProduction { get; set; }
-        public int LongestRoadProduction { get; set; }
-        public int LargestArmyProduction { get; set; }
+        public int VillageProduction { get; set; } // počet bodů za vesnici (také kolik produkuje vesnice suroviny)
+        public int TownProduction { get; set; } // počet bodů za město (také kolik suroviny produkuje město)
+        public int LongestRoadProduction { get; set; } // počet bodů za nejdelší cestu
+        public int LargestArmyProduction { get; set; } // počet bodů za největší počet rytířů
 
-        public int SpecialPortRate { get; set; }
-        public int UniversalPortRate { get; set; }
-        public int NoPortRate { get; set; }
+        public int SpecialPortRate { get; set; } // kurz výměny suroviny u speciálního portu (přístav se surovinou) 
+        public int UniversalPortRate { get; set; } // kurz výměny u univerzálního přístavu ( 3:1 )
+        public int NoPortRate { get; set; } // kurz výměny surovin bez přístavu
 
-        public int RoadRemaining { get; set; }
-        public int VillageRemaining { get; set; }
-        public int TownRemaining { get; set; }
+        public int RoadRemaining { get; set; } // počet cest které má každý hráč na začátku hry
+        public int VillageRemaining { get; set; } // počet vesnic které má každý hráč na začátku hry
+        public int TownRemaining { get; set; } // počet měst které má každý hráč na začátku hry
 
-        public ActionCardCollection RemainingActionCards { get; private set; }
-        public MaterialCollection MaterialsForRoad { get; private set; }
-        public MaterialCollection MaterialsForVillage { get; private set; }
-        public MaterialCollection MaterialsForTown { get; private set; }
-        public MaterialCollection MaterialsForActionCard { get; private set; }
+        public ActionCardCollection RemainingActionCards { get; private set; } // akční karty v balíčku
+        public MaterialCollection MaterialsForRoad { get; private set; } // seznam surovin potřebných na koupi cesty
+        public MaterialCollection MaterialsForVillage { get; private set; } // seznam surovin potřebných na koupi vesnice
+        public MaterialCollection MaterialsForTown { get; private set; } // seznam surovin potřebných na koupi města
+        public MaterialCollection MaterialsForActionCard { get; private set; } // seznam surovin potřebných na koupi akční karty
 
         public Face ThiefFace { get; set; } // stěna, na který je zloděj
 

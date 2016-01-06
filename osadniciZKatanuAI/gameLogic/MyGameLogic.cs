@@ -10,7 +10,7 @@ namespace osadniciZKatanuAI
     public class MyGameLogic : IGameLogic
     {
         int[] param;
-        GenerateMoves genMov;
+        GenerateMoves genMov; 
         List<Move> possibleMoves;
         GameProperties gmProp;
         PlayerProperties plProp;

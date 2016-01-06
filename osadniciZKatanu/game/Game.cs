@@ -14,7 +14,7 @@ namespace osadniciZKatanu
         public Player FirstPlayer { get { if (Players != null) { return Players.First(); } else return null; } } // první hráč v pořadí
         public Player LastPlayer { get { if (Players != null) { return Players.Last(); } else return null; } } // poslední hráč v pořadí
 
-        public GameProperties GmProp;
+        public GameProperties GmProp; // informace o hře
         
         public bool EndGame { get { return ActualPlayer.PlProp.Points >= GmProp.MinPointsToWin; } }
         private Random rand = new Random();

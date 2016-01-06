@@ -8,7 +8,7 @@ namespace evolution
 {
     public class OnePtXOver : IOperator
     {
-        double xOverProb;
+        double xOverProb; // pravděpodobnost křížení
         Random rnd;
 
         public OnePtXOver(double xOverProb)

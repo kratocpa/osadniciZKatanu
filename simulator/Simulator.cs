@@ -12,8 +12,8 @@ namespace simulator
     public class Simulator
     {
 
-        public const int MAX_MOVES = 20;
-        public const int MAX_ROUNDS = 5000;
+        public const int MAX_MOVES = 20; // omezení kvůli případnému zacyklení, při více jak 20 tazích jednoho hráče za kolo simulátor vyhodí výjimku
+        public const int MAX_ROUNDS = 5000; // omezení kvůli případnému zacyklení. Při více jak 5000 kolech za jednu hru vyhodí simulátor výjimku
 
         public IGameLogic redPl { set; get; }
         public IGameLogic bluePl { set; get; }
@@ -22,7 +22,7 @@ namespace simulator
         Game gm;
         public System.IO.StreamWriter output { set; get; }
 
-        IGameLogic actAI;
+        IGameLogic actAI; // AI, které je právě na tahu
         //GameDesc gmDes;
         Move mvDes;
         string moveToStr;

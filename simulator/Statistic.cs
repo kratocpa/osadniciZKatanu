@@ -12,12 +12,17 @@ namespace simulator
     {
         public const int PROGRESS_BAR_LENGTH = 50;
 
-        int maxNumRound, minNumRound, avrNumRound, numGames, actualGame, unfinishedGames;
-        public int RedWins { get; private set; }
-        public int BlueWins { get; private set; }
-        public int YellowWins { get; private set; }
-        public int WhiteWins { get; private set; }
-        ILanguage curLang;
+        int maxNumRound; // největší počet kol za hru
+        int minNumRound; // nejmenší počet kol za hru
+        int avrNumRound; // průměrný počet kol za hru
+        int numGames; // počet her
+        int actualGame; // statistika kolikáté hry se právě přidává
+        int unfinishedGames; // počet nedokončených her (simulátor vyhodil výjimku buďto na moc tahů za kolo nebo na moc kol)
+        public int RedWins { get; private set; } // počet hry kdy vyhrál červený
+        public int BlueWins { get; private set; } // počet her kdy vyhrál modrý
+        public int YellowWins { get; private set; } // počet her kdy vyhrál žlutý
+        public int WhiteWins { get; private set; } // počet her kdy vyhrál bílý
+        ILanguage curLang; // jazyk statistiky
         bool viewProgressBar;
 
         public Statistics(ILanguage curLang, int numGames, bool viewProgressBar)

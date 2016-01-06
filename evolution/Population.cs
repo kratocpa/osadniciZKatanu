@@ -8,10 +8,11 @@ namespace evolution
 {
     public class Population : ICloneable
     {
-        public List<Individual> population;
+        public List<Individual> population; // seznam jedinců v populaci
         public int sizeOfPopulation;
         public int lengthOfEachIndividual;
-        public int upperEachIndividual, lowerEachIndividual;
+        public int upperEachIndividual; // každá hodnota každého jedince je menší než tato hodnota
+        public int lowerEachIndividual; // každá hodnota každého jedince je vetší než tato hodnota
         Random rnd;
 
         public Population(int lengthOfEachIndividual_, int upperEachIndividual_, int lowerEachIndividual_)

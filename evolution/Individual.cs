@@ -8,10 +8,12 @@ namespace evolution
 {
     public class Individual : ICloneable
     {
-        public int upper, lower, seed;
-        public int[] individualArray;
+        public int upper; // každá hodnota jedince je menší než tato hodnota
+        public int lower; // každý hodnota jedince je větší než tato hodnota
+        public int seed; // hodnota pro generátor náhodných čísel
+        public int[] individualArray; // pole hodnot jedince
         public int lengthOfArray;
-        public double fitness;
+        public double fitness; // fitness jedince
 
         public Individual(int lengthOfArray_, int upper_, int lower_, int seed_)
         {

@@ -79,6 +79,10 @@ namespace osadniciZKatanu
             return sum;
         }
 
+        /// <summary>
+        /// vybere náhodnou akční kartu
+        /// </summary>
+        /// <returns>vrátí noActionCard, pokud je balíček prázdný</returns>
         public Game.actionCards PickRandomActionCard()
         {
             int sum = GetSumAllActionCard();

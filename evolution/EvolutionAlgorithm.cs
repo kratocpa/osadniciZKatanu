@@ -9,10 +9,11 @@ namespace evolution
     public class EvolutionAlgorithm
     {
 
-        public int popSize, generationNo;
-        public List<IOperator> operators;
-        public ISelector matingSelectors;
-        public IFitnessEvaluator eval;
+        public int popSize; // velikost populace
+        public int generationNo; // číslo kolikátá generace se právě počítá
+        public List<IOperator> operators; // seznam operátorů které se mají použít (křížení, mutace)
+        public ISelector matingSelectors; // selector na výběr partnerů pro křížení
+        public IFitnessEvaluator eval; // funkce na ohodnocení jedince
 
 
         public EvolutionAlgorithm(int popSize)

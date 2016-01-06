@@ -8,9 +8,9 @@ namespace osadniciZKatanu
 {
     public class PlayerProperties
     {
-        public int RoadRemaining { get; set; } // počet cest, které my ještě zbývají (tolik jich teoreticky ještě mohu postavit)
-        public int VillageRemaining { get; set; } // počet vesnic, které mi zbývají
-        public int TownRemaining { get; set; } // počet měst, které mi zbývají
+        public int RoadRemaining { get; set; } // počet cest, které hráči ještě zbývají (tolik jich teoreticky ještě mohu postavit)
+        public int VillageRemaining { get; set; } // počet vesnic, které hráči zbývají
+        public int TownRemaining { get; set; } // počet měst, které hráči zbývají
 
         public MaterialCollection Materials { get; private set; }  // seznam surovin hráče
         public ActionCardCollection ActionCards { get; private set; } // seznam nevyložených akčních karet hráče

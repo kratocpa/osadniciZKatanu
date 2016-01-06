@@ -10,7 +10,7 @@ namespace osadniciZKatanu
     public class Player
     {
         public MaterialCollection CurrentAddedMaterials { get; private set; } // suroviny, které se tomuto hráči toto kolo přičetli
-        public MaterialCollection CurrentDeletedMaterials { get; private set; }
+        public MaterialCollection CurrentDeletedMaterials { get; private set; } // suroviny které se hráči právě odečetly
 
         public PlayerProperties PlProp;
 

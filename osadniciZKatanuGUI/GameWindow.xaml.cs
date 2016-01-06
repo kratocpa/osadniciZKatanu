@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Threading;
+using System.Xml;
 using osadniciZKatanu;
 using osadniciZKatanuAI;
 
@@ -20,77 +21,95 @@ namespace osadniciZKatanuGUI
 
     public partial class GameWindow : Window
     {
-        Game gm;
+        Game gm; 
         Draw dr;
-        bool showMoves;
+        bool showMoves; // mají se ukazovat popisy tahů AI
         string pickedActionCard = "";
-        List<Player> players;
-        ILanguage curLang;
-        IGameLogic gmLogic;
+        List<Player> players; // seznam hráčů
+        ILanguage curLang; // jazyk hry
+        IGameLogic gmLogic; // AI, pokud hraje (zatím musí být všechny AI stejné)
         Information information;
-        gameEvent curEv;
-        Game.materials firstMat;
-        osadniciZKatanu.Coord firstPoint;
+        gameEvent curEv; // event hry (např přesouvám zloděje, musí se přesunout zloděj, musí se vybrat surovina atd...)
+        Game.materials firstMat; // první vybraná surovina. Používá se např u vybrání dvou surovin zadarmo
+        Coord firstPoint; // první bod, používá se např. u dvou cest zadarmo
 
         public enum gameEvent { none, firstPhaseMove, moveThief, moveThiefPartTwo, knightMove, knightMovePartTwo, twoFreeRoadsFirstRoad, twoFreeRoadsSecondRoad, twoMaterials, twoMaterialsPartTwo, materialsFromPlayers, changingMaterials, changingMaterialPartTwo };
 
         public enum spot { vertex, edge, face, none };
 
-        public GameWindow(int playerCount, string gameLanguage, bool randomGameBorder, bool redIsPlayer, bool blueIsPlayer, bool yellowIsPlayer, bool whiteIsPlayer, bool helpfullID, bool showMoves_)
+        public GameWindow(int playerCount, string gameLanguage, bool randomGameBorder, bool redIsPlayer, bool blueIsPlayer, bool yellowIsPlayer, bool whiteIsPlayer, bool helpfullID, bool showMoves_, string aiLogic)
         {
-            InitializeComponent();
-            showMoves = showMoves_;
-            //gmLogic = new MyGameLogic(BestParameters.newBest);
-            gmLogic = new MyGameLogic("param.xml");
-            information = new Information();
-
-            switch (gameLanguage)
+            try
             {
-                case "čeština": curLang = new CzechLanguage();
-                    break;
-                case "angličtina": curLang = new EngLanguage();
-                    break;
+                XmlDocument param = new XmlDocument();
+                param.LoadXml(Properties.Resources.param);
+                System.IO.StreamWriter paramWr = new System.IO.StreamWriter("param.xml");
+                paramWr.Write(param.OuterXml);
+                paramWr.Close();
+                InitializeComponent();
+                showMoves = showMoves_;
+                //gmLogic = new MyGameLogic(BestParameters.newBest);
+                if (aiLogic == null || aiLogic == "")
+                {
+                    gmLogic = new MyGameLogic("param.xml");
+                }
+                else
+                {
+                    gmLogic = new MyGameLogic(aiLogic);
+                }
+                information = new Information();
+
+                switch (gameLanguage)
+                {
+                    case "čeština": curLang = new CzechLanguage();
+                        break;
+                    case "angličtina": curLang = new EngLanguage();
+                        break;
+                }
+
+                dr = new Draw(gameBorderCanvas, useActionCardButton,
+                    changeMaterialButton, buyActionCardButton,
+                    startGameButton, materialsListbox, actionCardsListbox,
+                    fsSelectionListbox,
+                    points, actionCardsLabel, materialsLabel, diceLabel, informationLabel, pathLabel, townLabel, villageLabel, actionCardLabel,
+                    actualPlayerLabel, gameEventLabel, roundLabel, remainingVillageLabel, remainingTownLabel, remainingRoadLabel, remainingActionCardLabel,
+                    woodCountLabel, brickCountLabel, grainCountLabel, sheepCountLabel, stoneCountLabel,
+                    largestArmyImage, longestWayImage, remainingVillageImg, remainingTownImg, remainingActionCardImg, remainingRoadLine, curLang);
+
+                players = new List<Player>();
+                GameProperties gmProp = new GameProperties(randomGameBorder, curLang);
+                gmProp.LoadFromXml();
+                curEv = gameEvent.none;
+
+                switch (playerCount)
+                {
+                    case 2:
+                        players.Add(new Player(Game.color.red, redIsPlayer, gmProp));
+                        players.Add(new Player(Game.color.blue, blueIsPlayer, gmProp));
+                        break;
+                    case 3:
+                        players.Add(new Player(Game.color.red, redIsPlayer, gmProp));
+                        players.Add(new Player(Game.color.blue, blueIsPlayer, gmProp));
+                        players.Add(new Player(Game.color.yellow, yellowIsPlayer, gmProp));
+                        break;
+                    case 4:
+                        players.Add(new Player(Game.color.red, redIsPlayer, gmProp));
+                        players.Add(new Player(Game.color.blue, blueIsPlayer, gmProp));
+                        players.Add(new Player(Game.color.yellow, yellowIsPlayer, gmProp));
+                        players.Add(new Player(Game.color.white, whiteIsPlayer, gmProp));
+                        break;
+                }
+
+                gm = new Game(players, gmProp);
+                dr.DrawGameBorder(gmProp.GameBorderData);
+                if (helpfullID)
+                {
+                    dr.DrawHelpfullID(gm);
+                }
             }
-
-            dr = new Draw(gameBorderCanvas, useActionCardButton,
-                changeMaterialButton, buyActionCardButton,
-                startGameButton, materialsListbox, actionCardsListbox,
-                fsSelectionListbox,
-                points, actionCardsLabel, materialsLabel, diceLabel, informationLabel, pathLabel, townLabel, villageLabel, actionCardLabel,
-                actualPlayerLabel, gameEventLabel, roundLabel, remainingVillageLabel, remainingTownLabel, remainingRoadLabel, remainingActionCardLabel,
-                woodCountLabel, brickCountLabel, grainCountLabel, sheepCountLabel, stoneCountLabel,
-                largestArmyImage, longestWayImage, remainingVillageImg, remainingTownImg, remainingActionCardImg, remainingRoadLine, curLang);
-
-            players = new List<Player>();
-            GameProperties gmProp = new GameProperties(randomGameBorder, curLang);
-            gmProp.LoadFromXml();
-            curEv = gameEvent.none;
-
-            switch (playerCount)
+            catch (Exception ex)
             {
-                case 2:
-                    players.Add(new Player(Game.color.red, redIsPlayer, gmProp));
-                    players.Add(new Player(Game.color.blue, blueIsPlayer, gmProp));
-                    break;
-                case 3:
-                    players.Add(new Player(Game.color.red, redIsPlayer, gmProp));
-                    players.Add(new Player(Game.color.blue, blueIsPlayer, gmProp));
-                    players.Add(new Player(Game.color.yellow, yellowIsPlayer, gmProp));
-                    break;
-                case 4:
-                    players.Add(new Player(Game.color.white, whiteIsPlayer, gmProp));
-                    players.Add(new Player(Game.color.red, redIsPlayer, gmProp));
-                    players.Add(new Player(Game.color.blue, blueIsPlayer, gmProp));
-                    players.Add(new Player(Game.color.yellow, yellowIsPlayer, gmProp));
-                    
-                    break;
-            }
-
-            gm = new Game(players, gmProp);
-            dr.DrawGameBorder(gmProp.GameBorderData);
-            if (helpfullID)
-            {
-                dr.DrawHelpfullID(gm);
+                System.Windows.MessageBox.Show(ex.Message);
             }
         }
 
@@ -273,7 +292,7 @@ namespace osadniciZKatanuGUI
                     break;
                 case Game.state.game:
                     Move();
-                    dr.DrawStatue(gm, curEv);
+                    //dr.DrawStatue(gm, curEv);
                     break;
                 case Game.state.endGame:
                     var mainWindow = new MainWindow();

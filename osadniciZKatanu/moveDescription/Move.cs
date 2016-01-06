@@ -9,7 +9,7 @@ namespace osadniciZKatanu
     public class Move
     {
         public List<DoubleMaterials> ChangedMaterials { get; private set; } // seznam surovin k výměně
-        public double fitnessMove { get; set; } // udává kvalitu tahu
+        public double fitnessMove { get; set; } // udává kvalitu (fitness) tahu
 
         public Move()
         {

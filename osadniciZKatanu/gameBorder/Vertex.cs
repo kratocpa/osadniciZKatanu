@@ -15,11 +15,11 @@ namespace osadniciZKatanu
         public bool Port { get; protected set; } // true - je zde port, false - není
         public Game.materials PortMaterial { get; protected set; } // pokud je hodnota noMaterial, pak je zde univerzální port
         public Game.color Color { get; protected set; } // barva vesnice nebo města které je zde postavené (jinak noColor)
-        public int ID { get; set; }
+        public int ID { get; set; } // ID vrcholu
 
-        public List<Vertex> VerticesNeighbors { get; private set; }
-        public List<Edge> EdgeNeighbors { get; private set; }
-        public List<Face> FaceNeighbors { get; private set; }
+        public List<Vertex> VerticesNeighbors { get; private set; } // seznam vrcholů, které (přes hranu) sousedí s tímto vrcholem
+        public List<Edge> EdgeNeighbors { get; private set; } // sezam hran, které sousedí s tímto vrcholem
+        public List<Face> FaceNeighbors { get; private set; } // seznam stěn, které sousedí s tímto vrcholem
 
         public Vertex(Coord vertexCoordinate)
         {

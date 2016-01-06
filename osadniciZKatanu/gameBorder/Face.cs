@@ -12,9 +12,9 @@ namespace osadniciZKatanu
         public Game.materials Material { get; protected set; } // surovina na stěně
         public int ProbabilityNumber { get; protected set; } // číslo stěny (pokud padne toto číslo na kostkách, tak stěna produkuje surovinu)
         public bool Thief { get; set; } // true - je na stěně zloděj, false - není
-        public int ID { get; set; }
+        public int ID { get; set; } // ID stěny
 
-        public List<Vertex> VerticesNeighbors { get; private set; }
+        public List<Vertex> VerticesNeighbors { get; private set; } // seznam vrcholů které sousedí se stěnou (vždy jich je právě 6)
 
         public void SetMaterial(Game.materials changedMaterial) { Material = changedMaterial; }
 

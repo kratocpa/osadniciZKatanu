@@ -8,8 +8,8 @@ namespace evolution
 {
     public class IntegerMutation : IOperator
     {
-        double mutationProb;
-        double genChangeProb;
+        double mutationProb; // pravděpodobnost mutace
+        double genChangeProb; // v případě že se jedinec mutuje, tak pravděpodobnost změnění  konkrétní hodnoty (pro každou hodnotu jedince)
 
         Random rnd;
 

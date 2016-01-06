@@ -12,10 +12,10 @@ namespace evolution
     public class OneStrategyEvaluator : IFitnessEvaluator
     {
         public ILanguage CurLang { get; set; }
-        public int GamesNum { get; set; }
+        public int GamesNum { get; set; } // počet her (které se mají provést) k ohodnocení jedince
         public bool ViewProgressBar { get; set; }
-        Statistics statistic;
-        string fs, sc, th;
+        Statistics statistic; // statistika k jednoduššímu zjištění výsledků
+        string fs, sc, th; // názvy .xml souborů pro jiné než implicitní jedince
 
         public OneStrategyEvaluator(string fs, string sc, string th, int gamesNum)
         {

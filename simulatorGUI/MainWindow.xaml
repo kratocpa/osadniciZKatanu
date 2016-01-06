@@ -3,26 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="706.159">
     <Grid>
-        <ComboBox Name="playerCountComboBox" HorizontalAlignment="Left" Height="22" Margin="10,10,0,0" VerticalAlignment="Top" Width="136" SelectionChanged="playerCountComboBox_SelectionChanged">
+        <ComboBox Name="playerCountComboBox" HorizontalAlignment="Left" Height="22" Margin="10,55,0,0" VerticalAlignment="Top" Width="146" SelectionChanged="playerCountComboBox_SelectionChanged">
             <ComboBoxItem Content="2"/>
             <ComboBoxItem Content="3"/>
             <ComboBoxItem Content="4"/>
         </ComboBox>
-        <Button Name="fsPlayerButton" Content="first player" HorizontalAlignment="Left" Height="22" Margin="168,10,0,0" VerticalAlignment="Top" Width="114" Click="fsPlayerButton_Click"/>
-        <Button Name="scPlayerButton" Content="second player" HorizontalAlignment="Left" Height="20" Margin="168,37,0,0" VerticalAlignment="Top" Width="114" Click="scPlayerButton_Click"/>
-        <Button Name="thPlayerButton" Content="thirth player" HorizontalAlignment="Left" Height="22" Margin="168,62,0,0" VerticalAlignment="Top" Width="116" Click="thPlayerButton_Click"/>
-        <Button Name="foPlayerButton" Content="fourth player" HorizontalAlignment="Left" Height="20" Margin="168,89,0,0" VerticalAlignment="Top" Width="116" Click="foPlayerButton_Click"/>
-        <TextBox Name="fsPlayerTextBox" HorizontalAlignment="Left" Height="22" Margin="289,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="401"/>
-        <TextBox Name="scPlayerTextBox" HorizontalAlignment="Left" Height="20" Margin="289,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="401"/>
-        <TextBox Name="thPlayerTextBox" HorizontalAlignment="Left" Height="22" Margin="289,62,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="401"/>
-        <TextBox Name="foPlayerTextBox" HorizontalAlignment="Left" Height="20" Margin="289,89,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="401"/>
-        <CheckBox Name="rndCheckBox" Content="random game border" HorizontalAlignment="Left" Height="22" Margin="10,62,0,0" VerticalAlignment="Top" Width="136"/>
-        <CheckBox Name="rotatePlCheckBox" Content="rotate players order" HorizontalAlignment="Left" Height="20" Margin="10,89,0,0" VerticalAlignment="Top" Width="136"/>
-        <TextBox Name="roundTextBox" HorizontalAlignment="Left" Height="26" Margin="449,114,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="59"/>
-        <Label Content="Game count:" HorizontalAlignment="Left" Height="26" Margin="372,114,0,0" VerticalAlignment="Top" Width="72"/>
-        <ProgressBar Name="progressBar" HorizontalAlignment="Left" Height="35" Margin="10,150,0,0" VerticalAlignment="Top" Width="680" Minimum="0" Maximum="100" Value="0"/>
-        <Button Name="startButton" Content="Start" HorizontalAlignment="Left" Height="31" Margin="168,114,0,0" VerticalAlignment="Top" Width="161" Click="startButton_Click"/>
-        <Label Name="resultLabel" Content="" HorizontalAlignment="Left" Height="117" Margin="10,198,0,0" VerticalAlignment="Top" Width="497"/>
+        <Button Name="fsPlayerButton" Content="red player" HorizontalAlignment="Left" Height="29" Margin="168,21,0,0" VerticalAlignment="Top" Width="114" Click="fsPlayerButton_Click"/>
+        <Button Name="scPlayerButton" Content="blue player" HorizontalAlignment="Left" Height="29" Margin="168,55,0,0" VerticalAlignment="Top" Width="114" Click="scPlayerButton_Click"/>
+        <Button Name="thPlayerButton" Content="yellow player" HorizontalAlignment="Left" Height="29" Margin="168,89,0,0" VerticalAlignment="Top" Width="114" Click="thPlayerButton_Click"/>
+        <Button Name="foPlayerButton" Content="white player" HorizontalAlignment="Left" Height="29" Margin="168,123,0,0" VerticalAlignment="Top" Width="114" Click="foPlayerButton_Click"/>
+        <TextBox Name="fsPlayerTextBox" HorizontalAlignment="Left" Height="29" Margin="287,21,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="401"/>
+        <TextBox Name="scPlayerTextBox" HorizontalAlignment="Left" Height="27" Margin="289,55,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="401"/>
+        <TextBox Name="thPlayerTextBox" HorizontalAlignment="Left" Height="29" Margin="289,89,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="401"/>
+        <TextBox Name="foPlayerTextBox" HorizontalAlignment="Left" Height="29" Margin="289,123,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="401"/>
+        <CheckBox Name="rndCheckBox" Content="random game border" HorizontalAlignment="Left" Height="21" Margin="564,166,0,0" VerticalAlignment="Top" Width="126"/>
+        <CheckBox Name="rotatePlCheckBox" Content="rotate players order" HorizontalAlignment="Left" Height="21" Margin="436,166,0,0" VerticalAlignment="Top" Width="123"/>
+        <TextBox Name="roundTextBox" HorizontalAlignment="Left" Height="26" Margin="97,120,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="59"/>
+        <Label Content="Game count:" HorizontalAlignment="Left" Height="34" Margin="10,118,0,0" VerticalAlignment="Top" Width="82"/>
+        <ProgressBar Name="progressBar" HorizontalAlignment="Left" Height="35" Margin="10,193,0,0" VerticalAlignment="Top" Width="680" Minimum="0" Maximum="100" Value="0"/>
+        <Button Name="startButton" Content="Start" HorizontalAlignment="Left" Height="31" Margin="168,157,0,0" VerticalAlignment="Top" Width="161" Click="startButton_Click"/>
+        <Label Name="resultLabel" Content="" HorizontalAlignment="Left" Height="82" Margin="10,233,0,0" VerticalAlignment="Top" Width="678"/>
+        <Label Content="Players count:" HorizontalAlignment="Left" Height="29" Margin="10,21,0,0" VerticalAlignment="Top" Width="146"/>
 
     </Grid>
 </Window>

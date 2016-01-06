@@ -10,7 +10,7 @@ namespace osadniciZKatanu
     {
         private const int MAX_DISTANCE_BEETWEN_TWO_SAME_VERTICES = 10;
         private const int DISTANCE_BEETWEN_NEIGHBORING_FACE_AND_VERTEX = 80;
-        private const int DISTANCE_BEETWEN_NEIGHBORING_TWO_VERTICES = 80;
+        private const int DISTANCE_BEETWEN_NEIGHBORING_TWO_VERTICES = 80; // souží k vygenerování všech hran
 
         //na pozici "i" je počet možností, kterými muže padnout číslo "i+2" (0 ani 1 nemůže padnout) 
         private double[] countNumbersFit;
