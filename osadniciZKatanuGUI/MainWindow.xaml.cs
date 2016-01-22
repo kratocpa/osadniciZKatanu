@@ -61,6 +61,7 @@ namespace osadniciZKatanuGUI
                 whiteIsPlayerRadioButton.IsChecked == true,
                 helpfullID.IsChecked == true,
                 showMoves.IsChecked == true,
+                possibleMovesCheckBox.IsChecked == true,
                 pickAITextBox.Text);
 
             gameWindow.Show();

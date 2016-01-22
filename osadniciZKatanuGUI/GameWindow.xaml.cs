@@ -37,7 +37,7 @@ namespace osadniciZKatanuGUI
 
         public enum spot { vertex, edge, face, none };
 
-        public GameWindow(int playerCount, string gameLanguage, bool randomGameBorder, bool redIsPlayer, bool blueIsPlayer, bool yellowIsPlayer, bool whiteIsPlayer, bool helpfullID, bool showMoves_, string aiLogic)
+        public GameWindow(int playerCount, string gameLanguage, bool randomGameBorder, bool redIsPlayer, bool blueIsPlayer, bool yellowIsPlayer, bool whiteIsPlayer, bool helpfullID, bool showMoves_, bool showPossibleMoves, string aiLogic)
         {
             try
             {
@@ -58,6 +58,11 @@ namespace osadniciZKatanuGUI
                     gmLogic = new MyGameLogic(aiLogic);
                 }
                 information = new Information();
+
+                if (showPossibleMoves)
+                {
+                    information.Show();
+                }
 
                 switch (gameLanguage)
                 {
@@ -380,9 +385,8 @@ namespace osadniciZKatanuGUI
             dr.DrawStatue(gm, curEv);
         }
 
-        private void FsSelectionListboxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void selectionListboxDoubleClickFunction(object sender, MouseButtonEventArgs e)
         {
-
             if (curEv == gameEvent.moveThiefPartTwo || curEv == gameEvent.knightMovePartTwo)
             {
                 if (fsSelectionListbox.SelectedItem != null)
@@ -444,9 +448,19 @@ namespace osadniciZKatanuGUI
             dr.DrawStatue(gm, curEv);
         }
 
+        private void FsSelectionListboxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            selectionListboxDoubleClickFunction(sender, e);
+        }
+
+        private void FsSelectionListboxRightClick(object sender, MouseButtonEventArgs e)
+        {
+            selectionListboxDoubleClickFunction(sender, e);
+        }
+
         private void StartGameMove()
         {
-            information.Show();
+            
             startGameButton.Content = curLang.NextPlayerButton();
             startGameButton.IsEnabled = false;
             gm.NextState();

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="288.683" Width="341.8" ResizeMode="NoResize" Background="Azure">
     <Grid>
-        <Button Content="Nová hra" FontSize="15" FontWeight="ExtraBlack" HorizontalAlignment="Left" Height="28" Margin="172,167,0,0" VerticalAlignment="Top" Width="141" Click="Button_Click_1"/>
+        <Button Content="Nová hra" FontSize="15" FontWeight="ExtraBlack" HorizontalAlignment="Left" Height="28" Margin="172,145,0,0" VerticalAlignment="Top" Width="141" Click="Button_Click_1"/>
         <ComboBox Name="language_combo_box" SelectedIndex="0"  Text="jazyk" HorizontalAlignment="Left" Height="20" Margin="8,44,0,0" VerticalAlignment="Top" Width="148">
 
             <ComboBoxItem  Name="czech">čeština</ComboBoxItem>
@@ -47,6 +47,7 @@
         <CheckBox Name="showMoves" Content="u AI ukázat popisy tahů"  HorizontalAlignment="Left" Height="22" Margin="172,202,0,0" VerticalAlignment="Top" Width="153"/>
         <Button Name="pickAIButton"  Content="Vybrat AI" HorizontalAlignment="Left" Height="29" Margin="8,225,0,0" VerticalAlignment="Top" Width="96" Click="pickAIButton_Click"/>
         <TextBox Name="pickAITextBox" HorizontalAlignment="Left" Height="28" Margin="109,225,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="204"/>
+        <CheckBox Name="possibleMovesCheckBox" Content="u AI ukázat možné tahy" HorizontalAlignment="Left" Height="24" Margin="172,178,0,0" VerticalAlignment="Top" Width="141"/>
     </Grid>
 </Window>
 
