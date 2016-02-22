@@ -44,6 +44,7 @@
     <Compile Include="evaluators\SimpleEvaluator.cs" />
     <Compile Include="EvolutionAlgorithm.cs" />
     <Compile Include="evaluators\IFitnessEvaluator.cs" />
+    <Compile Include="EvolutionAlgorithmProperties.cs" />
     <Compile Include="Individual.cs" />
     <Compile Include="evaluators\OneStrategyEvaluator.cs" />
     <Compile Include="operators\IntegerMutation.cs" />
@@ -53,6 +54,11 @@
     <Compile Include="Printer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="selectors\RouletteWheelSelector.cs" />
     <Compile Include="selectors\ISelector.cs" />
   </ItemGroup>
@@ -72,6 +78,15 @@
       <Project>{7cbb059a-d01f-4f4f-baec-692863e9be40}</Project>
       <Name>simulator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\evaSettings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
