@@ -10,7 +10,7 @@ namespace evolution
 {
     public class Printer
     {
-        public static void PrintIndividum(Individual ind, XmlElement par, int generation, double avarage)
+        public static void PrintIndividum(Individual ind, XmlElement par, int generation)
         {
             //output.Write(String.Format("{0:000}", generation) + ". ");
             GenerateMovesProperties genMoPr = new GenerateMovesProperties();
@@ -23,10 +23,8 @@ namespace evolution
             //output.Write("(" + ind.fitness + ")");
         }
 
-        public static void PrintBest(Population pop, XmlDocument doc, int generation)
+        public static void PrintBest(Population pop, XmlDocument doc, int generation, string folderName)
         {
-
-
             double bestFit = pop.population[0].fitness;
             double avarageFit = 0;
             Individual best = pop.population[0];
@@ -46,14 +44,34 @@ namespace evolution
             fitness.InnerText = best.fitness.ToString();
             XmlElement avarageFitness = (XmlElement)par.AppendChild(doc.CreateElement("avarageFitness"));
             avarageFitness.InnerText = avarageFit.ToString();
-            PrintIndividum(best, par, generation, avarageFit);
-
-            string path = "bestParam/" + generation + "-" + best.fitness + ".xml";
+            PrintIndividum(best, par, generation);
+            string gen = String.Format("{0,3:D3}", generation);
+            string path = folderName + "/" + gen + "-" + best.fitness + "-best.xml";
+            
             System.IO.StreamWriter bestPerGen = new System.IO.StreamWriter(path);
             bestPerGen.Write(doc.OuterXml);
             bestPerGen.Flush();
             bestPerGen.Close();
             //output.WriteLine(" ({0}), ({1})", avarageFit, best.fitness);
+        }
+
+        public static void PrintPopulation(Population pop, XmlDocument doc, int generation, string folderName)
+        {
+            XmlElement population = (XmlElement)doc.AppendChild(doc.CreateElement("population"));
+            for (int i = 0; i < pop.population.Count; i++)
+            {
+                XmlElement param = (XmlElement)population.AppendChild(doc.CreateElement("param"));
+                XmlElement fitness = (XmlElement)param.AppendChild(doc.CreateElement("fitness"));
+                fitness.InnerText = pop.population[i].fitness.ToString();
+                PrintIndividum(pop.population[i], param, generation);
+            }
+            string gen = String.Format("{0,3:D3}", generation);
+            string path = folderName + "/" + gen + "-allPopulation.xml";
+
+            System.IO.StreamWriter bestPerGen = new System.IO.StreamWriter(path);
+            bestPerGen.Write(doc.OuterXml);
+            bestPerGen.Flush();
+            bestPerGen.Close();
         }
     }
 }

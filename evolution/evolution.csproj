@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="evaluators\EbdWithEbdEvaluator.cs" />
+    <Compile Include="evaluators\EloEvaluator.cs" />
     <Compile Include="evaluators\SimpleEvaluator.cs" />
     <Compile Include="EvolutionAlgorithm.cs" />
     <Compile Include="evaluators\IFitnessEvaluator.cs" />
@@ -50,6 +52,8 @@
     <Compile Include="operators\IntegerMutation.cs" />
     <Compile Include="operators\OnePtXOver.cs" />
     <Compile Include="operators\IOperator.cs" />
+    <Compile Include="operators\TwoPtXOver.cs" />
+    <Compile Include="operators\Uniform.cs" />
     <Compile Include="Population.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="Program.cs" />

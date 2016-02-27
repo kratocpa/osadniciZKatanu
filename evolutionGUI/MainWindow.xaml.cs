@@ -43,7 +43,7 @@ namespace evolutionGUI
 
                 Population parents = new Population(individumSize, 0, 300);
                 Population offspring;
-                IFitnessEvaluator fitEval = new OneStrategyEvaluator(fs, sc, th, gameCount);
+                IFitnessEvaluator fitEval = new OneStrategyEvaluator(fs, sc, th, gameCount, 4);
                 parents.GenerateRandomPopulation(popSize);
                 eva = new EvolutionAlgorithm(popSize);
 
@@ -52,13 +52,14 @@ namespace evolutionGUI
                 eva.operators.Add(mutation);
                 eva.eval = fitEval;
 
-                System.IO.Directory.CreateDirectory("bestParam");
+                string folderName="bestParam";
+                System.IO.Directory.CreateDirectory(folderName);
 
                 while (eva.generationNo < generationCount)
                 {
                     fitEval.Evaluate(parents);
                     XmlDocument doc = new XmlDocument();
-                    Printer.PrintBest(parents, doc, eva.generationNo);
+                    Printer.PrintBest(parents, doc, eva.generationNo, folderName);
                     progressBar.Dispatcher.BeginInvoke(new Action(() => { progressBar.Value = eva.generationNo; }));
                     //PrintPopulation(parents, evolutionPop, eva.generationNo);
                     offspring = eva.Evolve(parents);

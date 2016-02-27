@@ -11,7 +11,9 @@ namespace evolution
     {
         public int PopSize { get; set; } // velikost populace
         public int GenerationCount { get; set; } // počet generací
+        public int UpperBoundaryEachIndividual { get; set; } // maximální hodnota každého parametru jedince
         public EvolutionAlgorithm.mating MatingManner { get; set; } // způsob křížení (jednobodové, dvoubodové, uniformní)
+        public double MatingProb { get; set; } // pravděpodobnost křížení
         public double MutationProb { get; set; } // pravděpodobnost mutace
         public double MutationChangeBitProb { get; set; } // pravděpodobnost mutace jednoho bitu
 
@@ -20,6 +22,7 @@ namespace evolution
         public int PlayersCountInGame { get; set; } // počet hráčů v jedné testované hře při ohodnocování jedinců
         
         //nastavení pro fitness funkci s pevně danými protihráči
+        public int GamesCount; // počet her pro ohodnocení jednoho jedince
         public string FirstRival; // první soupeř  
         public string SecondRival; // druhý soupeř 
         public string ThirdRival; // třetí soupeř
@@ -45,33 +48,27 @@ namespace evolution
         public void LoadFromXml(string xmlFile)
         {
             XmlDocument EvaPropDoc = new XmlDocument();
-            try
-            {
-                EvaPropDoc.Load(xmlFile);
-                PopSize = int.Parse(EvaPropDoc.DocumentElement.Attributes["popSize"].Value);
-                GenerationCount = int.Parse(EvaPropDoc.DocumentElement.Attributes["generationCount"].Value);
 
-                foreach (XmlNode curNode in EvaPropDoc.DocumentElement.ChildNodes)
-                {
-                    switch (curNode.Name)
-                    {
-                        case "matingManner": SetMatingManner(curNode); break;
-                        case "mutation": SetMutation(curNode); break;
-                        case "evaluatorManner": SetEvaluatorManner(curNode); break;
-                        default: break;
-                    }
-                }
-            }
-            catch (Exception ex)
+            EvaPropDoc.Load(xmlFile);
+            PopSize = int.Parse(EvaPropDoc.DocumentElement.Attributes["popSize"].Value);
+            GenerationCount = int.Parse(EvaPropDoc.DocumentElement.Attributes["generationCount"].Value);
+            UpperBoundaryEachIndividual = int.Parse(EvaPropDoc.DocumentElement.Attributes["upperBoundaryEachIndividual"].Value);
+            foreach (XmlNode curNode in EvaPropDoc.DocumentElement.ChildNodes)
             {
-                //TODO: přidat výjimky
-                Console.WriteLine(ex.Message);
+                switch (curNode.Name)
+                {
+                    case "matingManner": SetMatingManner(curNode); break;
+                    case "mutation": SetMutation(curNode); break;
+                    case "evaluatorManner": SetEvaluatorManner(curNode); break;
+                    default: break;
+                }
             }
         }
 
         private void SetMatingManner(XmlNode curNode)
         {
             string type = curNode.Attributes["type"].Value;
+            MatingProb = double.Parse(curNode.Attributes["matingProb"].Value, System.Globalization.CultureInfo.InvariantCulture);
             switch (type)
             {
                 case "OnePtXOver": MatingManner = EvolutionAlgorithm.mating.OnePtXOver; break;
@@ -83,8 +80,8 @@ namespace evolution
 
         private void SetMutation(XmlNode curNode)
         {
-            MutationProb = int.Parse(curNode.Attributes["mutationProb"].Value);
-            MutationChangeBitProb = int.Parse(curNode.Attributes["mutationChangeBitProb"].Value);
+            MutationProb = double.Parse(curNode.Attributes["mutationProb"].Value, System.Globalization.CultureInfo.InvariantCulture);
+            MutationChangeBitProb = double.Parse(curNode.Attributes["mutationChangeBitProb"].Value, System.Globalization.CultureInfo.InvariantCulture);
         }
 
         private void SetEvaluatorManner(XmlNode curNode)
@@ -107,6 +104,7 @@ namespace evolution
                     case "firstRival": FirstRival = cN.InnerText; break;
                     case "secondRival": SecondRival = cN.InnerText; break;
                     case "thirdRival": ThirdRival = cN.InnerText; break;
+                    case "gameCount": GamesCount = int.Parse(cN.InnerText); break;
                     default: break;
                 }
             }
@@ -117,11 +115,14 @@ namespace evolution
             EvolutionAlgorithmProperties clonEAP = new EvolutionAlgorithmProperties();
             clonEAP.PopSize = PopSize;
             clonEAP.GenerationCount = GenerationCount;
+            clonEAP.UpperBoundaryEachIndividual = UpperBoundaryEachIndividual;
             clonEAP.MatingManner = MatingManner;
+            clonEAP.MatingProb = MatingProb;
             clonEAP.MutationProb = MutationProb;
             clonEAP.MutationChangeBitProb = MutationChangeBitProb;
             clonEAP.EvaluatorManner = EvaluatorManner;
             clonEAP.PlayersCountInGame = PlayersCountInGame;
+            clonEAP.GamesCount = GamesCount;
             clonEAP.FirstRival = FirstRival;
             clonEAP.SecondRival = SecondRival;
             clonEAP.ThirdRival = ThirdRival;
