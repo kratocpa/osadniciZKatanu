@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
+using System.IO;
 using osadniciZKatanuAI;
 
 namespace evolution
@@ -47,7 +49,7 @@ namespace evolution
             PrintIndividum(best, par, generation);
             string gen = String.Format("{0,3:D3}", generation);
             string path = folderName + "/" + gen + "-" + best.fitness + "-best.xml";
-            
+
             System.IO.StreamWriter bestPerGen = new System.IO.StreamWriter(path);
             bestPerGen.Write(doc.OuterXml);
             bestPerGen.Flush();
@@ -69,9 +71,29 @@ namespace evolution
             string path = folderName + "/" + gen + "-allPopulation.xml";
 
             System.IO.StreamWriter bestPerGen = new System.IO.StreamWriter(path);
-            bestPerGen.Write(doc.OuterXml);
+            
+            bestPerGen.Write(PrettyXml(doc.OuterXml));
             bestPerGen.Flush();
             bestPerGen.Close();
+        }
+
+        static string PrettyXml(string xml)
+        {
+            var stringBuilder = new StringBuilder();
+
+            var element = XElement.Parse(xml);
+
+            var settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            settings.Indent = true;
+            settings.NewLineOnAttributes = true;
+
+            using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
+            {
+                element.Save(xmlWriter);
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }

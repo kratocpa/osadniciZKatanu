@@ -57,7 +57,7 @@ namespace evolution
                 case EvolutionAlgorithm.mating.TwoPtXOver: mating = new TwoPtXOver(evaProp.MatingProb); break;
                 case EvolutionAlgorithm.mating.UniformMating: mating = new Uniform(evaProp.MatingProb); break;
                 case EvolutionAlgorithm.mating.none: mating = null; break;
-                default: mating = null; break;
+                default: mating = null; Console.Write("Ivalid type of mating"); return;
             }
 
             IOperator mutation = new IntegerMutation(evaProp.MutationProb, evaProp.MutationChangeBitProb);
@@ -72,7 +72,7 @@ namespace evolution
                 case EvolutionAlgorithm.fitnessEvaluator.EbdWithEbd: fitEval = new EbdWithEbdEvaluator(evaProp.PlayersCountInGame); break;
                 case EvolutionAlgorithm.fitnessEvaluator.Elo: fitEval = new EloEvaluator(); break;
                 case EvolutionAlgorithm.fitnessEvaluator.none: fitEval = null; break;
-                default: fitEval = null; break;
+                default: fitEval = null; Console.Write("Ivalid type of fitness evaluater"); return;
             }
 
             parents.GenerateRandomPopulation(evaProp.PopSize);
