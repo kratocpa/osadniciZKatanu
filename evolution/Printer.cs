@@ -70,30 +70,61 @@ namespace evolution
             string gen = String.Format("{0,3:D3}", generation);
             string path = folderName + "/" + gen + "-allPopulation.xml";
 
-            System.IO.StreamWriter bestPerGen = new System.IO.StreamWriter(path);
-            
-            bestPerGen.Write(PrettyXml(doc.OuterXml));
-            bestPerGen.Flush();
+            StreamWriter bestPerGen = new StreamWriter(path);
+            PrettyXml(doc.DocumentElement, bestPerGen, "");
             bestPerGen.Close();
         }
 
-        static string PrettyXml(string xml)
+        static void PrettyXml(XmlNode doc, StreamWriter sw, string depth)
         {
-            var stringBuilder = new StringBuilder();
-
-            var element = XElement.Parse(xml);
-
-            var settings = new XmlWriterSettings();
-            settings.OmitXmlDeclaration = true;
-            settings.Indent = true;
-            settings.NewLineOnAttributes = true;
-
-            using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
+            if (!doc.HasChildNodes)
             {
-                element.Save(xmlWriter);
+                sw.Write(doc.InnerText);
             }
+            else
+            {
+                bool needEnd;
+                sw.Write(depth+"<" + doc.Name);
+                if (doc.Attributes != null)
+                {
+                    for (int i = 0; i < doc.Attributes.Count; i++)
+                    {
+                        sw.Write(" " + doc.Attributes[i].Name + "=\"" + doc.Attributes[i].Value + "\"");
+                    }
+                }
+                if (doc.HasChildNodes)
+                {
+                    sw.Write(">");
+                    needEnd = true;
+                }
+                else
+                {
+                    sw.Write("/>");
+                    needEnd = false;
+                }
 
-            return stringBuilder.ToString();
+                if (doc.Name != "fitness")
+                {
+                    sw.WriteLine();
+                }
+
+                foreach (XmlNode el in doc.ChildNodes)
+                {
+                    PrettyXml(el, sw, depth+"\t");
+                }
+
+                if (doc.Name == "fitness")
+                {
+                    sw.WriteLine("</" + doc.Name + ">");
+                }
+                else
+                {
+                    if (needEnd)
+                    {
+                        sw.WriteLine(depth + "</" + doc.Name + ">");
+                    }
+                }
+            }
         }
     }
 }

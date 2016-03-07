@@ -27,8 +27,10 @@ namespace evolution
         public string SecondRival; // druhý soupeř 
         public string ThirdRival; // třetí soupeř
         
-        //nastavení pro fitness funci elo
+        //nastavení pro fitness funci se střídáním protihráčů
         public double InitialElo { get; set; } // elo, které má hráč který zatím nehrál žádnou hru
+        public int ChangeRivals { get; set; }
+        public bool ChangePopulation { get; set; }
 
         public EvolutionAlgorithmProperties()
         {
@@ -91,7 +93,7 @@ namespace evolution
             {
                 case "basic": EvaluatorManner = EvolutionAlgorithm.fitnessEvaluator.Basic; break;
                 case "ebdWithEbd": EvaluatorManner = EvolutionAlgorithm.fitnessEvaluator.EbdWithEbd; break;
-                case "elo": EvaluatorManner = EvolutionAlgorithm.fitnessEvaluator.Elo; break;
+                case "changeRivals": EvaluatorManner = EvolutionAlgorithm.fitnessEvaluator.ChangeRivals; break;
                 default: EvaluatorManner = EvolutionAlgorithm.fitnessEvaluator.none; break;
             }
 
@@ -105,6 +107,8 @@ namespace evolution
                     case "secondRival": SecondRival = cN.InnerText; break;
                     case "thirdRival": ThirdRival = cN.InnerText; break;
                     case "gameCount": GamesCount = int.Parse(cN.InnerText); break;
+                    case "changingTime": ChangeRivals = int.Parse(cN.InnerText); break;
+                    case "changePopulation": if (cN.InnerText == "true") { ChangePopulation = true; } else { ChangePopulation = false; } break;
                     default: break;
                 }
             }

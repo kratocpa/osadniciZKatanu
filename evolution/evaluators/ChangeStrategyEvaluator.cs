@@ -9,34 +9,62 @@ using osadniciZKatanuAI;
 
 namespace evolution
 {
-    public class OneStrategyEvaluator : IFitnessEvaluator
+    class ChangeStrategyEvaluator : IFitnessEvaluator
     {
+       
         public ILanguage CurLang { get; set; }
         public int GamesNum { get; set; } // počet her (které se mají provést) k ohodnocení jedince
         public int NumOfPlayers { get; set; }
-        public bool ViewProgressBar { get; set; }
+        public int ChangeRivals { get; set; }
+        public int Generation { get; set; }
+        public bool ChangePopulation { get; set; }
         Statistics statistic; // statistika k jednoduššímu zjištění výsledků
-        string fs, sc, th; // názvy .xml souborů pro jiné než implicitní jedince
 
-        public OneStrategyEvaluator(string fs, string sc, string th, int gamesNum, int numOfPlayers)
+        private Individual firstRival { get; set; }
+        private Individual secondRival { get; set; }
+        private Individual thirdRival { get; set; }
+
+        public ChangeStrategyEvaluator(int gamesNum, int numOfPlayers, int changeRivals, bool changePopulation)
         {
             GamesNum = gamesNum;
             NumOfPlayers = numOfPlayers;
-            ViewProgressBar = false;
-            this.fs = fs; this.sc = sc; this.th = th;
+            ChangeRivals = changeRivals;
+            ChangePopulation = changePopulation;
+            Generation = 0;
         }
 
         public void Evaluate(Population pop)
         {
+            if (Generation == 0)
+            {
+                firstRival = pop.population[0];
+                secondRival = pop.population[1];
+                thirdRival = pop.population[2];
+            }
+
             for (int i = 0; i < pop.sizeOfPopulation; i++)
             {
                 pop.population[i].fitness = FitnessFunction(pop.population[i]);
             }
+
+            if (Generation % ChangeRivals == 0)
+            {
+                Population newPop = (Population)pop.Clone();
+                newPop.population.OrderBy(x => x.fitness);
+                firstRival = pop.population[0];
+                secondRival = pop.population[1];
+                thirdRival = pop.population[2];
+                if (ChangePopulation)
+                {
+                    pop = new Population(pop.lengthOfEachIndividual, pop.lowerEachIndividual, pop.upperEachIndividual);
+                }
+            }
+            Generation++;
         }
 
         public double FitnessFunction(Individual curId)
         {
-            statistic = new Statistics(CurLang, GamesNum, ViewProgressBar);
+            statistic = new Statistics(CurLang, GamesNum, false);
 
             int i = 0;
             while (i < GamesNum)
@@ -48,22 +76,22 @@ namespace evolution
                 {
                     simul = new Simulator(Common.SimulateFourPlayers(true, gmProp, i), gmProp);
                     simul.redPl = new MyGameLogic(curId.individualArray);
-                    if (fs != "") { simul.bluePl = new MyGameLogic(fs); } else { simul.bluePl = new MyGameLogic(); }
-                    if (sc != "") { simul.yellowPl = new MyGameLogic(sc); } else { simul.yellowPl = new MyGameLogic(); }
-                    if (th != "") { simul.whitePl = new MyGameLogic(th); } else { simul.whitePl = new MyGameLogic(); }
+                    simul.bluePl = new MyGameLogic(firstRival.individualArray);
+                    simul.yellowPl = new MyGameLogic(secondRival.individualArray);
+                    simul.whitePl = new MyGameLogic(thirdRival.individualArray);
                 }
                 else if (NumOfPlayers == 3)
                 {
                     simul = new Simulator(Common.SimulateThreePlayers(true, gmProp, i), gmProp);
                     simul.redPl = new MyGameLogic(curId.individualArray);
-                    if (fs != "") { simul.bluePl = new MyGameLogic(fs); } else { simul.bluePl = new MyGameLogic(); }
-                    if (sc != "") { simul.yellowPl = new MyGameLogic(sc); } else { simul.yellowPl = new MyGameLogic(); }
+                    simul.bluePl = new MyGameLogic(firstRival.individualArray);
+                    simul.yellowPl = new MyGameLogic(secondRival.individualArray);
                 }
                 else
                 {
                     simul = new Simulator(Common.SimulateTwoPlayers(true, gmProp, i), gmProp);
                     simul.redPl = new MyGameLogic(curId.individualArray);
-                    if (fs != "") { simul.bluePl = new MyGameLogic(fs); } else { simul.bluePl = new MyGameLogic(); }
+                    simul.bluePl = new MyGameLogic(firstRival.individualArray);
                 }
 
                 try

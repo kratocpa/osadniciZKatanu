@@ -16,7 +16,7 @@ namespace evolution
         public IFitnessEvaluator eval; // funkce na ohodnocení jedince
 
         public enum mating { OnePtXOver, TwoPtXOver, UniformMating, none }
-        public enum fitnessEvaluator { Basic, EbdWithEbd, Elo, none }
+        public enum fitnessEvaluator { Basic, EbdWithEbd, ChangeRivals, none }
 
         public EvolutionAlgorithm(int popSize)
         {

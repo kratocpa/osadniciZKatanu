@@ -41,9 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="evaluators\Common.cs" />
     <Compile Include="evaluators\EbdWithEbdEvaluator.cs" />
-    <Compile Include="evaluators\EloEvaluator.cs" />
-    <Compile Include="evaluators\SimpleEvaluator.cs" />
+    <Compile Include="evaluators\ChangeStrategyEvaluator.cs" />
     <Compile Include="EvolutionAlgorithm.cs" />
     <Compile Include="evaluators\IFitnessEvaluator.cs" />
     <Compile Include="EvolutionAlgorithmProperties.cs" />
