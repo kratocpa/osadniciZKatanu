@@ -20,9 +20,9 @@ namespace evolution
         public bool ChangePopulation { get; set; }
         Statistics statistic; // statistika k jednoduššímu zjištění výsledků
 
-        private Individual firstRival { get; set; }
-        private Individual secondRival { get; set; }
-        private Individual thirdRival { get; set; }
+        public Individual firstRival { get; set; }
+        public Individual secondRival { get; set; }
+        public Individual thirdRival { get; set; }
 
         public ChangeStrategyEvaluator(int gamesNum, int numOfPlayers, int changeRivals, bool changePopulation)
         {
@@ -49,17 +49,15 @@ namespace evolution
 
             if (Generation % ChangeRivals == 0)
             {
-                Population newPop = (Population)pop.Clone();
-                newPop.population.OrderBy(x => x.fitness);
-                firstRival = pop.population[0];
-                secondRival = pop.population[1];
-                thirdRival = pop.population[2];
+                var newPop = pop.population.OrderByDescending(x => x.fitness);
+                firstRival = newPop.ElementAt(0);
+                secondRival = newPop.ElementAt(1);
+                thirdRival = newPop.ElementAt(2);
                 if (ChangePopulation)
                 {
                     pop = new Population(pop.lengthOfEachIndividual, pop.lowerEachIndividual, pop.upperEachIndividual);
                 }
             }
-            Generation++;
         }
 
         public double FitnessFunction(Individual curId)

@@ -93,6 +93,7 @@ namespace evolution
 
             while (eva.generationNo < evaProp.GenerationCount)
             {
+                fitEval.Generation = eva.generationNo;
                 fitEval.Evaluate(parents);
                 XmlDocument doc = new XmlDocument();
                 Printer.PrintBest(parents, doc, eva.generationNo, folderName);
@@ -104,6 +105,26 @@ namespace evolution
                 //Console.CursorLeft = cX;
                 //Console.CursorTop = cY;
                 //Console.Write(eva.generationNo);
+
+                if (fitEval is ChangeStrategyEvaluator && fitEval.Generation % evaProp.ChangeRivals == 0)
+                {
+                    List<Individual> inds = new List<Individual>();
+                    ChangeStrategyEvaluator changFitEval = (ChangeStrategyEvaluator)fitEval;
+                    if (changFitEval.firstRival != null)
+                    {
+                        inds.Add(changFitEval.firstRival);
+                    }
+                    if (changFitEval.secondRival != null)
+                    {
+                        inds.Add(changFitEval.secondRival);
+                    }
+                    if (changFitEval.thirdRival != null)
+                    {
+                        inds.Add(changFitEval.thirdRival);
+                    }
+                    Printer.PrintRivals(inds, fitEval.Generation, folderName);
+                }
+
             }
         }       
     }

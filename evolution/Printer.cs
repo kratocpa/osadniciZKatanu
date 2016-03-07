@@ -25,6 +25,25 @@ namespace evolution
             //output.Write("(" + ind.fitness + ")");
         }
 
+        public static void PrintRivals(List<Individual> rivals, int generation, string folderName)
+        {
+            int counter=0;
+            foreach (Individual ind in rivals)
+            {
+                XmlDocument doc = new XmlDocument();
+                XmlElement par = (XmlElement)doc.AppendChild(doc.CreateElement("rival" + counter));
+                PrintIndividum(ind, par, generation);
+                string gen = String.Format("{0,3:D3}", generation);
+                string path = folderName + "/" + gen + "-rival" + counter + "-" + ind.fitness + ".xml";
+
+                System.IO.StreamWriter rival = new System.IO.StreamWriter(path);
+                rival.Write(doc.OuterXml);
+                rival.Flush();
+                rival.Close();
+                counter++;
+            }
+        }
+
         public static void PrintBest(Population pop, XmlDocument doc, int generation, string folderName)
         {
             double bestFit = pop.population[0].fitness;

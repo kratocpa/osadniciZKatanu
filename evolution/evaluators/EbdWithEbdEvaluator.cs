@@ -13,6 +13,7 @@ namespace evolution
     {
         public ILanguage CurLang { get; set; }
         public int NumOfPlayers;
+        public int Generation { get; set; }
         Statistics statistic; // statistika k jednoduššímu zjištění výsledků
 
         public EbdWithEbdEvaluator(int numOfPlayers)

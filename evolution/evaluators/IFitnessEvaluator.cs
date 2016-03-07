@@ -8,6 +8,7 @@ namespace evolution
 {
     public interface IFitnessEvaluator
     {
+        int Generation { get; set; }
         void Evaluate(Population pop);
     }
 }

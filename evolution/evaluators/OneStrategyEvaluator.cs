@@ -11,6 +11,7 @@ namespace evolution
 {
     public class OneStrategyEvaluator : IFitnessEvaluator
     {
+        public int Generation { get; set; }
         public ILanguage CurLang { get; set; }
         public int GamesNum { get; set; } // počet her (které se mají provést) k ohodnocení jedince
         public int NumOfPlayers { get; set; }

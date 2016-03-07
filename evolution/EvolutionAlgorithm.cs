@@ -29,7 +29,7 @@ namespace evolution
         public Population Evolve(Population pop)
         {
             generationNo++;
-            eval.Evaluate(pop);
+            //eval.Evaluate(pop);
             Population matingPool = matingSelectors.Select(pop, popSize);
 
             foreach (IOperator curOp in operators)
