@@ -70,7 +70,7 @@ namespace evolution
             {
                 case EvolutionAlgorithm.fitnessEvaluator.Basic: fitEval = new OneStrategyEvaluator(evaProp.FirstRival, evaProp.SecondRival, evaProp.ThirdRival, evaProp.GamesCount, evaProp.PlayersCountInGame); break;
                 case EvolutionAlgorithm.fitnessEvaluator.EbdWithEbd: fitEval = new EbdWithEbdEvaluator(evaProp.PlayersCountInGame); break;
-                case EvolutionAlgorithm.fitnessEvaluator.ChangeRivals: fitEval = new ChangeStrategyEvaluator(evaProp.GamesCount, evaProp.PlayersCountInGame, evaProp.ChangeRivals); break;
+                case EvolutionAlgorithm.fitnessEvaluator.ChangeRivals: fitEval = new ChangeStrategyEvaluator(evaProp.GamesCount, evaProp.PlayersCountInGame, evaProp.ChangeRivals, evaProp.ChangePopulation); break;
                 case EvolutionAlgorithm.fitnessEvaluator.none: fitEval = null; break;
                 default: fitEval = null; Console.Write("Ivalid type of fitness evaluater"); return;
             }
