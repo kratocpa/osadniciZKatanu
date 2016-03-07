@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eva popSize="40" generationCount="100" upperBoundaryEachIndividual="100000">
+  <matingManner type="OnePtXOver" matingProb="0.9"/>
+  <mutation mutationProb="0.09" mutationChangeBitProb="0.12"/>
+  <evaluatorManner type="changeRivals" playersCountInGame="4">
+    <gameCount>200</gameCount>
+    <changingTime>20</changingTime>
+  </evaluatorManner>
+</eva>
