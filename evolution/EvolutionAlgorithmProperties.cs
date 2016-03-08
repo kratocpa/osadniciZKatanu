@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using osadniciZKatanu;
+using osadniciZKatanuAI;
 
 namespace evolution
 {
@@ -16,6 +18,7 @@ namespace evolution
         public double MatingProb { get; set; } // pravděpodobnost křížení
         public double MutationProb { get; set; } // pravděpodobnost mutace
         public double MutationChangeBitProb { get; set; } // pravděpodobnost mutace jednoho bitu
+        public Population InitialPopulation { get; set; }
 
         //nastavení fitness funkce
         public EvolutionAlgorithm.fitnessEvaluator EvaluatorManner { get; set; } // fitness funkce (pevně danný protihráči, všichni proti všem, elo)
@@ -31,6 +34,8 @@ namespace evolution
         public double InitialElo { get; set; } // elo, které má hráč který zatím nehrál žádnou hru
         public int ChangeRivals { get; set; }
         public bool ChangePopulation { get; set; }
+
+        private List<string> initialPopString { get; set; }
 
         public EvolutionAlgorithmProperties()
         {
@@ -63,6 +68,29 @@ namespace evolution
                     case "mutation": SetMutation(curNode); break;
                     case "evaluatorManner": SetEvaluatorManner(curNode); break;
                     default: break;
+                }
+            }
+            if (initialPopString != null)
+            {
+                GenerateMovesProperties gmMovProp = new GenerateMovesProperties();
+                int individumSize = gmMovProp.Parameters.Count;
+                InitialPopulation = new Population(individumSize, 0, UpperBoundaryEachIndividual);
+                int countPerPop = PopSize / initialPopString.Count;
+                int counter = 0;
+                foreach (var curStr in initialPopString)
+                {
+                    List<Individual> curPop = LoadPopulation(curStr);
+                    var newPop = curPop.OrderByDescending(x => x.fitness);
+                    for (int i = 0; i < countPerPop; i++)
+                    {
+                        InitialPopulation.AddIndividual(newPop.ElementAt(i));
+                        counter++;
+                    }
+                }
+                while (counter < PopSize)
+                {
+                    InitialPopulation.AddIndividual(new Individual(individumSize, 0, UpperBoundaryEachIndividual, counter));
+                    counter++;
                 }
             }
         }
@@ -109,9 +137,51 @@ namespace evolution
                     case "gameCount": GamesCount = int.Parse(cN.InnerText); break;
                     case "changingTime": ChangeRivals = int.Parse(cN.InnerText); break;
                     case "changePopulation": if (cN.InnerText == "true") { ChangePopulation = true; } else { ChangePopulation = false; } break;
+                    case "initialPopulation": SetInitialPopulation(cN); break;
                     default: break;
                 }
             }
+        }
+
+        private void SetInitialPopulation(XmlNode curNode)
+        {            
+            if (initialPopString == null)
+            {
+                initialPopString = new List<string>();
+            }
+            initialPopString.Add(curNode.InnerText);
+        }
+
+        private List<Individual> LoadPopulation(string xmlFile)
+        {
+            XmlDocument popDoc = new XmlDocument();
+            List<Individual> pop = new List<Individual>();
+            popDoc.Load(xmlFile);
+            foreach (XmlNode curNode in popDoc.DocumentElement.ChildNodes)
+            {
+                switch (curNode.Name)
+                {
+                    case "param": pop.Add(LoadIndividual(curNode)); break;
+                    default: break;
+                }
+            }
+            return pop;
+        }
+
+        private Individual LoadIndividual(XmlNode curNode)
+        {
+            int fitness=0;
+            GenerateMovesProperties movProp = new GenerateMovesProperties();
+            movProp.LoadFromXmlNode(curNode);
+            foreach (XmlNode cN in curNode)
+            {
+                switch (cN.Name)
+                {
+                    case "fitness": fitness = int.Parse(curNode.InnerText); break;
+                    default: break;
+                }
+            }
+            return new Individual(movProp, fitness, 0, UpperBoundaryEachIndividual);
         }
 
         public object Clone()

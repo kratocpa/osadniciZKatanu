@@ -107,6 +107,15 @@ namespace osadniciZKatanuAI
             return true;
         }
 
+        public bool LoadFromXmlNode(XmlNode xmlNode)
+        {
+            foreach (var par in Parameters)
+            {
+                par.Scale = double.Parse(xmlNode.Attributes[par.Name].Value, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            return true;
+        }
+
         public class Parameter
         {
             public string Name { get; private set; }

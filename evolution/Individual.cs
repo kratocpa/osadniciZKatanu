@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using osadniciZKatanu;
+using osadniciZKatanuAI;
 
 namespace evolution
 {
@@ -24,6 +26,19 @@ namespace evolution
             individualArray = new int[lengthOfArray];
 
             fitness = 0;
+        }
+
+        public Individual(GenerateMovesProperties mvProp, int fitness_, int upper_, int lower_)
+        {
+            lengthOfArray = mvProp.Parameters.Count;
+            upper = upper_;
+            lower = lower_;
+            fitness = fitness_;
+            individualArray = new int[lengthOfArray];
+            for (int i = 0; i < lengthOfArray; i++)
+            {
+                individualArray[i] = (int)mvProp.Parameters[i].Scale;
+            }
         }
 
         public object Clone()

@@ -75,7 +75,14 @@ namespace evolution
                 default: fitEval = null; Console.Write("Ivalid type of fitness evaluater"); return;
             }
 
-            parents.GenerateRandomPopulation(evaProp.PopSize);
+            if (evaProp.InitialPopulation != null)
+            {
+                parents = evaProp.InitialPopulation;
+            }
+            else
+            {
+                parents.GenerateRandomPopulation(evaProp.PopSize);
+            }
 
             //vytvoření evolučního algoritmu
             EvolutionAlgorithm eva;
