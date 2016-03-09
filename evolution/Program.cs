@@ -98,21 +98,44 @@ namespace evolution
             string folderName = xmlFile.Substring(0, xmlFile.Length - 4) + "Results";
             System.IO.Directory.CreateDirectory(folderName);
 
+            System.Linq.IOrderedEnumerable<Individual> sortedParents = null;
             while (eva.generationNo < evaProp.GenerationCount)
             {
                 fitEval.Generation = eva.generationNo;
                 fitEval.Evaluate(parents);
+
+                if (sortedParents != null)
+                {
+                    for (int i = 0; i < evaProp.EliteCount; i++)
+                    {
+                        int min = (int)parents.population[0].fitness, minID = 0;
+                        for (int j = 0; j < parents.population.Count; j++)
+                        {
+                            if (parents.population[j].fitness < min)
+                            {
+                                min = (int)parents.population[j].fitness;
+                                minID = j;
+                            }
+                        }
+                        parents.population[minID] = sortedParents.ElementAt(i);
+                    }
+                }
+
                 XmlDocument doc = new XmlDocument();
                 Printer.PrintBest(parents, doc, eva.generationNo, folderName);
                 doc = new XmlDocument();
                 Printer.PrintPopulation(parents, doc, eva.generationNo, folderName);
                 //PrintPopulation(parents, evolutionPop, eva.generationNo);
                 offspring = eva.Evolve(parents);
+
+                sortedParents = parents.population.OrderByDescending(x => x.fitness);
                 parents = offspring;
+
                 //Console.CursorLeft = cX;
                 //Console.CursorTop = cY;
                 //Console.Write(eva.generationNo);
 
+                //tisk protivníků pokud se změní
                 if (fitEval is ChangeStrategyEvaluator && fitEval.Generation % evaProp.ChangeRivals == 0)
                 {
                     List<Individual> inds = new List<Individual>();
