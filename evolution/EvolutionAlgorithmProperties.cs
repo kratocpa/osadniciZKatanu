@@ -19,7 +19,6 @@ namespace evolution
         public double MutationProb { get; set; } // pravděpodobnost mutace
         public double MutationChangeBitProb { get; set; } // pravděpodobnost mutace jednoho bitu
         public Population InitialPopulation { get; set; }
-        public int EliteCount { get; set; }
 
         //nastavení fitness funkce
         public EvolutionAlgorithm.fitnessEvaluator EvaluatorManner { get; set; } // fitness funkce (pevně danný protihráči, všichni proti všem, elo)
@@ -51,7 +50,6 @@ namespace evolution
             SecondRival = "";
             ThirdRival = "";
             InitialElo = 0;
-            EliteCount = 0;
         }
 
         public void LoadFromXml(string xmlFile)
@@ -68,7 +66,6 @@ namespace evolution
                 {
                     case "matingManner": SetMatingManner(curNode); break;
                     case "mutation": SetMutation(curNode); break;
-                    case "elite": SetElite(curNode); break;
                     case "evaluatorManner": SetEvaluatorManner(curNode); break;
                     default: break;
                 }
@@ -96,11 +93,6 @@ namespace evolution
                     counter++;
                 }
             }
-        }
-
-        private void SetElite(XmlNode curNode)
-        {
-            EliteCount = int.Parse(curNode.Attributes["eliteCount"].Value);
         }
 
         private void SetMatingManner(XmlNode curNode)
