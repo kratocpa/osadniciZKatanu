@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using osadniciZKatanu;
 
 namespace osadniciZKatanuAI
@@ -27,6 +28,17 @@ namespace osadniciZKatanuAI
         {
             movesProp = new GenerateMovesProperties();
             movesProp.LoadFromXml(filename);
+        }
+
+        public GenerateMoves(XmlNode xmlNode)
+        {
+            movesProp = new GenerateMovesProperties();
+            movesProp.LoadFromXmlNode(xmlNode);
+        }
+
+        public GenerateMoves(GenerateMovesProperties genMvProp)
+        {
+            movesProp = genMvProp;
         }
 
         public List<FirstPhaseGameMove> GenerateFirstRoadAndVillage(GameProperties gmProp, PlayerProperties plProp)

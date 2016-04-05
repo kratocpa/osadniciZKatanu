@@ -68,6 +68,7 @@ namespace osadniciZKatanuAI
             {
                 List<Edge> possibleEdges, possibleEdgesSec;
                 double fitnessMove = 0;
+                double fitnessFirstPart = 0;
                 Edge firstRoad, secondRoad;
 
                 possibleEdges = common.GeneratePossibleEdgesToBuildRoad();
@@ -75,6 +76,7 @@ namespace osadniciZKatanuAI
                 {
                     firstRoad = curEg;
                     fitnessMove = common.RateRoad(firstRoad);
+                    fitnessFirstPart = fitnessMove;
                     plProp.Road.Add(firstRoad);
                     possibleEdgesSec = common.GeneratePossibleEdgesToBuildRoad();
                     foreach (var curEgSec in possibleEdgesSec)
@@ -84,9 +86,10 @@ namespace osadniciZKatanuAI
                             secondRoad = curEgSec;
                             fitnessMove += common.RateRoad(secondRoad);
                             TwoRoadMove mvDesc = new TwoRoadMove(firstRoad, secondRoad);
-                            fitnessMove = movesProp.weightUseTwoRoadGeneral;
+                            fitnessMove *= movesProp.weightUseTwoRoadGeneral;
                             mvDesc.fitnessMove = fitnessMove;
                             possibleMove.Add(mvDesc);
+                            fitnessMove = fitnessFirstPart;
                         }
                     }
                     plProp.Road.Remove(firstRoad);

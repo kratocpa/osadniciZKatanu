@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using osadniciZKatanu;
 using osadniciZKatanuAI;
 
@@ -13,77 +14,123 @@ namespace simulator
         
         static void Main(string[] args)
         {
+
+            string xmlFile;
+            if (args.Count() >= 1)
+            {
+                xmlFile = args[0];
+            }
+            else
+            {
+                Console.WriteLine("You must specify an xml file");
+                return;
+            }
+
+            List<GenerateMovesProperties> strategies = new List<GenerateMovesProperties>();
+
+            XmlDocument propDoc = new XmlDocument();
+            propDoc.Load(xmlFile);
+
+            foreach (XmlNode curNode in propDoc.DocumentElement.ChildNodes)
+            {
+                GenerateMovesProperties gen = new GenerateMovesProperties();
+                gen.LoadFromXmlNode(curNode);
+                strategies.Add(gen);
+            }
+
+            int[] strategiesFitness = new int[strategies.Count];
+            int[,] strategieFitnessTwoDim = new int[strategies.Count, strategies.Count];
+
+            for (int i = 0; i < strategiesFitness.Count(); i++)
+            {
+                strategiesFitness[i] = 0;
+            }
+
             ILanguage curLang = new CzechLanguage();
             System.IO.StreamWriter movesWr = new System.IO.StreamWriter("movesInGames.txt");
+            System.IO.StreamWriter tournament = new System.IO.StreamWriter("tournament.txt");
             System.IO.StreamWriter resultWr = new System.IO.StreamWriter("resultOfGames.txt");
             System.IO.StreamWriter overallResultWr = new System.IO.StreamWriter("overalResult.txt");
 
-            int gamesNum = 1000;
-            bool viewProgressBar = true;
-            Statistics statistic = new Statistics(curLang, gamesNum, viewProgressBar);
+            int gamesNum = 10;
+            bool viewProgressBar = false;
+            
 
             GameProperties gmProp;
 
-            //Console.WriteLine();
-            //Console.Write("zadejte prvniho hrace: ");
-            //string fs = Console.ReadLine();
-            //Console.Write("zadejte druheho hrace: ");
-            //string sc = Console.ReadLine();
-            //Console.Write("zadejte tretiho hrace: ");
-            //string th = Console.ReadLine();
-            //Console.Write("zadejte ctvrteho hrace: ");
-            //string fo = Console.ReadLine();
 
-
-            int i = 0;
-            while(i<gamesNum)
+            for (int k = 0; k < strategies.Count; k++)
             {
-                gmProp = new GameProperties(true, curLang);
-                //gmProp.LoadFromXml();
-                
-                List<Player> players = new List<Player>();
-                players.Add(new Player(Game.color.red, false, gmProp));
-                players.Add(new Player(Game.color.blue, false, gmProp));
-                //players.Add(new Player(Game.color.yellow, false, gmProp));
-                //players.Add(new Player(Game.color.white, false, gmProp));
+                for (int l = 0; l < strategies.Count; l++)
+                {
+                    if (k != l)
+                    {
+                        Statistics statistic = new Statistics(curLang, gamesNum, viewProgressBar);
+                        int i = 0;
+                        while (i < gamesNum)
+                        {
+                            gmProp = new GameProperties(true, curLang);
+                            gmProp.LoadFromXml();
 
-                Simulator simul = new Simulator(players, gmProp);
-                simul.redPl = new MyGameLogic("bestParam.xml");
-                simul.bluePl = new MyGameLogic("superbest.xml");
-                //if (fs != "def") { simul.firstPl = new MyGameLogic(fs); } else { simul.firstPl = new MyGameLogic(); }
-                //if (sc != "def") { simul.secondPl = new MyGameLogic(sc); } else { simul.secondPl = new MyGameLogic(); }
-                //if (th != "def") { simul.thirdPl = new MyGameLogic(th); } else { simul.thirdPl = new MyGameLogic(); }
-                //if (fo != "def") { simul.fourthPl = new MyGameLogic(fo); } else { simul.fourthPl = new MyGameLogic(); }
-                simul.output = movesWr;
+                            List<Player> players = new List<Player>();
+                            players.Add(new Player(Game.color.red, false, gmProp));
+                            players.Add(new Player(Game.color.blue, false, gmProp));
 
-                try
-                {
-                    var result = simul.run();
-                    statistic.AddToStatistic(result);
-                    statistic.PrintGameResult(result, resultWr);
+                            Simulator simul = new Simulator(players, gmProp);
+                            simul.redPl = new MyGameLogic(strategies[k]);
+                            simul.bluePl = new MyGameLogic(strategies[l]);
+                            simul.output = movesWr;
+
+                            try
+                            {
+                                var result = simul.run();
+                                statistic.AddToStatistic(result);
+                                //statistic.PrintGameResult(result, resultWr);
+                            }
+                            catch (TooManyMovesException e)
+                            {
+                                Console.Write("\n" + e.Message + " in game number " + i);
+                                statistic.AddToStatistic();
+                            }
+                            catch (TooManyRoundsException e)
+                            {
+                                Console.Write("\n" + e.Message + " in game number " + i);
+                                statistic.AddToStatistic();
+                            }
+                            catch (WrongNumberOfPlayersException e)
+                            {
+                                Console.Write("\n" + e.Message + " in game number " + i);
+                            }
+                            i++;
+                        }
+
+                        //statistic.PrintOverallStatistics(Console.Out);
+                        strategiesFitness[k] += statistic.RedWins;
+                        strategiesFitness[l] += statistic.BlueWins;
+                        strategieFitnessTwoDim[k, l] = statistic.RedWins;
+                    }
                 }
-                catch (TooManyMovesException e)
-                {
-                    Console.Write("\n" + e.Message + " in game number " + i);
-                    statistic.AddToStatistic();
-                }
-                catch (TooManyRoundsException e)
-                {
-                    Console.Write("\n" + e.Message + " in game number " + i);
-                    statistic.AddToStatistic();
-                }
-                catch (WrongNumberOfPlayersException e)
-                {
-                    Console.Write("\n" + e.Message + " in game number " + i);
-                }
-                i++;
             }
 
-            statistic.PrintOverallStatistics(Console.Out);
+            for(int i=0; i<strategiesFitness.Count(); i++){
+                tournament.WriteLine(strategiesFitness[i]);
+            }
+            tournament.WriteLine();
+            tournament.WriteLine();
+
+            for (int i = 0; i < strategiesFitness.Count(); i++)
+            {
+                for (int j = 0; j < strategiesFitness.Count(); j++)
+                {
+                    tournament.Write(strategieFitnessTwoDim[i, j] + "  ");
+                }
+                tournament.WriteLine();
+            }
 
             movesWr.Close();
             resultWr.Close();
             overallResultWr.Close();
+            tournament.Close();
         }
     }
 }

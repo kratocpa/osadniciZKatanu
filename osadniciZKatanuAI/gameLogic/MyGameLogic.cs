@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using osadniciZKatanu;
 
 namespace osadniciZKatanuAI
@@ -29,6 +30,16 @@ namespace osadniciZKatanuAI
         public MyGameLogic(string filename)
         {
             genMov = new GenerateMoves(filename);
+        }
+
+        public MyGameLogic(XmlNode xmlNode)
+        {
+            genMov = new GenerateMoves(xmlNode);
+        }
+
+        public MyGameLogic(GenerateMovesProperties genMvProp)
+        {
+            genMov = new GenerateMoves(genMvProp);
         }
 
         public Move GenerateMove(GameProperties gmProp, PlayerProperties plProp)
