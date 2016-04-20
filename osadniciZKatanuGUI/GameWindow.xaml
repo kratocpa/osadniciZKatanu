@@ -88,15 +88,15 @@
 
 
 
-        <Label Name="pathLabel" Content="Cesta" FontSize="15" FontWeight="ExtraBold" HorizontalAlignment="Left" Height="30" Margin="630,472,0,0" VerticalAlignment="Top" Width="50"/>
+        <Label Name="pathLabel" Content="Cesta" FontSize="15" FontWeight="ExtraBold" HorizontalAlignment="Left" Height="30" Margin="630,472,0,0" VerticalAlignment="Top" Width="60"/>
         <Image Height="25"  Width="25" Margin="726,480,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/wood.png" />
         <Image Height="25"  Width="25" Margin="690,480,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/brick.png"/>
 
         <Label Name="villageLabel" Content="Vesnice" FontSize="15" FontWeight="ExtraBold" HorizontalAlignment="Left" Height="30" Margin="630,510,0,0" VerticalAlignment="Top" Width="67"/>
-        <Image Height="25"  Width="25" Margin="736,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/wood.png" />
+        <Image Height="25"  Width="25" Margin="730,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/wood.png" />
         <Image Height="25"  Width="25" Margin="700,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/brick.png"/>
-        <Image Height="25"  Width="25" Margin="764,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/grain.png" />
-        <Image Height="25"  Width="25" Margin="800,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/sheep.png" />
+        <Image Height="25"  Width="25" Margin="760,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/grain.png" />
+        <Image Height="25"  Width="25" Margin="786,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/sheep.png" />
 
 
         <Label Name="townLabel" Content="Město" FontSize="15" FontWeight="ExtraBold" HorizontalAlignment="Left" Height="30" Margin="770,472,0,0" VerticalAlignment="Top" Width="55"/>
@@ -106,7 +106,7 @@
         <Image Height="25"  Width="25" Margin="930,480,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/stone.png"/>
         <Image Height="25"  Width="25" Margin="960,480,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/stone.png"/>
 
-        <Label Name="actionCardLabel" Content="Akční karta" FontSize="15" FontWeight="ExtraBold" HorizontalAlignment="Left" Height="30" Margin="830,510,0,0" VerticalAlignment="Top" Width="90" />
+        <Label Name="actionCardLabel" Content="Akční karta" FontSize="15" FontWeight="ExtraBold" HorizontalAlignment="Left" Height="30" Margin="820,510,0,0" VerticalAlignment="Top" Width="100" />
         <Image Height="25"  Width="25" Margin="920,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/grain.png" />
         <Image Height="25"  Width="25" Margin="950,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/stone.png"/>
         <Image Height="25"  Width="25" Margin="970,520,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/sheep.png" />
