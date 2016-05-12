@@ -1,6 +1,6 @@
 # osadniciZKatanu
 
-Øešení obsahuje zkompilované binární soubory jednotlivých aplikací. Lze také samozøejmì provést kompilaci za pomoci vývojového nástroje visual studio.
+Øešení obsahuje zkompilované binární soubory jednotlivých aplikací. Kompilace probíhala na systému Windows 7.
 
 osadniciZKatanuGUI/bin/Release/osadniciZKatanuGUI.exe - samotná hra osadníci z katanu.
 
