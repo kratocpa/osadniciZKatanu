@@ -14,15 +14,16 @@ namespace simulator
         
         static void Main(string[] args)
         {
-
+            int gamesNum = 10;
             string xmlFile;
-            if (args.Count() >= 1)
+            if (args.Count() >= 2)
             {
                 xmlFile = args[0];
+                gamesNum = int.Parse(args[1]);
             }
             else
             {
-                Console.WriteLine("You must specify an xml file");
+                Console.WriteLine("You must specify an xml file and number of games");
                 return;
             }
 
@@ -52,7 +53,7 @@ namespace simulator
             System.IO.StreamWriter resultWr = new System.IO.StreamWriter("resultOfGames.txt");
             System.IO.StreamWriter overallResultWr = new System.IO.StreamWriter("overalResult.txt");
 
-            int gamesNum = 10;
+            
             bool viewProgressBar = false;
             
 

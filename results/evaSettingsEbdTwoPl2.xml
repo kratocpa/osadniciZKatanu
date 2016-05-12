@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<eva popSize="40" generationCount="100" upperBoundaryEachIndividual="600">
-  <matingManner type="OnePtXOver" matingProb="0.85"/>
-  <mutation mutationProb="0.1" mutationChangeBitProb="0.15"/>
-  <evaluatorManner type="ebdWithEbd" playersCountInGame="2">
-  </evaluatorManner>
-</eva>
