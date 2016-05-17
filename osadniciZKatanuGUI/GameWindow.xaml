@@ -70,7 +70,7 @@
         <Button Name="useActionCardButton" FontSize="12" FontWeight="ExtraBold" Content="" IsEnabled="false" HorizontalAlignment="Right" Height="26" Margin="0,212,38.6,0" VerticalAlignment="Top" Width="122" Click="UseActionCardButtonClick"/>
         <Label Name="diceLabel" FontSize="12" FontWeight="ExtraBold" Content="" HorizontalAlignment="Left" Height="26" Margin="630,181,0,0" VerticalAlignment="Top" Width="230" />
         <Button Name="startGameButton" FontSize="12" FontWeight="ExtraBold" Content="" HorizontalAlignment="Left" Height="36" Margin="630,243,0,0" VerticalAlignment="Top" Width="357" Click="StartGameClick" />
-        <Label Name="actualPlayerLabel" FontSize="15" FontWeight="ExtraBold"  Content="" HorizontalAlignment="Left" Height="32" Margin="630,18,0,0" VerticalAlignment="Top" Width="250" />
+        <Label Name="actualPlayerLabel" FontSize="15" FontWeight="ExtraBold"  Content="" HorizontalAlignment="Left" Height="32" Margin="630,18,0,0" VerticalAlignment="Top" Width="259" />
 
         <Image Height="25"  Width="25" Margin="880,90,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/wood.png" />
         <Image Height="25"  Width="25" Margin="880,115,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="pictures/brick.png"/>
